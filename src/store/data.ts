@@ -1,4 +1,3 @@
-import { ref } from "vue";
 import type { MusicItem } from '@/types/music.ts'
 
 
@@ -57,3 +56,17 @@ function formatTitle(fileName: string) {
     .replace(/_/g, " ") // 下划线转空格
     .replace(/\b\w/g, (c) => c.toUpperCase()); // 首字母大写
 }
+
+export const lrcList = computed<ComputedRef<lrcListType>>(() => {
+  return currentMusic.value?.lyric?.split('\n').map(item => {
+    if (!item) return {};
+    const timeString = item?.split(']')[0]?.replace('[', '')
+    const min = Number(timeString?.split(':')?.[0]) || 0
+    const second = Number(timeString?.split(':')?.[1]?.split('.')?.[0]) || 0
+    const ms = Number(timeString?.split(':')?.[1]?.split('.')?.[1]) || 0
+    return {
+      time: min * 60 * 1000 + second * 1000 + ms * 10,
+      text: item.split(']')[1]
+    }
+  }) || ['暂无歌词']
+})

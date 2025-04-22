@@ -1,0 +1,72 @@
+{
+  "id": "4902328",
+  "name": "music",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1159898",
+      "name": "随机播放",
+      "font_class": "suijibofang",
+      "unicode": "e622",
+      "unicode_decimal": 58914
+    },
+    {
+      "icon_id": "3057296",
+      "name": "顺序播放",
+      "font_class": "shunxubofang",
+      "unicode": "e6ba",
+      "unicode_decimal": 59066
+    },
+    {
+      "icon_id": "5774419",
+      "name": "icon_next",
+      "font_class": "icon-",
+      "unicode": "e73c",
+      "unicode_decimal": 59196
+    },
+    {
+      "icon_id": "5774420",
+      "name": "icon_previous",
+      "font_class": "icon-1",
+      "unicode": "e73d",
+      "unicode_decimal": 59197
+    },
+    {
+      "icon_id": "7594166",
+      "name": "24gf-playlistMusic3",
+      "font_class": "24gf-playlistMusic3",
+      "unicode": "ea86",
+      "unicode_decimal": 60038
+    },
+    {
+      "icon_id": "2815702",
+      "name": "播放",
+      "font_class": "bofang",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "2815740",
+      "name": "暂停",
+      "font_class": "zanting",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "10026971",
+      "name": "停止",
+      "font_class": "tingzhi",
+      "unicode": "e7e4",
+      "unicode_decimal": 59364
+    },
+    {
+      "icon_id": "26528661",
+      "name": "播放",
+      "font_class": "bofang1",
+      "unicode": "e6a2",
+      "unicode_decimal": 59042
+    }
+  ]
+}

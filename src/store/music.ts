@@ -1,3 +1,6 @@
+import { volume, playIndex, currentTime, duration, progress } from './contorl.ts'
+import { musicList, currentMusic } from './data.ts'
+
 export const audioContext = ref<AudioContext>(null); // 音频上下文
 export const gainNode = ref<GainNode>(null); // 音量控制节点
 export const activeInstance = ref<any>(null); // 当前播放实例
@@ -7,26 +10,22 @@ export const init = () => {
   audioContext.value = new window.AudioContext();
   gainNode.value = audioContext.value.createGain();
   gainNode.value.connect(audioContext.value.destination);
+  setVolume(volume.value);
 };
 
 export const audioBuffer = ref<AudioBuffer>(null); // 音频缓冲区
-export const duration = ref<number>(0); // 音频时长
 // 加载音频文件
-export const load = async (url: string) => {
+export const load = async (item: string = musicList.value[playIndex.value]) => {
+  currentMusic.value = item;
+        // 停止当前正在播放的实例, 创建新的音频源节点
+        if (activeInstance.value && activeInstance.value !== null) {
+          activeInstance.value.destroy();
+          activeInstance.value = null;
+        }
+    init();
+    console.log('item', item);
   try {
-      // 停止当前正在播放的实例
-  console.log(activeInstance.value);
-  
-  if (activeInstance.value && activeInstance.value !== null) {
-    activeInstance.value.destroy();
-    activeInstance.value = null;
-  }
-
-  init();
-
-    const response = await fetch(url);
-    console.log('response', response);
-    console.log('audioContext.value', audioContext.value);
+  const response = await fetch(item.audioUrl);
 
     const arrayBuffer = await response.arrayBuffer();
     audioBuffer.value = await audioContext.value.decodeAudioData(arrayBuffer);
@@ -45,6 +44,10 @@ export const pauseTime = ref<number>(0); // 暂停时间
 export const startTime = ref<number>(0); // 开始时间
 // 播放控制
 export function play() {
+  if (!audioBuffer.value) {
+    load(); // 如果没有音频缓冲区，则加载音频
+    return;
+  }
   // 设置当前活动实例
   activeInstance.value = {
     play,
@@ -56,11 +59,6 @@ export function play() {
     onProgress,
   };
 
-  if (!audioBuffer.value) return false;
-
-  // 创建新的音频源节点
-  console.log('audioContext.value', audioContext.value);
-  
   sourceNode.value = audioContext.value.createBufferSource();
   sourceNode.value.buffer = audioBuffer.value;
   sourceNode.value.connect(gainNode.value);
@@ -95,8 +93,13 @@ export const stop = () => {
 };
 
 // 音量控制 (0-1)
-export const setVolume = (level: any) => {
-  gainNode.value.gain.setValueAtTime(level, audioContext.value.currentTime);
+export function setVolume (level: any) {
+  // 确保音量范围在 0-1 之间
+  const safeVolume = Math.max(0, Math.min(1, level))
+  if (gainNode.value && audioContext.value) {
+    // 使用指数渐变实现平滑音量变化
+    gainNode.value.gain.value = safeVolume;
+  }
 };
 
 // 跳转到指定时间 (秒)
@@ -118,14 +121,14 @@ export const _animationFrameId = ref<number>(null); // 动画帧 ID
 export function _trackProgress() {
   const update = () => {
     if (isPlaying.value) {
-      const currentTime = audioContext.value.currentTime - startTime.value;
-      if (_progressCallback.value) {
+      currentTime.value = audioContext.value.currentTime - startTime.value;
+  if (_progressCallback.value) {
         _progressCallback.value({
-          currentTime: currentTime,
+          currentTime: currentTime.value,
           duration: duration.value,
-          progress: (currentTime / duration.value) * 100,
+          progress: progress.value * 100,
         });
-      }
+}
       _animationFrameId.value = requestAnimationFrame(update);
     }
   };
@@ -134,6 +137,7 @@ export function _trackProgress() {
 
 // 事件监听
 export function onProgress(callback: any) {
+  console.log('callback', callback);
   _progressCallback.value = callback;
 }
 
@@ -142,8 +146,9 @@ export function destroy() {
   stop();
   if (audioContext.value) {
     audioContext.value.close();
-    sourceNode?.value.disconnect();
-    gainNode?.value.disconnect();
+    sourceNode.value?.disconnect();
+    gainNode.value?.disconnect();
     audioContext.value = null;
+    gainNode.value = null
   }
 }
