@@ -9,10 +9,25 @@ onMounted(() => {
 </script>
 
 <template>
-  <ContorlBtn />
-  <Music />
+  <div class="container">
+    <Music />
+    <ContorlBtn />
+  </div>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
+.container {
+  width: 100vw;
+  height: 100vh;
 
+  .music {
+    height: 80%;
+    width: 100%;
+  }
+
+  .contorl-btn {
+    height: 20%;
+    width: 100%;
+  }
+}
 </style>

@@ -1,14 +1,9 @@
 import { ref } from "vue";
+import type { MusicItem } from '@/types/music.ts'
 
-// 定义音乐对象类型
-export interface MusicItem {
-  id: string;
-  title: string;
-  audioUrl: string;
-  lyric: string[];
-}
 
 export const musicList = ref<MusicItem[]>([]);
+export const currentMusic = ref<MusicItem | null>(null);
 
 // 加载音乐数据
 export const loadMusicData = async () => {
@@ -19,7 +14,7 @@ export const loadMusicData = async () => {
       eager: true, // 立即加载
     });
     const jsModules = import.meta.glob("@/assets/music/*.js", { eager: true });
-
+    const imgModules = import.meta.glob("@/assets/images/music/*.webp", { eager: true });
     // 生成音乐列表
     musicList.value = await Promise.all(
       Object.entries(mp3Modules).map(async ([mp3Path, mp3Url]) => {
@@ -31,8 +26,12 @@ export const loadMusicData = async () => {
 
         // 查找匹配的歌词文件
         const jsPath = `/src/assets/music/${baseName}.js`;
+        const imgPath = `/src/assets/images/music/${baseName}.webp`;
         
         const lyricModule = (jsModules[jsPath] as { default: string[] }) || {
+          default: [],
+        };
+        const musicLogoModule = (imgModules[imgPath] as { default: string[] }) || {
           default: [],
         };
 
@@ -41,6 +40,7 @@ export const loadMusicData = async () => {
           title: formatTitle(baseName),
           audioUrl: mp3Url as string,
           lyric: lyricModule.default,
+          logo: musicLogoModule.default,
         };
       })
     );

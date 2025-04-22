@@ -1,4 +1,4 @@
-[00:00.00]Bones - Imagine Dragons
+export default `[00:00.00]Bones - Imagine Dragons
 [00:00.00]   
 [00:00.00]Lyrics by：Dan Reynolds/Wayne Sermon/Ben McKee/Daniel Platzman/Robin Fredriksson/Mattias Larsson
 [00:02.00]   
@@ -113,4 +113,4 @@
 [02:30.00]There goes my mind
 [02:33.00]我的思绪纷飞
 [02:33.00]Cause there's magic in my bones
-[02:38.00]因为我的身体里有种魔力
+[02:38.00]因为我的身体里有种魔力`

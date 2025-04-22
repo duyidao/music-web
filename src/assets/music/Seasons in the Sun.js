@@ -1,4 +1,4 @@
-[00:00.00]Seasons in the Sun - Westlife (西城男孩)
+export default `[00:00.00]Seasons in the Sun - Westlife (西城男孩)
 [00:06.00]   
 [00:06.00]Written by：Terry Jacks/Jacques Brel
 [00:12.00]   
@@ -94,3 +94,4 @@
 [03:56.00]便如这更迭的四季悄然逝去
 [03:56.00]We had joy we had fun we had seasons in the sun
 [04:01.00]我们曾肆意欢笑 也曾纵情享乐
+`
