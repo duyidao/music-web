@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { init } from '@/store/music.ts'
-import { currentMusic } from '@/store/data.ts'
+import { init, load } from '@/store/music.ts'
+import { musicList, currentMusic, type MusicItem } from '@/store/data.ts'
 import type { LrcListType } from '@/types/music.ts'
 
 onMounted(() => {
@@ -22,6 +22,10 @@ const lrcList = computed<ComputedRef<lrcListType>>(() => {
   }) || ['暂无歌词']
 })
 
+const choseMusic = (item: MusicItem) => {
+  currentMusic.value = item;
+  load(item.audioUrl)
+}
 </script>
 
 <template>
@@ -32,14 +36,20 @@ const lrcList = computed<ComputedRef<lrcListType>>(() => {
     <div class="music-lrc">
       <div class="music-lrc-content" v-for="item in lrcList">{{ item.time }}{{ item.text }}</div>
     </div>
+
+    <div class="music-chose">
+      <div v-for="item in musicList" :key="item.id" class="text-2xl" @click.stop="choseMusic(item)">{{ item.title }}</div>
+    </div>
   </div>
 </template>
 
 <style lang="less" scoped>
 .music {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+
 
   .music-logo {
     width: 38%;
@@ -57,6 +67,12 @@ const lrcList = computed<ComputedRef<lrcListType>>(() => {
     flex: 1;
     height: 100%;
     overflow: scroll;
+  }
+
+  .music-chose {
+    position: absolute;
+    right: 50px;
+    bottom: 50px;
   }
 }
 </style>
