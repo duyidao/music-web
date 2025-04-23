@@ -1,21 +1,27 @@
 <script setup lang="ts">
 import { currentTime, duration, progress } from '@/store/contorl.ts'
+import { seek } from '@/store/music.ts'
 
+const handleProgressChange = e => {
+  console.log(e, 'e', e.target.value)
+  currentTime.value = e.target.value * duration.value
+  seek(currentTime.value)
+}
 </script>
 
 <template>
-  <div>
+  <div class="progress">
     <input
         type="range"
         min="0"
         max="1"
         step="0.01"
         :value="progress"
-        @input="handleVolumeChange($event.target.valueAsNumber)"
+        @input="handleProgressChange"
         class="volume-slider"
       >
       <p>
-        {{ currentTime.toFixed(0) }} / {{ duration.toFixed(0) }}
+        <span>{{ currentTime.toFixed(0) }}</span> / <span>{{ duration.toFixed(0) }}</span>
       </p>
   </div>
 </template>

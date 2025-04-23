@@ -14,19 +14,23 @@ export const init = () => {
 };
 
 export const audioBuffer = ref<AudioBuffer>(null); // 音频缓冲区
+export const isPlaying = ref<boolean>(false); // 是否正在播放
+export const sourceNode = ref<AudioBufferSourceNode>(null); // 音频源节点
+export const pauseTime = ref<number>(0); // 暂停时间
+export const startTime = ref<number>(0); // 开始时间
+
 // 加载音频文件
 export const load = async (item: string = musicList.value[playIndex.value]) => {
+  if (item.audioUrl === currentMusic.value?.audioUrl) return;
   currentMusic.value = item;
-        // 停止当前正在播放的实例, 创建新的音频源节点
-        if (activeInstance.value && activeInstance.value !== null) {
-          activeInstance.value.destroy();
-          activeInstance.value = null;
-        }
-    init();
-    console.log('item', item);
+  // 停止当前正在播放的实例, 创建新的音频源节点
+  if (activeInstance.value && activeInstance.value !== null) {
+    activeInstance.value.destroy();
+    activeInstance.value = null;
+  }
+  init();
   try {
-  const response = await fetch(item.audioUrl);
-
+    const response = await fetch(item.audioUrl);
     const arrayBuffer = await response.arrayBuffer();
     audioBuffer.value = await audioContext.value.decodeAudioData(arrayBuffer);
     duration.value = audioBuffer.value.duration;
@@ -38,10 +42,6 @@ export const load = async (item: string = musicList.value[playIndex.value]) => {
   }
 };
 
-export const isPlaying = ref<boolean>(false); // 是否正在播放
-export const sourceNode = ref<AudioBufferSourceNode>(null); // 音频源节点
-export const pauseTime = ref<number>(0); // 暂停时间
-export const startTime = ref<number>(0); // 开始时间
 // 播放控制
 export function play() {
   if (!audioBuffer.value) {
@@ -85,8 +85,9 @@ export const pause = () => {
 
 export const stop = () => {
   if (isPlaying.value) {
-    sourceNode.value.stop();
     isPlaying.value = false;
+    sourceNode.value.stop();
+    sourceNode.value.disconnect();
   }
   pauseTime.value = 0;
   cancelAnimationFrame(_animationFrameId);
@@ -120,17 +121,18 @@ export const _animationFrameId = ref<number>(null); // 动画帧 ID
 // 进度跟踪
 export function _trackProgress() {
   const update = () => {
-    if (isPlaying.value) {
+    if (!isPlaying.value) return;
       currentTime.value = audioContext.value.currentTime - startTime.value;
-  if (_progressCallback.value) {
+      if (duration.value !== 0 && currentTime.value >= duration.value) stop();
+
+      if (_progressCallback.value) {
         _progressCallback.value({
           currentTime: currentTime.value,
           duration: duration.value,
           progress: progress.value * 100,
         });
-}
+      }
       _animationFrameId.value = requestAnimationFrame(update);
-    }
   };
   update();
 }
@@ -145,10 +147,11 @@ export function onProgress(callback: any) {
 export function destroy() {
   stop();
   if (audioContext.value) {
-    audioContext.value.close();
+    audioContext.value?.close();
     sourceNode.value?.disconnect();
     gainNode.value?.disconnect();
     audioContext.value = null;
     gainNode.value = null
+    sourceNode.value = null
   }
 }
