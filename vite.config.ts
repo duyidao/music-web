@@ -3,6 +3,10 @@ import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import path from 'path';
 
+// eslint-disable-next-line no-control-regex
+const INVALID_CHAR_REGEX = /[\u0000-\u001F"#$&*+,:;<=>?[\]^`{|}\u007F]/g;
+const DRIVE_LETTER_REGEX = /^[a-z]:/i;
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Progress from './progress.vue'
+import Progress from './progressBar.vue'
 import Volume from './volume.vue'
 import Btn from './btn.vue'
 </script>

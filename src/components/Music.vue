@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { init, load } from '@/store/music.ts'
 import { musicList, currentMusic, lrcList, type MusicItem } from '@/store/data.ts'
-import type { LrcListType } from '@/types/music.ts'
 
 onMounted(() => {
   init()
