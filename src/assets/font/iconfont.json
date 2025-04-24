@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "38321781",
+      "name": "音量-L",
+      "font_class": "yinliang",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
+      "icon_id": "38321782",
+      "name": "静音-L",
+      "font_class": "jingyin",
+      "unicode": "e653",
+      "unicode_decimal": 58963
+    },
+    {
       "icon_id": "1159898",
       "name": "随机播放",
       "font_class": "suijibofang",
@@ -22,21 +36,21 @@
     {
       "icon_id": "5774419",
       "name": "icon_next",
-      "font_class": "icon-",
+      "font_class": "next",
       "unicode": "e73c",
       "unicode_decimal": 59196
     },
     {
       "icon_id": "5774420",
       "name": "icon_previous",
-      "font_class": "icon-1",
+      "font_class": "prev",
       "unicode": "e73d",
       "unicode_decimal": 59197
     },
     {
       "icon_id": "7594166",
       "name": "24gf-playlistMusic3",
-      "font_class": "24gf-playlistMusic3",
+      "font_class": "play_list",
       "unicode": "ea86",
       "unicode_decimal": 60038
     },
@@ -60,13 +74,6 @@
       "font_class": "tingzhi",
       "unicode": "e7e4",
       "unicode_decimal": 59364
-    },
-    {
-      "icon_id": "26528661",
-      "name": "播放",
-      "font_class": "bofang1",
-      "unicode": "e6a2",
-      "unicode_decimal": 59042
     }
   ]
 }

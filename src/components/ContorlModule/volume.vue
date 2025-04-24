@@ -11,7 +11,6 @@ setVolume(volume.value)
 
 // 音量变化处理
 const handleVolumeChange = (newVolume: number) => {
-  console.log('newVolume', newVolume);
   volume.value = newVolume
   isMuted.value = newVolume === 0
   setVolume(newVolume)
@@ -39,15 +38,15 @@ watch(volume, (newVal) => {
 </script>
 
 <template>
-  <div class="contoel-btn">
-    <button @click="toggleMute">
-        {{ isMuted ? '🔇' : '🔊' }}
-      </button>
-      <Progress :progress="volume" :callback="handleVolumeChange" />
-
-      <span class="volume-percent">
-        {{ (volume * 100).toFixed(0) }}%
-      </span>
+  <div class="contoel-volume">
+      <span class="iconfont" :class="{'icon-jingyin': isMuted, 'icon-yinliang': !isMuted}"></span>
+      
+      <div class="contoel-volume__model">
+        <Progress :progress="volume" :callback="handleVolumeChange" />
+        <span class="volume-percent">
+          {{ (volume * 100).toFixed(0) }}%
+        </span>
+      </div>
   </div>
 </template>
 

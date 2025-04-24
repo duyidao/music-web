@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4902328 */
-  src: url('iconfont.woff2?t=1745337069847') format('woff2'),
-       url('iconfont.woff?t=1745337069847') format('woff'),
-       url('iconfont.ttf?t=1745337069847') format('truetype');
+  src: url('iconfont.woff2?t=1745511899456') format('woff2'),
+       url('iconfont.woff?t=1745511899456') format('woff'),
+       url('iconfont.ttf?t=1745511899456') format('truetype');
 }
 
 .iconfont {
@@ -13,6 +13,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-yinliang:before {
+  content: "\e652";
+}
+
+.icon-jingyin:before {
+  content: "\e653";
+}
+
 .icon-suijibofang:before {
   content: "\e622";
 }
@@ -21,15 +29,15 @@
   content: "\e6ba";
 }
 
-.icon-icon-:before {
+.icon-next:before {
   content: "\e73c";
 }
 
-.icon-icon-1:before {
+.icon-prev:before {
   content: "\e73d";
 }
 
-.icon-24gf-playlistMusic3:before {
+.icon-play_list:before {
   content: "\ea86";
 }
 
@@ -43,9 +51,5 @@
 
 .icon-tingzhi:before {
   content: "\e7e4";
-}
-
-.icon-bofang1:before {
-  content: "\e6a2";
 }
 

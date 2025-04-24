@@ -64,10 +64,13 @@ function handleTrackClick(e) {
 </template>
 
 <style scoped>
+.progress {
+  width: 100%;
+}
 /* CSS样式 */
 .custom-slider {
   position: relative;
-  width: 200px;
+  width: 100%;
   height: 20px;
 }
 

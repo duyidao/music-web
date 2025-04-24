@@ -124,7 +124,6 @@ export function _trackProgress() {
     if (!isPlaying.value) return;
       currentTime.value = audioContext.value.currentTime - startTime.value;
       if (duration.value !== 0 && currentTime.value >= duration.value) stop();
-
       if (_progressCallback.value) {
         _progressCallback.value({
           currentTime: currentTime.value,
@@ -139,7 +138,6 @@ export function _trackProgress() {
 
 // 事件监听
 export function onProgress(callback: any) {
-  console.log('callback', callback);
   _progressCallback.value = callback;
 }
 
