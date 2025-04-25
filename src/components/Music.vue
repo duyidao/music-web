@@ -1,14 +1,10 @@
 <script setup lang="ts">
-import { init, load } from '@/store/music.ts'
-import { musicList, currentMusic, lrcList, type MusicItem } from '@/store/data.ts'
+import { init } from '@/store/music.ts'
+import { currentMusic, lrcList } from '@/store/data.ts'
 
 onMounted(() => {
   init()
 })
-
-const choseMusic = (item: MusicItem) => {
-  load(item)
-}
 </script>
 
 <template>
@@ -19,16 +15,11 @@ const choseMusic = (item: MusicItem) => {
     <div class="music-lrc">
       <div class="music-lrc-content" v-for="item in lrcList">{{ item.time }}{{ item.text }}</div>
     </div>
-
-    <div class="music-chose">
-      <div v-for="item in musicList" :key="item.id" class="text-2xl" @click.stop="choseMusic(item)">{{ item.title }}</div>
-    </div>
   </div>
 </template>
 
 <style lang="less" scoped>
 .music {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,12 +41,6 @@ const choseMusic = (item: MusicItem) => {
     flex: 1;
     height: 100%;
     overflow: scroll;
-  }
-
-  .music-chose {
-    position: absolute;
-    right: 50px;
-    bottom: 50px;
   }
 }
 </style>

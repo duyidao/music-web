@@ -2,6 +2,13 @@
 import Progress from './progressBar.vue'
 import Volume from './volume.vue'
 import Btn from './btn.vue'
+import MusicListBoard from './musicListBoard.vue'
+
+const showBorad = ref<boolean>(false)
+
+const showBoardFn = () => {
+  showBorad.value = true;
+}
 </script>
 
 <template>
@@ -9,18 +16,23 @@ import Btn from './btn.vue'
     <Progress />
     <div class="controls-row">
       <Btn />
+      <span class="iconfont icon-play_list" @click.stop="showBoardFn"></span>
       <Volume />
     </div>
+    <MusicListBoard v-model:show="showBorad" />
   </div>
 </template>
 
 <style lang="less" scoped>
   .control-module {
+    position: relative;
     display: grid;
     gap: 10px;
     /* 可根据需要调整间距 */
     height: 20%;
     padding: 15px 20px;
+    background-color: #f1f1f1f1;
+    z-index: 100;
 
     :deep(.progress-bar__info) {
       width: 60%;
@@ -29,6 +41,7 @@ import Btn from './btn.vue'
     .controls-row {
       display: flex;
       justify-content: center;
+      align-items: center;
       gap: 10px;
       /* 按钮之间的间距 */
       width: 100%;
@@ -38,6 +51,12 @@ import Btn from './btn.vue'
         /* 关键属性：让两个元素均分剩余空间 */
         max-width: max-content;
         /* 可选：限制最大宽度为内容宽度 */
+      }
+
+      .icon-play_list {
+        font-size: 22px;
+        font-weight: 700;
+        margin: 0 20px;
       }
 
       :deep(.control-btn) {
@@ -68,7 +87,7 @@ import Btn from './btn.vue'
           display: flex;
           align-items: center;
           width: 120px;
-          padding: 2px 6px;
+          padding: 2px 6px 2px 14px;
           background-color: #ccc;
           border-radius: 5px;
 

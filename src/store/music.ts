@@ -1,5 +1,6 @@
 import { volume, playIndex, currentTime, duration, progress } from './contorl.ts'
 import { musicList, currentMusic } from './data.ts'
+import type { MusicItem } from '@/types/music.ts'
 
 export const audioContext = ref<AudioContext>(null); // 音频上下文
 export const gainNode = ref<GainNode>(null); // 音量控制节点
@@ -20,7 +21,7 @@ export const pauseTime = ref<number>(0); // 暂停时间
 export const startTime = ref<number>(0); // 开始时间
 
 // 加载音频文件
-export const load = async (item: string = musicList.value[playIndex.value]) => {
+export const load = async (item: MusicItem = musicList.value[playIndex.value]) => {
   if (item.audioUrl === currentMusic.value?.audioUrl) return;
   currentMusic.value = item;
   // 停止当前正在播放的实例, 创建新的音频源节点
