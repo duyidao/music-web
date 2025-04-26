@@ -89,4 +89,36 @@ const durationText = computed(() => {
     }
   }
 }
+
+@media screen and (max-width: 920px) {
+  .progress-bar {
+
+    &__logo {
+      width: 3.125rem;
+      height: 3.125rem;
+      margin-right: .9375rem;
+    }
+
+    &__info {
+      p.name {
+        font-size: 1rem;
+      }
+
+      &__progress {
+        margin-top: .625rem;
+        font-size: .75rem;
+
+        :deep(.progress) {
+          margin-right: 1rem;
+        }
+
+        .time {
+          i {
+            margin: 0 .3125rem;
+          }
+        }
+      }
+    }
+  }
+}
 </style>

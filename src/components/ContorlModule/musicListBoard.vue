@@ -96,4 +96,23 @@ const closeBoradFn = () => {
     }
   }
 }
+
+@media screen and (max-width: 920px) {
+  .music-list-board {
+    height: 13.125rem;
+    padding: 1.875rem .875rem .625rem;
+
+    .music-list-down {
+      padding: .0625rem .75rem;
+      border-width: .0625rem;
+      border-radius: 0 0 .3125rem .3125rem;
+    }
+
+    .music-item {
+      font-size: 1rem;
+      margin-bottom: .3125rem;
+      padding: .5rem;
+    }
+  }
+}
 </style>
