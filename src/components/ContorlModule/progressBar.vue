@@ -3,26 +3,36 @@ import Progress from '@comp/Common/progress.vue'
 import { currentTime, duration, progress } from '@/store/contorl.ts'
 import { seek } from '@/store/music.ts'
 import { currentMusic } from '@/store/data.ts'
+import { formatDuration } from '@/utils/index.ts'
+import baseImg from '@/assets/images/base/music.jpg'
 
 const callback = (num: number) => {
   currentTime.value = num * duration.value
   seek(currentTime.value)
 }
+
+const currentTimeText = computed(() => {
+  return formatDuration(currentTime.value)
+})
+
+const durationText = computed(() => {
+  return formatDuration(duration.value)
+})
 </script>
 
 <template>
   <div class="progress-bar">
     <div class="progress-bar__logo">
-      <img :src="currentMusic?.logo"
-        alt="">
+      <img :src="currentMusic?.logo || baseImg"
+        alt="音乐logo">
     </div>
     <div class="progress-bar__info">
-      <p class="name">{{ currentMusic?.title }}</p>
+      <p class="name">{{ currentMusic?.title || '暂无音乐' }}</p>
       <div class="progress-bar__info__progress">
         <Progress :progress="progress"
           :callback="callback" />
         <p class="time">
-          <span>{{ currentTime.toFixed(0) }}</span> <i>/</i> <span>{{ duration.toFixed(0) }}</span>
+          <span>{{ currentTimeText }}</span> <i>/</i> <span>{{ durationText }}</span>
         </p>
       </div>
     </div>

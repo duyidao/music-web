@@ -9,6 +9,6 @@ export interface MusicItem {
   id: string;
   title: string;
   audioUrl: string;
-  lyric: string[];
-  logo: string[];
+  lyric: string;
+  logo: string;
 }

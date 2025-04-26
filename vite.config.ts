@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
+// 安装 @types/node 以解决类型声明问题，不然报错Cannot find module 'path' or its corresponding type declarations.
 import path from 'path';
 
 // eslint-disable-next-line no-control-regex
@@ -12,11 +13,11 @@ export default defineConfig({
   plugins: [
     vue(),
     AutoImport({
-      imports: [
-        // auto-import内置vue、vue-router、react这些常见基本库的引入规则
-        "vue",
-        "vue-router",
-      ]
+      imports: ['vue'], // 关键配置，启用 Vue 的自动导入
+      dts: 'src/auto-imports.d.ts', // 生成类型声明文件
+      eslintrc: {
+        enabled: true // 生成 .eslintrc-auto-import.json 文件
+      }
     })
   ],
   server: {

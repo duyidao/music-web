@@ -26,7 +26,7 @@ onUnmounted(() => {
   height: 100vh;
 
   .music {
-    height: 80%;
+    height: 85%;
     width: 100%;
   }
 

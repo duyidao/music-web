@@ -6,7 +6,7 @@ const props = defineProps<{
 
 const isDragging = ref(false)
 // 开始拖拽
-const startDrag = (e) => {
+const startDrag = (e: MouseEvent | TouchEvent) => {
   e.preventDefault()
   isDragging.value = true
   window.addEventListener('mousemove', handleDrag)
@@ -16,7 +16,7 @@ const startDrag = (e) => {
 }
 
 // 处理拖拽
-function handleDrag(e) {
+function handleDrag(e: MouseEvent | TouchEvent) {
   if (!isDragging.value) return
   updateProgress(e)
 }
@@ -28,20 +28,23 @@ function stopDrag() {
   window.removeEventListener('touchmove', handleDrag)
 }
 
-const sliderRef = ref(null)
+// 修复找不到 'HTMLAttributes' 的问题，将类型改为 'HTMLDivElement'，因为 sliderRef 引用的是 div 元素
+const sliderRef = ref<HTMLDivElement | null>(null)
 
 // 更新进度值
-function updateProgress(e) {
+function updateProgress(e: MouseEvent | TouchEvent) {
+  console.log(e);
+
   const slider = sliderRef.value
-  const rect = slider.getBoundingClientRect()
-  const clientX = e.clientX ?? e.touches?.[0]?.clientX
+  const rect = slider!.getBoundingClientRect()
+  const clientX = (e as MouseEvent).clientX ?? (e as TouchEvent).touches?.[0]?.clientX
 
   let rawValue = (clientX - rect.left) / rect.width
   rawValue = Math.max(0, Math.min(1, rawValue))
   props.callback(Number(rawValue.toFixed(2)))
 }
 // 点击轨道跳转
-function handleTrackClick(e) {
+function handleTrackClick(e: any) {
   updateProgress(e)
 }
 </script>
@@ -67,6 +70,7 @@ function handleTrackClick(e) {
 .progress {
   width: 100%;
 }
+
 /* CSS样式 */
 .custom-slider {
   position: relative;
