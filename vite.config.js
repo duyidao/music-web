@@ -18,6 +18,7 @@ export default defineConfig({
             }
         })
     ],
+    base: 'music-web',
     server: {
         port: 6996,
     },
