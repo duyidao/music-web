@@ -12,3 +12,9 @@ export interface MusicItem {
   lyric: string;
   logo: string;
 }
+
+export enum OrderType {
+  Sequence = 'SEQUENCE',
+  Random = 'RANDOM',
+  Single = 'SINGLE',
+}

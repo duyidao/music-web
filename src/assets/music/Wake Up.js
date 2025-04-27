@@ -1,11 +1,4 @@
 export default `[00:00.00]Wake Up - Imagine Dragons
-[00:01.00]TME享有本翻译作品的著作权
-[00:03.00]Lyrics by：Dan Reynolds/Wayne Sermon/Ben McKee/Robin Lennart Fredriksson/Mattias Larsson
-[00:03.00]
-[00:06.00]Composed by：Dan Reynolds/Wayne Sermon/Ben McKee/Robin Lennart Fredriksson/Mattias Larsson
-[00:06.00]
-[00:11.00]Produced by：Mattman & Robin
-[00:11.00]
 [00:12.00]Wheels up when I'm off the ground
 [00:12.00]轮子收起 飞机起飞 我飞离地面
 [00:14.00]I'm nowhere but I'm all around

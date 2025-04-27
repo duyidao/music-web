@@ -1,8 +1,4 @@
 export default `[00:00.00]Bones - Imagine Dragons
-[00:00.00]
-[00:00.00]Lyrics by：Dan Reynolds/Wayne Sermon/Ben McKee/Daniel Platzman/Robin Fredriksson/Mattias Larsson
-[00:02.00]
-[00:02.00]Composed by：Dan Reynolds/Wayne Sermon/Ben McKee/Daniel Platzman/Robin Fredriksson/Mattias Larsson
 [00:06.00]Gimme gimme gimme some time to think
 [00:06.00]给我一些思考的时间
 [00:08.00]I'm in the bathroom looking at me

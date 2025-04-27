@@ -1,9 +1,4 @@
 export default `[00:00.00]Thunder - Imagine Dragons (梦龙)
-[00:00.00]
-[00:00.00]Lyrics by：Dan Reynolds/Wayne Sermon/Ben McKee/Daniel Platzman/Jayson DeZuzio/A. Grant
-[00:00.00]
-[00:00.00]Composed by：Dan Reynolds/Wayne Sermon/Ben McKee/Daniel Platzman/Jayson DeZuzio/A. Grant
-[00:00.00]
 [00:03.00]Just a young gun with a quick fuse
 [00:03.00]像是一把容易走火的枪 我年轻气盛
 [00:06.00]I was uptight wanna let loose

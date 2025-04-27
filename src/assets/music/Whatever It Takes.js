@@ -1,11 +1,4 @@
 export default `[00:00.00]Whatever It Takes - Imagine Dragons (梦龙)
-[00:03.00]
-[00:07.00]Lyrics by：Dan Reynolds/Wayne Sermon/Ben McKee/Daniel Platzman/Joel Little
-[00:07.00]
-[00:11.00]Composed by：Dan Reynolds/Wayne Sermon/Ben McKee/Daniel Platzman/Joel Little
-[00:11.00]
-[00:14.00]Produced by：Joel Little
-[00:14.00]
 [00:16.00]Falling too fast to prepare for this
 [00:16.00]未及准备却已沦陷其中
 [00:18.00]Tripping in the world could be dangerous

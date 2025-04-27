@@ -1,22 +1,23 @@
-<script setup lang="ts">
-import { load } from '@/store/music.ts'
-import { musicList } from '@/store/data.ts'
-import type { MusicItem } from '@/types/music.ts'
-import { playIndex } from '@/store/contorl.ts'
+<script setup
+  lang="ts">
+  import { load } from '@/store/music.ts'
+  import { musicList } from '@/store/data.ts'
+  import type { MusicItem } from '@/types/music.ts'
+  import { playIndex } from '@/store/contorl.ts'
 
-const choseMusic = (item: MusicItem, index: number) => {
-  playIndex.value = index
-  load(item)
-  closeBoradFn()
-}
+  const choseMusic = (item: MusicItem, index: number) => {
+    playIndex.value = index
+    load(item)
+    closeBoradFn()
+  }
 
-const show = defineModel('show');
+  const show = defineModel('show');
 
-const emit = defineEmits(['update:show'])
+  const emit = defineEmits(['update:show'])
 
-const closeBoradFn = () => {
-  emit('update:show', false)
-}
+  const closeBoradFn = () => {
+    emit('update:show', false)
+  }
 </script>
 
 <template>
@@ -113,6 +114,13 @@ const closeBoradFn = () => {
       margin-bottom: .3125rem;
       padding: .5rem;
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .music-list-board {
+    width: 65%;
+    height: 13.25rem;
   }
 }
 </style>

@@ -33,8 +33,6 @@ const sliderRef = ref<HTMLDivElement | null>(null)
 
 // 更新进度值
 function updateProgress(e: MouseEvent | TouchEvent) {
-  console.log(e);
-
   const slider = sliderRef.value
   const rect = slider!.getBoundingClientRect()
   const clientX = (e as MouseEvent).clientX ?? (e as TouchEvent).touches?.[0]?.clientX

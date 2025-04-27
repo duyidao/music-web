@@ -1,11 +1,4 @@
 export default `[00:00.00]Demons - Imagine Dragons (梦龙)
-[00:00.00]
-[00:00.00]Lyrics by：Dan Reynolds/Wayne Sermon/Ben McKee/Alex Da Kid/Josh Mosser
-[00:00.00]
-[00:00.00]Composed by：Josh Mosser/Alex Da Kid/Dan Reynolds/Wayne Sermon/Ben McKee
-[00:00.00]
-[00:00.00]Arranged by：Alex da Kid
-[00:00.00]
 [00:03.00]When the days are cold
 [00:03.00]当冰冷降临世间
 [00:05.00]And the cards all fold

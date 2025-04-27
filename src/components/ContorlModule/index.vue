@@ -1,24 +1,19 @@
 <script setup lang="ts">
 import Progress from './progressBar.vue'
 import Volume from './volume.vue'
-import Btn from './btn.vue'
+import PlayBtn from './playBtn.vue'
+import ControlBtn from './controlBtn.vue'
 import MusicListBoard from './musicListBoard.vue'
 
 const showBorad = ref<boolean>(false)
-
-const showBoardFn = () => {
-  showBorad.value = true;
-}
 </script>
 
 <template>
   <div class="control-module">
     <Progress />
     <div class="controls-row">
-      <Btn />
-      <span class="iconfont icon-play_list"
-        title="播放列表"
-        @click.stop="showBoardFn"></span>
+      <PlayBtn />
+      <ControlBtn v-model:showBorad="showBorad"/>
       <Volume />
     </div>
     <MusicListBoard v-model:show="showBorad" />
@@ -30,7 +25,7 @@ const showBoardFn = () => {
   position: relative;
   display: grid;
   /* 可根据需要调整间距 */
-  height: 15%;
+  height: 7.5rem;
   padding: .9375rem 1.25rem;
   background-color: #f1f1f1f1;
   z-index: 100;
@@ -52,13 +47,6 @@ const showBoardFn = () => {
       /* 关键属性：让两个元素均分剩余空间 */
       max-width: max-content;
       /* 可选：限制最大宽度为内容宽度 */
-    }
-
-    .icon-play_list {
-      font-size: 1.375rem;
-      font-weight: 700;
-      margin: 0 1.25rem;
-      cursor: pointer;
     }
 
     :deep(.control-btn) {

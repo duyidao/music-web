@@ -1,4 +1,7 @@
 import type { MusicItem } from "@/types/music.ts";
+import {
+  playIndex,
+} from "./contorl.ts";
 
 export const musicList = ref<MusicItem[]>([]);
 export const currentMusic = ref<MusicItem | null>(null);
@@ -45,6 +48,7 @@ export const loadMusicData = async () => {
         };
       })
     );
+    currentMusic.value = musicList.value[playIndex.value]; // 设置当前播放的音乐
   } catch (err) {
     console.error("加载音乐数据失败:", err);
   }

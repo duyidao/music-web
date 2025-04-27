@@ -3,13 +3,16 @@ import ContorlModule from '@/components/ContorlModule/index.vue'
 import Music from '@/components/Music.vue'
 import { loadMusicData } from '@/store/data.ts'
 import { destroy } from '@/store/music.ts'
+import { pxToRem } from '@/utils/index.ts';
 
 onMounted(() => {
   loadMusicData()
+  window.addEventListener('resize', pxToRem);
 })
 
 onUnmounted(() => {
   destroy()
+  window.removeEventListener('resize', pxToRem);
 })
 </script>
 
@@ -26,13 +29,20 @@ onUnmounted(() => {
   height: 100vh;
 
   .music {
-    height: 85%;
     width: 100%;
+    height: calc(100vh - 120px);
   }
 
   .contorl-btn {
-    height: 20%;
     width: 100%;
+  }
+}
+
+@media screen and (max-width: 920px) {
+  .container {
+    .music {
+      height: calc(100vh - 7.5rem);
+    }
   }
 }
 </style>

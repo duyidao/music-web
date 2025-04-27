@@ -7,6 +7,7 @@ import {
 } from "./contorl.ts";
 import { musicList, currentMusic } from "./data.ts";
 import type { MusicItem } from "@/types/music.ts";
+import { order, nextSong } from './contorl.ts'
 
 export const audioContext = ref<AudioContext | null>(null); // 音频上下文
 export const gainNode = ref<GainNode | null>(null); // 音量控制节点
@@ -30,7 +31,7 @@ export const startTime = ref<number>(0); // 开始时间
 export const load = async (
   item: MusicItem = musicList.value[playIndex.value]
 ) => {
-  if (item.audioUrl === currentMusic.value?.audioUrl) return;
+  if (item.audioUrl === currentMusic.value?.audioUrl && !(Math.abs(duration.value - currentTime.value) <= 1)) return;
   currentMusic.value = item;
   // 停止当前正在播放的实例, 创建新的音频源节点
   if (activeInstance.value && activeInstance.value !== null) {
@@ -71,11 +72,17 @@ export function play() {
   sourceNode.value = audioContext.value!.createBufferSource();
   sourceNode.value.buffer = audioBuffer.value;
   sourceNode.value.connect(gainNode.value!);
-
   const offset = pauseTime.value;
   sourceNode.value.start(0, offset);
   startTime.value = audioContext.value!.currentTime - offset;
   isPlaying.value = true;
+
+  // 如果是正常播放完毕，则根据当前类型决定下一首的播放方式
+  sourceNode.value.onended = () => {
+    if (Math.abs(duration.value - currentTime.value) <= 1) {
+      nextSong[order.value]();
+    }
+  }
 
   _trackProgress();
   return true;

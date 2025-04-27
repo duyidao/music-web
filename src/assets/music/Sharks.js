@@ -1,9 +1,4 @@
 export default `[00:00.00]Sharks - Imagine Dragons
-[00:00.00]
-[00:02.00]Lyrics by：Dan Reynolds/Wayne Sermon/Ben McKee/Daniel Platzman/Mattias Larsson/Robin Fredriksson
-[00:04.00]
-[00:04.00]Composed by：Dan Reynolds/Wayne Sermon/Ben McKee/Daniel Platzman/Mattias Larsson/Robin Fredriksson
-[00:06.00]
 [00:06.00]Ha ha ha ha ha
 [00:06.00]
 [00:08.00]Trouble

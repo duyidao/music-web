@@ -1,7 +1,4 @@
 export default `[00:00.00]Seasons in the Sun - Westlife (西城男孩)
-[00:06.00]
-[00:06.00]Written by：Terry Jacks/Jacques Brel
-[00:12.00]
 [00:18.00]Goodbye to you my trusted friend
 [00:18.00]至交老友 向你道声离别
 [00:23.00]We've known each other since we were nine or ten
