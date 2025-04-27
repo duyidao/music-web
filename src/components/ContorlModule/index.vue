@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { currentMusic } from '@/store/data.ts'
 import Progress from './progressBar.vue'
 import Volume from './volume.vue'
 import PlayBtn from './playBtn.vue'
@@ -6,14 +7,22 @@ import ControlBtn from './controlBtn.vue'
 import MusicListBoard from './musicListBoard.vue'
 
 const showBorad = ref<boolean>(false)
+
+const controlModuleRef = ref<HTMLDivElement>(null as unknown as HTMLDivElement);
+
+watch(() => currentMusic.value, (newVal) => {
+  if (!newVal?.logo) return;
+  nextTick(() => controlModuleRef.value.style.background = `url(${newVal!.logo}) no-repeat 100% / cover`)
+})
 </script>
 
 <template>
   <div class="control-module">
+    <div ref="controlModuleRef" class="bg-image"></div>
     <Progress />
     <div class="controls-row">
       <PlayBtn />
-      <ControlBtn v-model:showBorad="showBorad"/>
+      <ControlBtn v-model:showBorad="showBorad" />
       <Volume />
     </div>
     <MusicListBoard v-model:show="showBorad" />
@@ -29,6 +38,16 @@ const showBorad = ref<boolean>(false)
   padding: .9375rem 1.25rem;
   background-color: #f1f1f1f1;
   z-index: 100;
+
+  .bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.4;
+    z-index: -1;
+  }
 
   :deep(.progress-bar__info) {
     width: 60%;
@@ -105,6 +124,41 @@ const showBorad = ref<boolean>(false)
         span {
           margin-left: .625rem;
         }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .control-module {
+    /* 可根据需要调整间距 */
+    height: 7.5rem;
+    padding: .9rem 1rem;
+
+    .controls-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* 按钮之间的间距 */
+      width: 100%;
+      margin-top: .75rem;
+
+
+      :deep(.control-btn) {
+
+        span {
+          font-size: 2.3rem;
+          margin: 0 .25rem;
+
+          &:first-child,
+          &:last-child {
+            font-size: 1.5rem;
+          }
+        }
+      }
+
+      :deep(.contoel-volume) {
+        display: none;
       }
     }
   }

@@ -4,6 +4,34 @@ import { currentMusic, lrcList } from '@/store/data.ts'
 import { currentTime } from '@/store/contorl.ts'
 import baseImg from '@/assets/images/base/music.jpg'
 import { screenWidth, ratio } from '@/utils/index.ts';
+// @ts-ignore
+import ColorThief from 'colorthief';
+
+const colorThief = new ColorThief();
+const bgColor = ref('transparent');
+const getBg = async () => {
+  if (!currentMusic.value?.logo) return
+  
+  try {
+    // 1. 创建图片对象并加载
+    const img = new Image()
+    img.crossOrigin = 'Anonymous' // 处理跨域问题
+    img.src = currentMusic.value.logo
+
+    // 2. 等待图片加载完成
+    await new Promise((resolve, reject) => {
+      img.onload = resolve
+      img.onerror = reject
+    })
+
+    // 3. 获取颜色
+    const colors = await colorThief.getColor(img, 5)
+    bgColor.value = `rgba(${colors[0]}, ${colors[1]}, ${colors[2]}, .7)`
+  } catch (err) {
+    console.error('获取背景色失败:', err)
+    bgColor.value = 'transparent' // 设置默认颜色
+  }
+}
 
 onMounted(() => {
   init()
@@ -23,6 +51,8 @@ let maxOffsetTop = 0
 watch(() => lrcList.value, () => {
   musicLrcHeight = musicLrc.value.clientHeight; // 获取容器的高度
   maxOffsetTop = (lrcList.value.length - 1) * liHeight.value - musicLrcHeight + liHeight.value / 2; // 计算最大偏移量
+
+  getBg();
 })
 
 watch(() => screenWidth.value, (newVal: number) => {
@@ -47,7 +77,7 @@ watch(() => currentTime.value, () => {
 </script>
 
 <template>
-  <div class="music">
+  <div class="music" :style="{ '--bg': bgColor }">
     <div class="music-logo">
       <img :src="currentMusic?.logo || baseImg"
         alt="音乐logo" />
@@ -71,7 +101,7 @@ watch(() => currentTime.value, () => {
   display: flex;
   align-items: center;
   justify-content: center;
-
+  background-color: var(--bg);
 
   .music-logo {
     width: 38%;
@@ -152,7 +182,8 @@ watch(() => currentTime.value, () => {
   .music-lrc {
     width: 100%;
     height: 100%;
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
 
     ul {
       font-size: .875rem;

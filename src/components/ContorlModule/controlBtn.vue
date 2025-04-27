@@ -48,13 +48,13 @@ const icons = computed(() => [
   justify-content: center;
   width: 100%;
   height: 100%;
-  margin-left: 1rem;
-  
+  margin-left: .75rem;
+
   .iconfont {
-      font-size: 1.375rem;
-      font-weight: 700;
-      margin: 0 0.9rem;
-      cursor: pointer;
+    font-size: 1.375rem;
+    font-weight: 700;
+    margin: 0 0.5rem;
+    cursor: pointer;
   }
 }
 </style>

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/node": "^22.15.2",
+    "colorthief": "^2.6.0",
     "less": "^4.3.0",
     "less-loader": "^12.2.0",
     "unplugin-auto-import": "^19.1.2",
