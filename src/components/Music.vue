@@ -129,7 +129,7 @@ const handleBuyFn = () => {
     <div class="music-show-more" @click.stop="showMoreFn" title="购买音频">
       <span class="iconfont icon-gengduo"></span>
       <div class="music-more-content" :class="{'active': show}">
-        <p>当前可听时长：{{ currentMusic?.hasOwnProperty('time') ? currentMusic.time : '无需购买' }}</p>
+        <p>当前可听时长：{{ currentMusic?.hasOwnProperty('time') ? currentMusic.time + ' 秒' : '无需购买' }}</p>
         <div v-if="currentMusic?.hasOwnProperty('time')">
           <input v-model="buy" type="number" placeholder="请输入购买时长" />
           <button @click.stop="handleBuyFn">购买</button>
