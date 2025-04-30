@@ -4,10 +4,14 @@ import { currentMusic, lrcList } from '@/store/data.ts'
 import { currentTime } from '@/store/contorl.ts'
 import baseImg from '@/assets/images/base/music.jpg'
 import { screenWidth, ratio } from '@/utils/index.ts';
+import { addUserTime } from '@/store/user.ts'
+import { modelList } from '@/store/data.ts';
+
 // @ts-ignore
 import ColorThief from 'colorthief';
 
 const colorThief = new ColorThief();
+// @ts-ignore
 const bgColor = ref('transparent');
 const getBg = async () => {
   if (!currentMusic.value?.logo) return
@@ -33,21 +37,28 @@ const getBg = async () => {
   }
 }
 
+// @ts-ignore
 onMounted(() => {
   init()
 })
 
+// @ts-ignore
 const lrcActive = computed(() => {
   return lrcList.value.find((item: any) => {
     return item.time >= currentTime.value
   })
 })
+// @ts-ignore
+
 const musicLrc = ref()
+// @ts-ignore
 const musicLrcContent = ref()
 let musicLrcHeight = 0
+// @ts-ignore
 let liHeight = ref(screenWidth.value < 768 ? 40 * ratio.value : 40);
 let maxOffsetTop = 0
 
+// @ts-ignore
 watch(() => lrcList.value, () => {
   musicLrcHeight = musicLrc.value.clientHeight; // 获取容器的高度
   maxOffsetTop = (lrcList.value.length - 1) * liHeight.value - musicLrcHeight + liHeight.value / 2; // 计算最大偏移量
@@ -55,10 +66,12 @@ watch(() => lrcList.value, () => {
   getBg();
 })
 
+// @ts-ignore
 watch(() => screenWidth.value, (newVal: number) => {
   liHeight.value = newVal < 768 ? 40 * ratio.value : 40;
 })
 
+// @ts-ignore
 watch(() => currentTime.value, () => {
   const index = lrcList.value.findIndex((item: any) => {
     return item.time >= currentTime.value
@@ -74,6 +87,25 @@ watch(() => currentTime.value, () => {
 
   musicLrcContent.value.style.transform = `translateY(-${offsetTop}px)` // 设置偏移量
 })
+
+const show = ref(false)
+const showMoreFn = () => {
+  show.value = !show.value;
+}
+
+// @ts-ignore
+const buy = ref(0)
+const handleBuyFn = () => {
+  console.log('buy.value', buy.value);
+  if (isNaN(buy.value) || buy.value <= 0) {
+    modelList.value.unshift('购买时长必须大于0')
+    return;
+  }
+  addUserTime(currentMusic.value.id, buy.value);
+  buy.value = 0;
+  modelList.value.unshift('购买成功，请继续享受音乐吧');
+  show.value = false;
+}
 </script>
 
 <template>
@@ -92,6 +124,17 @@ watch(() => currentTime.value, () => {
           {{ (item as any)?.text }}
         </li>
       </ul>
+    </div>
+
+    <div class="music-show-more">
+      <span class="iconfont icon-gengduo" title="更多设置" @click.stop="showMoreFn"></span>
+      <div class="music-more-content" :class="{'active': show}">
+        <p>当前可听时长：{{ currentMusic?.hasOwnProperty('time') ? currentMusic.time : '无需购买' }}</p>
+        <div v-if="currentMusic?.hasOwnProperty('time')">
+          <input v-model="buy" type="number" placeholder="请输入购买时长" />
+          <button @click.stop="handleBuyFn">购买</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -125,6 +168,7 @@ watch(() => currentTime.value, () => {
     ul {
       font-size: 16px;
       text-align: center;
+      transition: all .3s;
 
       li {
         display: flex;
@@ -134,6 +178,59 @@ watch(() => currentTime.value, () => {
         &.active {
           transform: scale(1.3);
           color: green;
+        }
+      }
+    }
+  }
+
+  .music-show-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 140px;
+    left: 20px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, .5);
+    cursor: pointer;
+
+    .music-more-content {
+      position: absolute;
+      transform: translateX(-130%);
+      bottom: 50px;
+      left: 0;
+      width: max-content;
+      padding: 15px;
+      background-color: rgba(255, 255, 255, .5);
+      transition: all .3s;
+
+      &.active {
+        transform: translateX(0);
+      }
+
+      p {
+        font-size: 14px;
+      }
+
+      >div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 14px;
+
+        input {
+          border: 1px solid #e1e1e1;
+          font-size: 13px;
+          padding: 4px 6px;
+          background-color: transparent;
+        }
+
+        button {
+          background-color: #ccc;
+          margin-left: 8px;
+          border-radius: 6px;
         }
       }
     }
@@ -149,7 +246,7 @@ watch(() => currentTime.value, () => {
 
   .music-lrc {
     ul {
-      font-size: 1rem;
+      font-size: .875rem;
     }
   }
 }
@@ -186,7 +283,7 @@ watch(() => currentTime.value, () => {
     overflow-x: hidden;
 
     ul {
-      font-size: .875rem;
+      font-size: .75rem;
 
       li {
         &.active {

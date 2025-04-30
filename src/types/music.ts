@@ -11,6 +11,7 @@ export interface MusicItem {
   audioUrl: string;
   lyric: string;
   logo: string;
+  time?: number;
 }
 
 export enum OrderType {

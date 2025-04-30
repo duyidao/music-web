@@ -1,10 +1,11 @@
 import type { MusicItem } from "@/types/music.ts";
-import {
-  playIndex,
-} from "./contorl.ts";
+import { playIndex } from "./contorl.ts";
+import { userTime } from "./user.ts";
 
 export const musicList = ref<MusicItem[]>([]);
-export const currentMusic = ref<MusicItem | null>(null);
+export const currentMusic = computed(() => {
+  return musicList.value[playIndex.value]; // 设置当前播放的音乐
+});
 
 // 加载音乐数据
 export const loadMusicData = async () => {
@@ -39,16 +40,18 @@ export const loadMusicData = async () => {
           default: "",
         };
 
-        return {
+        let obj: MusicItem = {
           id: baseName,
           title: formatTitle(baseName),
           audioUrl: mp3Url as string,
           lyric: lyricModule.default,
           logo: musicLogoModule.default,
-        };
+        }
+        if (userTime.value.hasOwnProperty(baseName)) obj.time = (userTime.value as any)[baseName];
+
+        return obj;
       })
     );
-    currentMusic.value = musicList.value[playIndex.value]; // 设置当前播放的音乐
   } catch (err) {
     console.error("加载音乐数据失败:", err);
   }
@@ -76,3 +79,6 @@ export const lrcList = computed(() => {
     }) || ["暂无歌词"]
   );
 });
+
+
+export const modelList = ref<string[]>([]);

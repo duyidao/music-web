@@ -5,7 +5,7 @@ import {
   duration,
   progress,
 } from "./contorl.ts";
-import { musicList, currentMusic } from "./data.ts";
+import { musicList, currentMusic, modelList } from "./data.ts";
 import type { MusicItem } from "@/types/music.ts";
 import { order, nextSong } from './contorl.ts'
 
@@ -26,13 +26,17 @@ export const isPlaying = ref<boolean>(false); // 是否正在播放
 export const sourceNode = ref<AudioBufferSourceNode | null>(null); // 音频源节点
 export const pauseTime = ref<number>(0); // 暂停时间
 export const startTime = ref<number>(0); // 开始时间
+export const wantMoney = ref<boolean>(true); // 开始时间
 
 // 加载音频文件
 export const load = async (
   item: MusicItem = musicList.value[playIndex.value]
 ) => {
   if (item.audioUrl === currentMusic.value?.audioUrl && !(Math.abs(duration.value - currentTime.value) <= 1)) return;
-  currentMusic.value = item;
+
+  const index = musicList.value.findIndex((i) => i.audioUrl === item.audioUrl);
+  playIndex.value = index;
+
   // 停止当前正在播放的实例, 创建新的音频源节点
   if (activeInstance.value && activeInstance.value !== null) {
     activeInstance.value.destroy();
@@ -52,8 +56,16 @@ export const load = async (
   }
 };
 
+export const beginListen = ref(0)
+export const endListen = ref(0)
+
 // 播放控制
 export function play() {
+  if (wantMoney.value && currentMusic.value.hasOwnProperty('time') && (currentMusic.value?.time ?? 0) <= 0) {
+    modelList.value.unshift('当前歌曲可听部分已结束，请重新购买或选择其他音频。')
+    return;
+  }
+
   if (!audioBuffer.value) {
     load(); // 如果没有音频缓冲区，则加载音频
     return;
@@ -76,6 +88,8 @@ export function play() {
   sourceNode.value.start(0, offset);
   startTime.value = audioContext.value!.currentTime - offset;
   isPlaying.value = true;
+  beginListen.value = Date.now()
+  console.log('beginListen.value ', Date(), beginListen.value );
 
   // 如果是正常播放完毕，则根据当前类型决定下一首的播放方式
   sourceNode.value.onended = () => {
@@ -88,12 +102,21 @@ export function play() {
   return true;
 }
 
+const timeCompute = () => {
+  if (currentMusic.value!.hasOwnProperty('time')) {
+    (musicList.value![playIndex.value] as any).time -= Number(((endListen.value - beginListen.value) / 1000).toFixed(0));
+  }
+}
+
 export const pause = () => {
   if (isPlaying.value) {
     sourceNode.value!.stop();
     pauseTime.value = audioContext.value!.currentTime - startTime.value;
     isPlaying.value = false;
     cancelAnimationFrame(_animationFrameId.value!);
+    endListen.value = Date.now();
+
+    timeCompute();
     return true;
   }
   return false;
@@ -104,6 +127,8 @@ export const stop = () => {
     isPlaying.value = false;
     sourceNode.value!.stop();
     sourceNode.value!.disconnect();
+    endListen.value = Date.now()
+    timeCompute();
   }
   pauseTime.value = 0;
   cancelAnimationFrame(_animationFrameId.value!);

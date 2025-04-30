@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import ContorlModule from '@/components/ContorlModule/index.vue'
-import Music from '@/components/Music.vue'
+import ContorlModule from '@comp/ContorlModule/index.vue'
+import Music from '@comp/Music.vue'
+import Model from '@comp/Common/model.vue'
 import { loadMusicData } from '@/store/data.ts'
 import { destroy } from '@/store/music.ts'
 import { pxToRem } from '@/utils/index.ts';
@@ -20,6 +21,7 @@ onUnmounted(() => {
   <div class="container">
     <Music />
     <ContorlModule />
+    <Model />
   </div>
 </template>
 
