@@ -47,4 +47,4 @@
 
 ## 思维导图
 
-![思维导图](https://pic1.imgdb.cn/item/6811f00958cb8da5c8d55837.png)
+![思维导图](/daotu.png)
