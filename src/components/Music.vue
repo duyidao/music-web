@@ -90,7 +90,7 @@ watch(() => currentTime.value, () => {
 
 const show = ref(false)
 const showMoreFn = () => {
-  show.value = !show.value;
+  show.value = true;
 }
 
 // @ts-ignore
@@ -126,8 +126,8 @@ const handleBuyFn = () => {
       </ul>
     </div>
 
-    <div class="music-show-more">
-      <span class="iconfont icon-gengduo" title="更多设置" @click.stop="showMoreFn"></span>
+    <div class="music-show-more" @click.stop="showMoreFn" title="购买音频">
+      <span class="iconfont icon-gengduo"></span>
       <div class="music-more-content" :class="{'active': show}">
         <p>当前可听时长：{{ currentMusic?.hasOwnProperty('time') ? currentMusic.time : '无需购买' }}</p>
         <div v-if="currentMusic?.hasOwnProperty('time')">

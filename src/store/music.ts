@@ -27,12 +27,13 @@ export const sourceNode = ref<AudioBufferSourceNode | null>(null); // 音频源�
 export const pauseTime = ref<number>(0); // 暂停时间
 export const startTime = ref<number>(0); // 开始时间
 export const wantMoney = ref<boolean>(true); // 开始时间
+const nowPlay = ref('')
 
 // 加载音频文件
 export const load = async (
   item: MusicItem = musicList.value[playIndex.value]
 ) => {
-  if (item.audioUrl === currentMusic.value?.audioUrl && !(Math.abs(duration.value - currentTime.value) <= 1)) return;
+  if (!!nowPlay.value && item.audioUrl === nowPlay.value && !(Math.abs(duration.value - currentTime.value) <= 1)) return;
 
   const index = musicList.value.findIndex((i) => i.audioUrl === item.audioUrl);
   playIndex.value = index;
@@ -43,11 +44,14 @@ export const load = async (
     activeInstance.value = null;
   }
   init();
+
   try {
+    modelList.value.unshift(`正在加载音频：${item.id}`);
     const response = await fetch(item.audioUrl);
     const arrayBuffer = await response.arrayBuffer();
     audioBuffer.value = await audioContext.value!.decodeAudioData(arrayBuffer);
     duration.value = audioBuffer.value.duration;
+    nowPlay.value = item.audioUrl;
     play();
     return true;
   } catch (err) {
@@ -61,6 +65,7 @@ export const endListen = ref(0)
 
 // 播放控制
 export function play() {
+  // 如果没有时长，不给播放
   if (wantMoney.value && currentMusic.value.hasOwnProperty('time') && (currentMusic.value?.time ?? 0) <= 0) {
     modelList.value.unshift('当前歌曲可听部分已结束，请重新购买或选择其他音频。')
     return;
@@ -89,7 +94,6 @@ export function play() {
   startTime.value = audioContext.value!.currentTime - offset;
   isPlaying.value = true;
   beginListen.value = Date.now()
-  console.log('beginListen.value ', Date(), beginListen.value );
 
   // 如果是正常播放完毕，则根据当前类型决定下一首的播放方式
   sourceNode.value.onended = () => {
@@ -102,7 +106,8 @@ export function play() {
   return true;
 }
 
-const timeCompute = () => {
+// 暂停或停止，都计算当前音频剩余时长
+export const timeCompute = () => {
   if (currentMusic.value!.hasOwnProperty('time')) {
     (musicList.value![playIndex.value] as any).time -= Number(((endListen.value - beginListen.value) / 1000).toFixed(0));
   }
@@ -129,6 +134,7 @@ export const stop = () => {
     sourceNode.value!.disconnect();
     endListen.value = Date.now()
     timeCompute();
+    nowPlay.value = '';
   }
   pauseTime.value = 0;
   cancelAnimationFrame(_animationFrameId.value!);
