@@ -7,6 +7,14 @@ export const userTime = ref({
   'Bad Liar': 0,
 })
 
+export const userColor = ref('')
+
+export const setUserColor = (color: string = '#4fa273') => {
+  userColor.value = color;
+  document.documentElement.style.setProperty(`--base-color`, userColor.value)
+}
+setUserColor();
+
 export const addUserTime = (id: string, time: number) => {
   if (id in userTime.value) {
     userTime.value[id as keyof typeof userTime.value] += time;

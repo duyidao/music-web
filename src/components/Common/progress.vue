@@ -91,7 +91,7 @@ function handleTrackClick(e: any) {
 .fill {
   position: absolute;
   height: 100%;
-  background: #4CAF50;
+  background: var(--base-color);
   border-radius: 2px;
   transition: width 0.1s;
 }

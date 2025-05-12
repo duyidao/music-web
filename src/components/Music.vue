@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { init } from '@/store/music.ts'
 import { currentMusic, lrcList } from '@/store/data.ts'
-import { currentTime } from '@/store/contorl.ts'
+import { currentTime, show } from '@/store/contorl.ts'
 import baseImg from '@/assets/images/base/music.jpg'
 import { screenWidth, ratio } from '@/utils/index.ts';
 import { addUserTime } from '@/store/user.ts'
@@ -88,11 +88,6 @@ watch(() => currentTime.value, () => {
   musicLrcContent.value.style.transform = `translateY(-${offsetTop}px)` // 设置偏移量
 })
 
-const show = ref(false)
-const showMoreFn = () => {
-  show.value = true;
-}
-
 // @ts-ignore
 const buy = ref(0)
 const handleBuyFn = () => {
@@ -126,7 +121,7 @@ const handleBuyFn = () => {
       </ul>
     </div>
 
-    <div class="music-show-more" @click.stop="showMoreFn" title="购买音频">
+    <div class="music-show-more" v-close="true" title="购买音频">
       <span class="iconfont icon-gengduo"></span>
       <div class="music-more-content" :class="{'active': show}">
         <p>当前可听时长：{{ currentMusic?.hasOwnProperty('time') ? currentMusic.time + ' 秒' : '无需购买' }}</p>
@@ -177,7 +172,8 @@ const handleBuyFn = () => {
 
         &.active {
           transform: scale(1.3);
-          color: green;
+          color: var(--base-color);
+          text-shadow: 0 0px 8px #fff;
         }
       }
     }

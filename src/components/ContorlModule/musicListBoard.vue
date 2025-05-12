@@ -3,6 +3,7 @@ import { load } from '@/store/music.ts'
 import { musicList } from '@/store/data.ts'
 import type { MusicItem } from '@/types/music.ts'
 import { playIndex } from '@/store/contorl.ts'
+import { currentMusic } from '@/store/data.ts'
 
 const choseMusic = (item: MusicItem, index: number) => {
   playIndex.value = index
@@ -17,11 +18,25 @@ const emit = defineEmits(['update:show'])
 const closeBoradFn = () => {
   emit('update:show', false)
 }
+
+const boardRef = ref<HTMLDivElement>(null as unknown as HTMLDivElement);
+
+watch(() => currentMusic.value, (newVal) => {
+  if (!newVal?.logo) return;
+  nextTick(() => boardRef.value.style.background = `url(${newVal!.logo}) no-repeat 100% / cover`)
+})
+
+const getMusicType = (item: MusicItem) => {
+  if (item.time || item.time === 0) return '付费音乐'
+  return item.type === 1 ? '允许试听' : '免费音乐'
+}
 </script>
 
 <template>
   <div class="music-list-board"
+    ref="boardRef"
     :class="{ active: show }">
+    <div class="bg-image"></div>
     <div style="width: 100%; height: 100%; overflow: auto;">
       <div v-for="(item, index) in musicList"
         :key="item.id"
@@ -29,18 +44,17 @@ const closeBoradFn = () => {
         @click.stop="choseMusic(item, index)"
         :class="{ active: index === playIndex }">
         <span>{{ item.title }}</span>
-        <span>梦龙乐队</span>
+        <span>{{ getMusicType(item) }}</span>
       </div>
     </div>
 
-    <div class="music-list-down">
-      <span class="iconfont icon-xia"
-        @click.stop="closeBoradFn"></span>
+    <div class="music-list-down" @click.stop="closeBoradFn">
+      <span class="iconfont icon-xia"></span>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
 .music-list-board {
   position: absolute;
   display: none;
@@ -50,12 +64,25 @@ const closeBoradFn = () => {
   height: 210px;
   transform: translate(-50%, 200%);
   padding: 30px 14px 10px;
-  background-color: #f1f1f1;
   overflow-y: scroll;
   z-index: -1;
   transition: all 0.3s ease-in-out;
-  isolation: isolate;
-  /* ✅ 隔离堆叠上下文 */
+  backdrop-filter: blur(10px);
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: .35;
+    z-index: -1;
+    background-color: #f1f1f1;
+  }
 
   &.active {
     display: block;
@@ -71,7 +98,7 @@ const closeBoradFn = () => {
     top: 0;
     left: 50%;
     transform: translate(-50%, 0);
-    padding: 1px 12px;
+    padding: 1px 24px;
     border: 1px solid #ccc;
     border-radius: 0 0 5px 5px;
     cursor: pointer;

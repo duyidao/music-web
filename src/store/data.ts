@@ -7,6 +7,8 @@ export const currentMusic = computed(() => {
   return musicList.value[playIndex.value]; // 设置当前播放的音乐
 });
 
+const whileList = ['Season in the Sun', 'Shots']
+
 // 加载音乐数据
 export const loadMusicData = async () => {
   try {
@@ -46,6 +48,7 @@ export const loadMusicData = async () => {
           audioUrl: mp3Url as string,
           lyric: lyricModule.default,
           logo: musicLogoModule.default,
+          type: whileList.includes(baseName) ? 1 : 0
         }
         if (userTime.value.hasOwnProperty(baseName)) obj.time = (userTime.value as any)[baseName];
 

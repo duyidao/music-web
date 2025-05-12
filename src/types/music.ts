@@ -4,6 +4,11 @@ export interface LrcListType {
   time: number;
 }
 
+enum MusicType {
+  免费试听 = 1,
+  免费音乐 = 0
+}
+
 // 定义音乐对象类型
 export interface MusicItem {
   id: string;
@@ -12,6 +17,7 @@ export interface MusicItem {
   lyric: string;
   logo: string;
   time?: number;
+  type?: MusicType;
 }
 
 export enum OrderType {

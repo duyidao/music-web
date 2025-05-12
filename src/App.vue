@@ -18,7 +18,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="container">
+  <div class="container" v-close="false">
     <Music />
     <ContorlModule />
     <Model />
