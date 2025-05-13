@@ -30,7 +30,7 @@ const getBg = async () => {
 
     // 3. 获取颜色
     const colors = await colorThief.getColor(img, 5)
-    bgColor.value = `rgba(${colors[0]}, ${colors[1]}, ${colors[2]}, .7)`
+    bgColor.value = `rgba(${colors[0]}, ${colors[1]}, ${colors[2]}, .35)`
   } catch (err) {
     console.error('获取背景色失败:', err)
     bgColor.value = 'transparent' // 设置默认颜色
@@ -179,7 +179,7 @@ const changePhoneShow = (type: string) => {
         &.active {
           transform: scale(1.3);
           color: var(--base-color);
-          text-shadow: 0 0px 8px #fff;
+          text-shadow: 0 0px 10px #fff;
         }
       }
     }
