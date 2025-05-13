@@ -12,11 +12,19 @@ import { order, nextSong } from './contorl.ts'
 export const audioContext = ref<AudioContext | null>(null); // 音频上下文
 export const gainNode = ref<GainNode | null>(null); // 音量控制节点
 export const activeInstance = ref<any>(null); // 当前播放实例
+export const analyser = ref<AnalyserNode | null>(null); // 音频分析器
 
 export const init = () => {
   if (audioContext.value) return;
   audioContext.value = new window.AudioContext();
+
+  // 创建分析器和增益节点
+  analyser.value = audioContext.value.createAnalyser();
+  analyser.value.fftSize = 256;
   gainNode.value = audioContext.value.createGain();
+
+  gainNode.value = audioContext.value.createGain();
+  // 正确连接节点链：source -> analyser -> gain -> destination
   gainNode.value.connect(audioContext.value.destination);
   setVolume(volume.value);
 };
@@ -88,7 +96,10 @@ export function play() {
 
   sourceNode.value = audioContext.value!.createBufferSource();
   sourceNode.value.buffer = audioBuffer.value;
-  sourceNode.value.connect(gainNode.value!);
+  // 连接音频源到分析器
+  sourceNode.value.connect(analyser.value!);
+  analyser.value!.connect(gainNode.value!);
+
   const offset = pauseTime.value;
   sourceNode.value.start(0, offset);
   startTime.value = audioContext.value!.currentTime - offset;

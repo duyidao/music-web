@@ -1,10 +1,10 @@
 import { musicList } from './data.ts'
 
 export const userTime = ref({
-  'Bones': 360,
+  'Bones': 0,
   'Demons': 15,
   'Brids': 7800,
-  'Bad Liar': 0,
+  'Bad Liar': 360,
 })
 
 export const userColor = ref('')

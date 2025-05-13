@@ -2,10 +2,10 @@
 import { init } from '@/store/music.ts'
 import { currentMusic, lrcList } from '@/store/data.ts'
 import { currentTime, show } from '@/store/contorl.ts'
-import baseImg from '@/assets/images/base/music.jpg'
 import { screenWidth, ratio } from '@/utils/index.ts';
 import { addUserTime } from '@/store/user.ts'
 import { modelList } from '@/store/data.ts';
+import CanvasVisual from '@comp/CanvasVisual/index.vue'
 
 // @ts-ignore
 import ColorThief from 'colorthief';
@@ -85,11 +85,14 @@ watch(() => currentTime.value, () => {
     offsetTop = maxOffsetTop
   }
 
-  musicLrcContent.value.style.transform = `translateY(-${offsetTop}px)` // 设置偏移量
+  musicLrcContent.value.style.transform = `translateY(-${offsetTop * (screenWidth.value < 768 ? ratio.value : 1)}px)` // 设置偏移量
 })
 
 // @ts-ignore
 const buy = ref(0)
+/**
+ * 购买时长的处理函数
+ */
 const handleBuyFn = () => {
   console.log('buy.value', buy.value);
   if (isNaN(buy.value) || buy.value <= 0) {
@@ -101,16 +104,27 @@ const handleBuyFn = () => {
   modelList.value.unshift('购买成功，请继续享受音乐吧');
   show.value = false;
 }
+
+const phoneShow = ref<string>('image')
+/**
+ * 改变手机号显示类型
+ *
+ * @param type 显示类型，'image' 表示显示logo，'lrc' 表示显示歌词
+ */
+const changePhoneShow = (type: string) => {
+  phoneShow.value = type
+}
 </script>
 
 <template>
   <div class="music" :style="{ '--bg': bgColor }">
-    <div class="music-logo">
-      <img :src="currentMusic?.logo || baseImg"
-        alt="音乐logo" />
+    <div class="music-logo" :class="{'active': phoneShow === 'image'}" @click.stop="changePhoneShow('lrc')">
+      <CanvasVisual/>
     </div>
     <div class="music-lrc"
-      ref="musicLrc">
+      ref="musicLrc"
+      :class="{'active': phoneShow === 'lrc'}"
+      @click.stop="changePhoneShow('image')">
       <ul class="music-lrc-content"
         ref="musicLrcContent">
         <li v-for="item in lrcList"
@@ -142,17 +156,7 @@ const handleBuyFn = () => {
   background-color: var(--bg);
 
   .music-logo {
-    width: 38%;
-    padding: 0 30px 0 100px;
-
-    img {
-      width: 100%;
-      aspect-ratio: 1/1;
-      /* 宽高比强制为 1:1（正方形） */
-      object-fit: contain;
-      /* 控制图片填充方式（cover 裁剪，contain 包含） */
-      border-radius: 50%;
-    }
+    width: 400px;
   }
 
   .music-lrc {
@@ -233,34 +237,22 @@ const handleBuyFn = () => {
   }
 }
 
-@media screen and (max-width: 920px) {
-  .music {
-
-  .music-logo {
-    padding: 0 1.875rem 0 6.25rem;
-  }
-
-  .music-lrc {
-    ul {
-      font-size: .875rem;
-    }
-  }
-}
-}
-
 @media screen and (max-width: 768px) {
   .music {
     position: relative;
   display: block;
 
   .music-logo {
-    position: absolute;
-    top: 1.5rem;
-    left: 1.5rem;
-    width: 3.125rem;
-    height: 3.125rem;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
     padding: 0;
-    z-index: 9999;
+
+    &.active {
+      display: flex;
+    }
 
     img {
       width: 100%;
@@ -273,10 +265,15 @@ const handleBuyFn = () => {
   }
 
   .music-lrc {
+    display: none;
     width: 100%;
     height: 100%;
     overflow-y: scroll;
     overflow-x: hidden;
+
+    &.active {
+      display: block;
+    }
 
     ul {
       font-size: .75rem;
