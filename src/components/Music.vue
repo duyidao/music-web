@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { init } from '@/store/music.ts'
+import { init, timeout } from '@/store/music.ts'
 import { currentMusic, lrcList } from '@/store/data.ts'
 import { currentTime, show } from '@/store/contorl.ts'
 import { screenWidth, ratio } from '@/utils/index.ts';
@@ -100,6 +100,8 @@ const handleBuyFn = () => {
     return;
   }
   addUserTime(currentMusic.value.id, buy.value);
+  clearTimeout(timeout.value);
+  timeout.value = null;
   buy.value = 0;
   modelList.value.unshift('购买成功，请继续享受音乐吧');
   show.value = false;

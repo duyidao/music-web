@@ -4,6 +4,7 @@ import {
   currentTime,
   duration,
   progress,
+  next,
 } from "./contorl.ts";
 import { musicList, modelList } from "./data.ts";
 import type { MusicItem } from "@/types/music.ts";
@@ -70,12 +71,18 @@ export const load = async (
 
 export const beginListen = ref(0)
 export const endListen = ref(0)
+export const timeout = ref<any>(null)
 
 // 播放控制
 export function play() {
   // 如果没有时长，不给播放
   if (wantMoney.value && nowPlay.value.hasOwnProperty('time') && (nowPlay.value?.time ?? 0) <= 0) {
     modelList.value.unshift('当前歌曲可听部分已结束，请重新购买或选择其他音频。')
+    currentTime.value = 0;
+    modelList.value.unshift('即将播放下一首歌。')
+    timeout.value = setTimeout(() => {
+      next();
+    }, 3000)
     return;
   }
 

@@ -3,7 +3,8 @@
   import { screenWidth, ratio } from '@/utils/index.ts';
   import { currentMusic } from '@/store/data.ts'
   import { analyser, isPlaying } from '@/store/music.ts'
-
+  import { userColor } from '@/store/user.ts'
+  
   const canvasWidth = computed(() => {
     return screenWidth.value < 768 ? screenWidth.value - 100 * ratio.value : 400
   });
@@ -77,7 +78,7 @@
         : historyData[i] * config.smoothFactor;
       const barLength = historyData[i] * config.maxBarLength;
 
-      ctx.fillStyle = 'green';
+      ctx.fillStyle = userColor.value;
 
       ctx.save();
       ctx.rotate(currentAngle);
