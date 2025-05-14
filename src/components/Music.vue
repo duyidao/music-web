@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { init, timeout } from '@/store/music.ts'
+import { init } from '@/store/music.ts'
 import { currentMusic, lrcList } from '@/store/data.ts'
 import { currentTime, show } from '@/store/contorl.ts'
 import { screenWidth, ratio } from '@/utils/index.ts';
-import { addUserTime } from '@/store/user.ts'
+import { addUserTime, timeout } from '@/store/user.ts'
 import { modelList } from '@/store/data.ts';
 import CanvasVisual from '@comp/CanvasVisual/index.vue'
 
@@ -94,7 +94,6 @@ const buy = ref(0)
  * 购买时长的处理函数
  */
 const handleBuyFn = () => {
-  console.log('buy.value', buy.value);
   if (isNaN(buy.value) || buy.value <= 0) {
     modelList.value.unshift('购买时长必须大于0')
     return;

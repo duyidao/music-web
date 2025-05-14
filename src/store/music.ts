@@ -6,7 +6,6 @@ import {
   progress,
   order,
   nextSong,
-  next,
 } from "./contorl.ts";
 import { musicList, modelList } from "./data.ts";
 import type { MusicItem } from "@/types/music.ts";
@@ -73,26 +72,17 @@ export const load = async (
 
 export const beginListen = ref(0);
 export const endListen = ref(0);
-export const timeout = ref<any>(null)
 
 // 播放控制
 export function play(needStop = true) {
-  if (needStop) {
-    const flag = canPlayFn(nowPlay.value.id ? nowPlay.value : musicList.value[playIndex.value], 'play'); // 播放前先调用canplay事件
-    if (!flag) {
-      modelList.value.unshift('当前歌曲可听部分已结束，请重新购买或选择其他音频。')
-      currentTime.value = 0;
-      modelList.value.unshift('即将播放下一首歌。')
-      timeout.value = setTimeout(() => {
-        next();
-      }, 3000)
-      return;
-    }
-  }
-
   if (!audioBuffer.value) {
     load(); // 如果没有音频缓冲区，则加载音频
     return;
+  }
+
+  if (needStop) {
+    const flag = canPlayFn(nowPlay.value, "play"); // 播放前先调用canplay事件
+    if (!flag) return;
   }
   // 设置当前活动实例
   activeInstance.value = {
@@ -181,7 +171,7 @@ export const _progressCallback = ref<any>(null); // 进度回调函数
 export const _animationFrameId = ref<number>(); // 动画帧 ID
 export const _backgroundIntervalId = ref<any>(null); // 动画定时器
 
-function clearIntervalOrRAF () {
+function clearIntervalOrRAF() {
   if (_animationFrameId.value) {
     cancelAnimationFrame(_animationFrameId.value);
     _animationFrameId.value = 0;
@@ -201,7 +191,7 @@ export function _trackProgressWithRAF() {
     // 如果是正常播放完毕，则根据当前类型决定下一首的播放方式
     if (duration.value !== 0 && currentTime.value >= duration.value) {
       stop();
-      nextSong[order.value]()
+      nextSong[order.value]();
     }
     if (_progressCallback.value) {
       _progressCallback.value({
@@ -216,7 +206,7 @@ export function _trackProgressWithRAF() {
 }
 
 // 进度跟踪：使用 setInterval 更新进度（后台）
-function _trackProgressWithInterval () {
+function _trackProgressWithInterval() {
   const update = () => {
     if (!isPlaying.value) return;
     // 计算当前播放时间
@@ -229,7 +219,7 @@ function _trackProgressWithInterval () {
   };
   // 设置1秒间隔（可根据需求调整）
   _backgroundIntervalId.value = setInterval(update, 1000);
-};
+}
 
 // 销毁实例
 export function destroy() {
@@ -270,7 +260,7 @@ const _switchToBackgroundUpdate = () => {
 
 // 恢复 AudioContext（处理浏览器自动暂停）
 const _resumeAudioContextIfNeeded = async () => {
-  if (audioContext.value?.state === 'suspended') {
+  if (audioContext.value?.state === "suspended") {
     await audioContext.value.resume();
     // 校准播放时间（避免因暂停导致的时间偏差）
     startTime.value = audioContext.value.currentTime - pauseTime.value;
@@ -278,7 +268,7 @@ const _resumeAudioContextIfNeeded = async () => {
 };
 
 // 添加页面可见性监听
-document.addEventListener('visibilitychange', () => {
+document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     // 页面切到后台：停用 requestAnimationFrame，改用 setInterval
     _switchToBackgroundUpdate();
