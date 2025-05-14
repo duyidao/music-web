@@ -32,8 +32,9 @@ export const getRandomIndex = (len: number = 1, nowIndex?: number): number => {
 }
 
 export const ratio = ref(window.innerWidth / 750);
-export const screenWidth = ref(0);
+export const screenWidth = ref(window.innerWidth);
 export const pxToRem = () => {
   ratio.value = window.innerWidth / 750;
   screenWidth.value = window.innerWidth;
 }
+pxToRem();

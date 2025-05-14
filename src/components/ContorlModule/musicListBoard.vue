@@ -23,7 +23,9 @@ const boardRef = ref<HTMLDivElement>(null as unknown as HTMLDivElement);
 
 watch(() => currentMusic.value, (newVal) => {
   if (!newVal?.logo) return;
-  nextTick(() => boardRef.value.style.background = `url(${newVal!.logo}) no-repeat 100% / cover`)
+  nextTick(() => {
+    boardRef.value.style.background = `url(${newVal!.logo}) no-repeat 100% / cover`
+  })
 })
 
 const getMusicType = (item: MusicItem) => {
@@ -69,6 +71,10 @@ const getMusicType = (item: MusicItem) => {
   z-index: -1;
   transition: all 0.3s ease-in-out;
   backdrop-filter: blur(10px);
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  border-bottom: none;
+  box-shadow: 0 -4px 20px #555;
 
   &::-webkit-scrollbar {
     display: none;
@@ -129,6 +135,10 @@ const getMusicType = (item: MusicItem) => {
   .music-list-board {
     height: 13.125rem;
     padding: 1.875rem .875rem .625rem;
+    backdrop-filter: blur(.625rem);
+    border-radius: .3125rem;
+    border-width: .0625rem;
+    box-shadow: 0 -0.25rem 1.25rem #555;
 
     .music-list-down {
       padding: .0625rem .75rem;

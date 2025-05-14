@@ -29,6 +29,7 @@ onUnmounted(() => {
 .container {
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 
   .music {
     width: 100%;

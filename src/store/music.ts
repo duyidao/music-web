@@ -6,6 +6,7 @@ import {
   progress,
   order,
   nextSong,
+  next,
 } from "./contorl.ts";
 import { musicList, modelList } from "./data.ts";
 import type { MusicItem } from "@/types/music.ts";
@@ -14,11 +15,19 @@ import { canPlayFn } from "./user.ts";
 export const audioContext = ref<AudioContext | null>(null); // 音频上下文
 export const gainNode = ref<GainNode | null>(null); // 音量控制节点
 export const activeInstance = ref<any>(null); // 当前播放实例
+export const analyser = ref<AnalyserNode | null>(null); // 音频分析器
 
 export const init = () => {
   if (audioContext.value) return;
   audioContext.value = new window.AudioContext();
+
+  // 创建分析器和增益节点
+  analyser.value = audioContext.value.createAnalyser();
+  analyser.value.fftSize = 256;
   gainNode.value = audioContext.value.createGain();
+
+  gainNode.value = audioContext.value.createGain();
+  // 正确连接节点链：source -> analyser -> gain -> destination
   gainNode.value.connect(audioContext.value.destination);
   setVolume(volume.value);
 };
@@ -64,12 +73,21 @@ export const load = async (
 
 export const beginListen = ref(0);
 export const endListen = ref(0);
+export const timeout = ref<any>(null)
 
 // 播放控制
 export function play(needStop = true) {
   if (needStop) {
     const flag = canPlayFn(nowPlay.value, 'play'); // 播放前先调用canplay事件
-    if (!flag) return;
+    if (!flag) {
+      modelList.value.unshift('当前歌曲可听部分已结束，请重新购买或选择其他音频。')
+      currentTime.value = 0;
+      modelList.value.unshift('即将播放下一首歌。')
+      timeout.value = setTimeout(() => {
+        next();
+      }, 3000)
+      return;
+    }
   }
 
   if (!audioBuffer.value) {
@@ -89,7 +107,10 @@ export function play(needStop = true) {
 
   sourceNode.value = audioContext.value!.createBufferSource();
   sourceNode.value.buffer = audioBuffer.value;
-  sourceNode.value.connect(gainNode.value!);
+  // 连接音频源到分析器
+  sourceNode.value.connect(analyser.value!);
+  analyser.value!.connect(gainNode.value!);
+
   const offset = pauseTime.value;
   sourceNode.value.start(0, offset);
   startTime.value = audioContext.value!.currentTime - offset;
