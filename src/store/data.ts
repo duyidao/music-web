@@ -48,7 +48,7 @@ export const loadMusicData = async () => {
           audioUrl: mp3Url as string,
           lyric: lyricModule.default,
           logo: musicLogoModule.default,
-          type: whileList.includes(baseName) ? 1 : 0
+          type: whileList.includes(baseName) ? 1 : 0, // 0: 付费歌曲不能试听  1: 付费歌曲允许试听
         }
         if (userTime.value.hasOwnProperty(baseName)) obj.time = (userTime.value as any)[baseName];
 

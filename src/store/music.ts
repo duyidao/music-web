@@ -1,3 +1,4 @@
+import { currentMusic } from './data.ts';
 import {
   volume,
   playIndex,
@@ -47,6 +48,7 @@ export const load = async (
 
   const index = musicList.value.findIndex((i) => i.audioUrl === item.audioUrl);
   playIndex.value = index;
+  currentTime.value = 0;
 
   // 停止当前正在播放的实例, 创建新的音频源节点
   if (activeInstance.value && activeInstance.value !== null) {
@@ -75,13 +77,13 @@ export const endListen = ref(0);
 
 // 播放控制
 export function play(needStop = true) {
+  // 如果没有音频缓冲区，则加载音频
   if (!audioBuffer.value) {
-    load(); // 如果没有音频缓冲区，则加载音频
+    load();
     return;
   }
-
   if (needStop) {
-    const flag = canPlayFn(nowPlay.value, "play"); // 播放前先调用canplay事件
+    const flag = canPlayFn(nowPlay.value.id ? nowPlay.value : currentMusic.value, "play"); // 播放前先调用canplay事件
     if (!flag) return;
   }
   // 设置当前活动实例
@@ -111,7 +113,7 @@ export function play(needStop = true) {
 
 // 暂停或停止，都计算当前音频剩余时长
 export const timeCompute = () => {
-  if (nowPlay.value!.hasOwnProperty("time")) {
+  if (nowPlay.value!.hasOwnProperty("time") && nowPlay.value.type !== 1) {
     const index = musicList.value.findIndex(
       (i) => i.audioUrl === nowPlay.value.audioUrl
     );

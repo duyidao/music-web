@@ -1,5 +1,5 @@
 import { MusicItem } from "../types/music.ts";
-import { nowPlay } from "./music.ts";
+import { nowPlay, stop } from "./music.ts";
 import { duration, currentTime, order, nextSong } from "./contorl.ts";
 import { musicList, modelList } from "./data.ts";
 
@@ -8,7 +8,7 @@ export const userTime = ref({
   Demons: 15,
   Brids: 7800,
   "Bad Liar": 20,
-  "Season In The Sun": 0,
+  "Season in the Sun": 0,
   Shots: 0,
 });
 
@@ -49,20 +49,31 @@ export const canPlayFn = (item: MusicItem, type = "load") => {
     !(Math.abs(duration.value - currentTime.value) <= 1)
   )
     return false;
-
-  // 免费音乐允许播放
-  if (item?.type === 0) return true;
+  console.log("item", item);
+  console.log("item?.type", item?.type);
+  console.log("item?.time", item?.time);
+  // 允许试听音频
+  if (item?.type === 1 && item?.time! <= 0) {
+    console.log("333", 333);
+    setTimeout(() => {
+      modelList.value.unshift("当前歌曲试听已结束。");
+      stop();
+    }, 10000);
+    return true;
+  }
+  console.log("222", 222);
 
   // 如果剩余时长为空，不允许播放
-  if (nowPlay.value.hasOwnProperty("time") && (nowPlay.value?.time ?? 0) <= 0) {
+  if (item.hasOwnProperty("time") && (item?.time ?? 0) <= 0) {
     modelList.value.unshift(
       "当前歌曲可听部分已结束，请重新购买或选择其他音频。"
     );
-    currentTime.value = 0;
     modelList.value.unshift("即将播放下一首歌。");
     timeout.value = setTimeout(() => {
       nextSong[order.value]();
     }, 3000);
     return false;
   }
+
+  return true;
 };
