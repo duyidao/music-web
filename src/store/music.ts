@@ -60,8 +60,8 @@ export const load = async (
     modelList.value.unshift(`正在加载音频：${item.id}`);
     const response = await fetch(item.audioUrl);
     const arrayBuffer = await response.arrayBuffer();
-    audioBuffer.value = await audioContext.value!.decodeAudioData(arrayBuffer);
-    duration.value = audioBuffer.value.duration;
+    audioBuffer.value = await audioContext.value!.decodeAudioData(arrayBuffer); // 解码音频数据
+    duration.value = audioBuffer.value.duration; // 获取音频时长
     nowPlay.value = item;
     play(false);
     return true;
@@ -78,7 +78,7 @@ export const timeout = ref<any>(null)
 // 播放控制
 export function play(needStop = true) {
   if (needStop) {
-    const flag = canPlayFn(nowPlay.value, 'play'); // 播放前先调用canplay事件
+    const flag = canPlayFn(nowPlay.value.id ? nowPlay.value : musicList.value[playIndex.value], 'play'); // 播放前先调用canplay事件
     if (!flag) {
       modelList.value.unshift('当前歌曲可听部分已结束，请重新购买或选择其他音频。')
       currentTime.value = 0;
@@ -102,7 +102,6 @@ export function play(needStop = true) {
     destroy,
     setVolume,
     seek,
-    onProgress,
   };
 
   sourceNode.value = audioContext.value!.createBufferSource();
@@ -117,15 +116,7 @@ export function play(needStop = true) {
   isPlaying.value = true;
   beginListen.value = Date.now();
 
-  // 如果是正常播放完毕，则根据当前类型决定下一首的播放方式
-  sourceNode.value.onended = () => {
-    if (Math.abs(duration.value - currentTime.value) <= 1) {
-      nextSong[order.value]();
-    }
-  };
-
-  _trackProgress();
-  return true;
+  _trackProgressWithRAF();
 }
 
 // 暂停或停止，都计算当前音频剩余时长
@@ -145,13 +136,10 @@ export const pause = () => {
     sourceNode.value!.stop();
     pauseTime.value = audioContext.value!.currentTime - startTime.value;
     isPlaying.value = false;
-    cancelAnimationFrame(_animationFrameId.value!);
     endListen.value = Date.now();
-
     timeCompute();
-    return true;
   }
-  return false;
+  clearIntervalOrRAF();
 };
 
 export const stop = () => {
@@ -163,8 +151,8 @@ export const stop = () => {
     timeCompute();
     nowPlay.value = {} as MusicItem;
   }
+  clearIntervalOrRAF();
   pauseTime.value = 0;
-  cancelAnimationFrame(_animationFrameId.value!);
 };
 
 // 音量控制 (0-1)
@@ -191,13 +179,30 @@ export const seek = (time: any) => {
 
 export const _progressCallback = ref<any>(null); // 进度回调函数
 export const _animationFrameId = ref<number>(); // 动画帧 ID
+export const _backgroundIntervalId = ref<any>(null); // 动画定时器
 
-// 进度跟踪
-export function _trackProgress() {
+function clearIntervalOrRAF () {
+  if (_animationFrameId.value) {
+    cancelAnimationFrame(_animationFrameId.value);
+    _animationFrameId.value = 0;
+  }
+  if (_backgroundIntervalId.value) {
+    clearInterval(_backgroundIntervalId.value);
+    _backgroundIntervalId.value = null;
+  }
+}
+
+// 进度跟踪：使用 requestAnimationFrame 更新进度（前台）
+export function _trackProgressWithRAF() {
   const update = () => {
     if (!isPlaying.value) return;
+    // 计算当前播放时间
     currentTime.value = audioContext.value!.currentTime - startTime.value;
-    if (duration.value !== 0 && currentTime.value >= duration.value) stop();
+    // 如果是正常播放完毕，则根据当前类型决定下一首的播放方式
+    if (duration.value !== 0 && currentTime.value >= duration.value) {
+      stop();
+      nextSong[order.value]()
+    }
     if (_progressCallback.value) {
       _progressCallback.value({
         currentTime: currentTime.value,
@@ -210,20 +215,77 @@ export function _trackProgress() {
   update();
 }
 
-// 事件监听
-export function onProgress(callback: any) {
-  _progressCallback.value = callback;
-}
+// 进度跟踪：使用 setInterval 更新进度（后台）
+function _trackProgressWithInterval () {
+  const update = () => {
+    if (!isPlaying.value) return;
+    // 计算当前播放时间
+    currentTime.value = audioContext.value!.currentTime - startTime.value;
+    // 检测播放结束
+    if (duration.value !== 0 && currentTime.value >= duration.value) {
+      stop();
+      nextSong[order.value]();
+    }
+  };
+  // 设置1秒间隔（可根据需求调整）
+  _backgroundIntervalId.value = setInterval(update, 1000);
+};
 
 // 销毁实例
 export function destroy() {
   stop();
   if (audioContext.value) {
     audioContext.value?.close();
-    sourceNode.value?.disconnect();
     gainNode.value?.disconnect();
     audioContext.value = null;
     gainNode.value = null;
-    sourceNode.value = null;
   }
 }
+
+// 切换到前台更新（高性能）
+const _switchToForegroundUpdate = () => {
+  // 清除后台的 setInterval
+  if (_backgroundIntervalId.value) {
+    clearInterval(_backgroundIntervalId.value);
+    _backgroundIntervalId.value = null;
+  }
+  // 启动 requestAnimationFrame
+  if (!_animationFrameId.value) {
+    _trackProgressWithRAF();
+  }
+};
+
+// 切换到后台更新（确保持续检测）
+const _switchToBackgroundUpdate = () => {
+  // 清除前台的 requestAnimationFrame
+  if (_animationFrameId.value) {
+    cancelAnimationFrame(_animationFrameId.value);
+    _animationFrameId.value = 0;
+  }
+  // 启动 setInterval（间隔1秒）
+  if (!_backgroundIntervalId.value) {
+    _trackProgressWithInterval();
+  }
+};
+
+// 恢复 AudioContext（处理浏览器自动暂停）
+const _resumeAudioContextIfNeeded = async () => {
+  if (audioContext.value?.state === 'suspended') {
+    await audioContext.value.resume();
+    // 校准播放时间（避免因暂停导致的时间偏差）
+    startTime.value = audioContext.value.currentTime - pauseTime.value;
+  }
+};
+
+// 添加页面可见性监听
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    // 页面切到后台：停用 requestAnimationFrame，改用 setInterval
+    _switchToBackgroundUpdate();
+  } else {
+    // 页面回到前台：停用 setInterval，恢复 requestAnimationFrame
+    _switchToForegroundUpdate();
+    // 恢复可能被暂停的 AudioContext
+    _resumeAudioContextIfNeeded();
+  }
+});

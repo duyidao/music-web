@@ -7,7 +7,7 @@ export const userTime = ref({
   "Bones": 360,
   "Demons": 15,
   "Brids": 7800,
-  "Bad Liar": 0,
+  "Bad Liar": 20,
   "Season In The Sun": 0,
   "Shots": 0,
 });

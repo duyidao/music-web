@@ -47,7 +47,6 @@ export function play() {
     destroy,
     setVolume,
     seek,
-    onProgress,
   };
 
   const offset = pauseTime.value;
@@ -96,7 +95,6 @@ export function play() {
     destroy,
     setVolume,
     seek,
-    onProgress,
   };
 
   sourceNode.value = audioContext.value.createBufferSource();
