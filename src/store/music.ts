@@ -4,10 +4,12 @@ import {
   currentTime,
   duration,
   progress,
+  order,
+  nextSong,
 } from "./contorl.ts";
 import { musicList, modelList } from "./data.ts";
 import type { MusicItem } from "@/types/music.ts";
-import { order, nextSong } from './contorl.ts'
+import { canPlayFn } from "./user.ts";
 
 export const audioContext = ref<AudioContext | null>(null); // 音频上下文
 export const gainNode = ref<GainNode | null>(null); // 音量控制节点
@@ -26,14 +28,14 @@ export const isPlaying = ref<boolean>(false); // 是否正在播放
 export const sourceNode = ref<AudioBufferSourceNode | null>(null); // 音频源节点
 export const pauseTime = ref<number>(0); // 暂停时间
 export const startTime = ref<number>(0); // 开始时间
-export const wantMoney = ref<boolean>(true); // 开始时间
-const nowPlay = ref<MusicItem>({} as MusicItem)
+export const nowPlay = ref<MusicItem>({} as MusicItem);
 
 // 加载音频文件
 export const load = async (
   item: MusicItem = musicList.value[playIndex.value]
 ) => {
-  if (!!nowPlay.value.audioUrl && item.audioUrl === nowPlay.value.audioUrl && !(Math.abs(duration.value - currentTime.value) <= 1)) return;
+  const flag = canPlayFn(item); // 播放前先调用canplay事件
+  if (!flag) return;
 
   const index = musicList.value.findIndex((i) => i.audioUrl === item.audioUrl);
   playIndex.value = index;
@@ -52,7 +54,7 @@ export const load = async (
     audioBuffer.value = await audioContext.value!.decodeAudioData(arrayBuffer);
     duration.value = audioBuffer.value.duration;
     nowPlay.value = item;
-    play();
+    play(false);
     return true;
   } catch (err) {
     console.error("音频加载失败:", err);
@@ -60,15 +62,14 @@ export const load = async (
   }
 };
 
-export const beginListen = ref(0)
-export const endListen = ref(0)
+export const beginListen = ref(0);
+export const endListen = ref(0);
 
 // 播放控制
-export function play() {
-  // 如果没有时长，不给播放
-  if (wantMoney.value && nowPlay.value.hasOwnProperty('time') && (nowPlay.value?.time ?? 0) <= 0) {
-    modelList.value.unshift('当前歌曲可听部分已结束，请重新购买或选择其他音频。')
-    return;
+export function play(needStop = true) {
+  if (needStop) {
+    const flag = canPlayFn(nowPlay.value, 'play'); // 播放前先调用canplay事件
+    if (!flag) return;
   }
 
   if (!audioBuffer.value) {
@@ -93,14 +94,14 @@ export function play() {
   sourceNode.value.start(0, offset);
   startTime.value = audioContext.value!.currentTime - offset;
   isPlaying.value = true;
-  beginListen.value = Date.now()
+  beginListen.value = Date.now();
 
   // 如果是正常播放完毕，则根据当前类型决定下一首的播放方式
   sourceNode.value.onended = () => {
     if (Math.abs(duration.value - currentTime.value) <= 1) {
       nextSong[order.value]();
     }
-  }
+  };
 
   _trackProgress();
   return true;
@@ -108,11 +109,15 @@ export function play() {
 
 // 暂停或停止，都计算当前音频剩余时长
 export const timeCompute = () => {
-  if (nowPlay.value!.hasOwnProperty('time')) {
-    const index = musicList.value.findIndex((i) => i.audioUrl === nowPlay.value.audioUrl);
-    (musicList.value![index] as any).time -= Number(((endListen.value - beginListen.value) / 1000).toFixed(0));
+  if (nowPlay.value!.hasOwnProperty("time")) {
+    const index = musicList.value.findIndex(
+      (i) => i.audioUrl === nowPlay.value.audioUrl
+    );
+    (musicList.value![index] as any).time -= Number(
+      ((endListen.value - beginListen.value) / 1000).toFixed(0)
+    );
   }
-}
+};
 
 export const pause = () => {
   if (isPlaying.value) {
@@ -133,7 +138,7 @@ export const stop = () => {
     isPlaying.value = false;
     sourceNode.value!.stop();
     sourceNode.value!.disconnect();
-    endListen.value = Date.now()
+    endListen.value = Date.now();
     timeCompute();
     nowPlay.value = {} as MusicItem;
   }

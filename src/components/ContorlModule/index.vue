@@ -18,7 +18,8 @@ watch(() => currentMusic.value, (newVal) => {
 
 <template>
   <div class="control-module">
-    <div ref="controlModuleRef" class="bg-image"></div>
+    <div ref="controlModuleRef"
+      class="bg-image"></div>
     <Progress />
     <div class="controls-row">
       <PlayBtn />

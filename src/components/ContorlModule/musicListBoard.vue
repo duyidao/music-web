@@ -48,7 +48,8 @@ const getMusicType = (item: MusicItem) => {
       </div>
     </div>
 
-    <div class="music-list-down" @click.stop="closeBoradFn">
+    <div class="music-list-down"
+      @click.stop="closeBoradFn">
       <span class="iconfont icon-xia"></span>
     </div>
   </div>
@@ -114,7 +115,7 @@ const getMusicType = (item: MusicItem) => {
     padding: 8px;
 
     &.active {
-      background-color: #4CAF50;
+      background-color: var(--base-color);
       color: #fff;
     }
 

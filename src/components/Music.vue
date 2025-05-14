@@ -15,7 +15,7 @@ const colorThief = new ColorThief();
 const bgColor = ref('transparent');
 const getBg = async () => {
   if (!currentMusic.value?.logo) return
-  
+
   try {
     // 1. 创建图片对象并加载
     const img = new Image()
@@ -30,7 +30,7 @@ const getBg = async () => {
 
     // 3. 获取颜色
     const colors = await colorThief.getColor(img, 5)
-    bgColor.value = `rgba(${colors[0]}, ${colors[1]}, ${colors[2]}, .7)`
+    bgColor.value = `rgba(${colors[0]}, ${colors[1]}, ${colors[2]}, .45)`
   } catch (err) {
     console.error('获取背景色失败:', err)
     bgColor.value = 'transparent' // 设置默认颜色
@@ -104,7 +104,8 @@ const handleBuyFn = () => {
 </script>
 
 <template>
-  <div class="music" :style="{ '--bg': bgColor }">
+  <div class="music"
+    :style="{ '--bg': bgColor }">
     <div class="music-logo">
       <img :src="currentMusic?.logo || baseImg"
         alt="音乐logo" />
@@ -121,12 +122,17 @@ const handleBuyFn = () => {
       </ul>
     </div>
 
-    <div class="music-show-more" v-close="true" title="购买音频">
+    <div class="music-show-more"
+      v-close="true"
+      title="购买音频">
       <span class="iconfont icon-gengduo"></span>
-      <div class="music-more-content" :class="{'active': show}">
+      <div class="music-more-content"
+        :class="{ 'active': show }">
         <p>当前可听时长：{{ currentMusic?.hasOwnProperty('time') ? currentMusic.time + ' 秒' : '无需购买' }}</p>
         <div v-if="currentMusic?.hasOwnProperty('time')">
-          <input v-model="buy" type="number" placeholder="请输入购买时长" />
+          <input v-model="buy"
+            type="number"
+            placeholder="请输入购买时长" />
           <button @click.stop="handleBuyFn">购买</button>
         </div>
       </div>
@@ -236,58 +242,58 @@ const handleBuyFn = () => {
 @media screen and (max-width: 920px) {
   .music {
 
-  .music-logo {
-    padding: 0 1.875rem 0 6.25rem;
-  }
+    .music-logo {
+      padding: 0 1.875rem 0 6.25rem;
+    }
 
-  .music-lrc {
-    ul {
-      font-size: .875rem;
+    .music-lrc {
+      ul {
+        font-size: .875rem;
+      }
     }
   }
-}
 }
 
 @media screen and (max-width: 768px) {
   .music {
     position: relative;
-  display: block;
+    display: block;
 
-  .music-logo {
-    position: absolute;
-    top: 1.5rem;
-    left: 1.5rem;
-    width: 3.125rem;
-    height: 3.125rem;
-    padding: 0;
-    z-index: 9999;
+    .music-logo {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      width: 3.125rem;
+      height: 3.125rem;
+      padding: 0;
+      z-index: 9999;
 
-    img {
-      width: 100%;
-      aspect-ratio: 1/1;
-      /* 宽高比强制为 1:1（正方形） */
-      object-fit: contain;
-      /* 控制图片填充方式（cover 裁剪，contain 包含） */
-      border-radius: 50%;
+      img {
+        width: 100%;
+        aspect-ratio: 1/1;
+        /* 宽高比强制为 1:1（正方形） */
+        object-fit: contain;
+        /* 控制图片填充方式（cover 裁剪，contain 包含） */
+        border-radius: 50%;
+      }
     }
-  }
 
-  .music-lrc {
-    width: 100%;
-    height: 100%;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    .music-lrc {
+      width: 100%;
+      height: 100%;
+      overflow-y: scroll;
+      overflow-x: hidden;
 
-    ul {
-      font-size: .75rem;
+      ul {
+        font-size: .75rem;
 
-      li {
-        &.active {
-          transform: scale(1.2);
+        li {
+          &.active {
+            transform: scale(1.2);
+          }
         }
       }
     }
   }
-}
 }
 </style>

@@ -44,9 +44,16 @@ const show = ref(false);
       :title="item.title"
       @click.stop="item.click">
     </span>
-    <div class="color-change" @mouseenter="show = true" @mouseleave="show = false">
-      <div class="color-chose-list" :class="{'active': show}">
-        <span v-for="item in colorList" :key="item" :class="{'active': item === userColor}" :style="{'--bg': item}" @click="setUserColor(item)"></span>
+    <div class="color-change"
+      @mouseenter="show = true"
+      @mouseleave="show = false">
+      <div class="color-chose-list"
+        :class="{ 'active': show }">
+        <span v-for="item in colorList"
+          :key="item"
+          :class="{ 'active': item === userColor }"
+          :style="{ '--bg': item }"
+          @click="setUserColor(item)"></span>
       </div>
     </div>
   </div>
@@ -129,45 +136,45 @@ const show = ref(false);
 
 @media screen and (max-width: 768px) {
   .btn-list {
-  margin-left: .75rem;
+    margin-left: .75rem;
 
-  .color-chose-list {
-    bottom: 2.1875rem;
-    width: 9.25rem;
-    padding: .3125rem .3125rem .3125rem .625rem;
+    .color-chose-list {
+      bottom: 2.1875rem;
+      width: 9.25rem;
+      padding: .3125rem .3125rem .3125rem .625rem;
 
-    span {
-      width: 1.75rem;
-      height: 1.75rem;
-      margin: 0 .3125rem .3125rem 0;
-      border-width: .0625rem;
+      span {
+        width: 1.75rem;
+        height: 1.75rem;
+        margin: 0 .3125rem .3125rem 0;
+        border-width: .0625rem;
 
-      &.active {
-        border-width: .125rem;
+        &.active {
+          border-width: .125rem;
+        }
       }
     }
-  }
 
-  .color-change {
-    width: 1.75rem;
-    height: 1.75rem;
-    margin: 0 .5rem;
+    .color-change {
+      width: 1.75rem;
+      height: 1.75rem;
+      margin: 0 .5rem;
 
-    &::before {
-      bottom: 1.75rem;
-      width: 9.25rem;
-      height: .5rem;
+      &::before {
+        bottom: 1.75rem;
+        width: 9.25rem;
+        height: .5rem;
+      }
+
+      &::after {
+        inset: .125rem;
+      }
     }
 
-    &::after {
-      inset: .125rem;
+    .iconfont {
+      font-size: 1.375rem;
+      margin: 0 .5rem;
     }
   }
-
-  .iconfont {
-    font-size: 1.375rem;
-    margin: 0 .5rem;
-  }
-}
 }
 </style>
