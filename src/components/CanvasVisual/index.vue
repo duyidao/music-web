@@ -48,7 +48,6 @@
     // 绘制中心Logo
     ctx.save();
     ctx.beginPath();
-    console.log('centerX, centerY', centerX, centerY);
     ctx.arc(centerX, centerY, config.centerRadius, 0, Math.PI * 2);
     ctx.clip();
     ctx.drawImage(

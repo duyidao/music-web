@@ -14,7 +14,6 @@ import { canPlayFn } from "./user.ts";
 
 export const audioContext = ref<AudioContext | null>(null); // 音频上下文
 export const gainNode = ref<GainNode | null>(null); // 音量控制节点
-export const activeInstance = ref<any>(null); // 当前播放实例
 export const analyser = ref<AnalyserNode | null>(null); // 音频分析器
 
 export const init = () => {
@@ -43,6 +42,8 @@ export const nowPlay = ref<MusicItem>({} as MusicItem);
 export const load = async (
   item: MusicItem = musicList.value[playIndex.value]
 ) => {
+  console.log('load');
+  
   const flag = canPlayFn(item); // 播放前先调用canplay事件
   if (!flag) return;
 
@@ -51,10 +52,7 @@ export const load = async (
   currentTime.value = 0;
 
   // 停止当前正在播放的实例, 创建新的音频源节点
-  if (activeInstance.value && activeInstance.value !== null) {
-    activeInstance.value.destroy();
-    activeInstance.value = null;
-  }
+  destroy();
   init();
 
   try {
@@ -86,15 +84,6 @@ export function play(needStop = true) {
     const flag = canPlayFn(nowPlay.value.id ? nowPlay.value : currentMusic.value, "play"); // 播放前先调用canplay事件
     if (!flag) return;
   }
-  // 设置当前活动实例
-  activeInstance.value = {
-    play,
-    pause,
-    stop,
-    destroy,
-    setVolume,
-    seek,
-  };
 
   sourceNode.value = audioContext.value!.createBufferSource();
   sourceNode.value.buffer = audioBuffer.value;
@@ -224,14 +213,47 @@ function _trackProgressWithInterval() {
 }
 
 // 销毁实例
+// export function destroy() {
+//   stop();
+//   if (audioContext.value) {
+//     audioContext.value?.close();
+//     gainNode.value?.disconnect();
+//     audioContext.value = null;
+//     gainNode.value = null;
+//   }
+// }
+// 增强的销毁函数
 export function destroy() {
   stop();
-  if (audioContext.value) {
-    audioContext.value?.close();
-    gainNode.value?.disconnect();
-    audioContext.value = null;
+  clearIntervalOrRAF();
+  
+  // 断开所有节点连接
+  if (sourceNode.value) {
+    sourceNode.value.disconnect();
+    sourceNode.value = null;
+  }
+  
+  if (analyser.value) {
+    analyser.value.disconnect();
+    analyser.value = null;
+  }
+  
+  if (gainNode.value) {
+    gainNode.value.disconnect();
     gainNode.value = null;
   }
+  
+  // 关闭音频上下文
+  if (audioContext.value) {
+    audioContext.value.close().catch(e => console.error("关闭音频上下文失败:", e));
+    audioContext.value = null;
+  }
+  
+  // 重置状态
+  audioBuffer.value = null;
+  pauseTime.value = 0;
+  startTime.value = 0;
+  isPlaying.value = false;
 }
 
 // 切换到前台更新（高性能）

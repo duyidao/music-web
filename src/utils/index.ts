@@ -38,3 +38,14 @@ export const pxToRem = () => {
   screenWidth.value = window.innerWidth;
 }
 pxToRem();
+
+export const debounce = (fn: Function, delay: number = 500) => {
+  let timer: NodeJS.Timeout;
+  return function (...args: any[]) {
+    console.log('timer', timer);
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn.apply(this, args);
+    }, delay);
+  };
+}

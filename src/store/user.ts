@@ -38,6 +38,7 @@ export const addUserTime = (id: string, time: number) => {
 };
 
 export const timeout = ref<any>(null);
+export const timetry = ref<any>(null);
 /**
  * 是否允许播放音频
  */
@@ -52,10 +53,9 @@ export const canPlayFn = (item: MusicItem, type = "load") => {
   
     // 允许试听音频
   if (item?.type === 1 && item?.time! <= 0) {
-    setTimeout(() => {
-      modelList.value.unshift("当前歌曲试听已结束。");
+    timetry.value = setTimeout(() => {
+      modelList.value.unshift("当前歌曲试听已结束。即将播放下一首歌。");
       stop();
-      modelList.value.unshift("即将播放下一首歌。");
       timeout.value = setTimeout(() => {
         nextSong[order.value]();
       }, 3000);
@@ -66,9 +66,8 @@ export const canPlayFn = (item: MusicItem, type = "load") => {
   // 如果剩余时长为空，不允许播放
   if (item.hasOwnProperty("time") && (item?.time ?? 0) <= 0) {
     modelList.value.unshift(
-      "当前歌曲可听部分已结束，请重新购买或选择其他音频。"
+      "当前歌曲可听部分已结束，请重新购买或选择其他音频。即将播放下一首歌。"
     );
-    modelList.value.unshift("即将播放下一首歌。");
     timeout.value = setTimeout(() => {
       nextSong[order.value]();
     }, 3000);
@@ -77,3 +76,5 @@ export const canPlayFn = (item: MusicItem, type = "load") => {
 
   return true;
 };
+
+

@@ -1,7 +1,8 @@
 import { musicList } from "./data.ts";
 import { load } from "./music.ts";
+import { timeout, timetry } from "./user.ts";
 import { OrderType } from '@/types/music.ts'
-import { getRandomIndex } from '@/utils/index.ts'
+import { getRandomIndex, debounce } from '@/utils/index.ts'
 
 export const volume = ref<number>(0.5); // 默认音量 50%
 export const playIndex = ref<number>(0); // 当前播放歌曲的索引
@@ -14,13 +15,22 @@ export const progress = computed<number>(() => {
   return duration.value !== 0 ? currentTime.value / duration.value : 0;
 });
 
+const debounceLoad = debounce(() => {
+  console.log('123', 123);
+  clearTimeout(timeout.value);
+  clearTimeout(timetry.value);
+  timeout.value = null;
+  timetry.value = null;
+  load();
+});
+
 export const prev = () => {
   if (playIndex.value === 0) {
     playIndex.value = musicList.value.length - 1;
   } else {
     playIndex.value--;
   }
-  load();
+  debounceLoad();
 };
 
 export const next = () => {
@@ -29,7 +39,7 @@ export const next = () => {
   } else {
     playIndex.value++;
   }
-  load();
+  debounceLoad();
 };
 
 
