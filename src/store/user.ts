@@ -49,19 +49,19 @@ export const canPlayFn = (item: MusicItem, type = "load") => {
     !(Math.abs(duration.value - currentTime.value) <= 1)
   )
     return false;
-  console.log("item", item);
-  console.log("item?.type", item?.type);
-  console.log("item?.time", item?.time);
-  // 允许试听音频
+  
+    // 允许试听音频
   if (item?.type === 1 && item?.time! <= 0) {
-    console.log("333", 333);
     setTimeout(() => {
       modelList.value.unshift("当前歌曲试听已结束。");
       stop();
+      modelList.value.unshift("即将播放下一首歌。");
+      timeout.value = setTimeout(() => {
+        nextSong[order.value]();
+      }, 3000);
     }, 10000);
     return true;
   }
-  console.log("222", 222);
 
   // 如果剩余时长为空，不允许播放
   if (item.hasOwnProperty("time") && (item?.time ?? 0) <= 0) {

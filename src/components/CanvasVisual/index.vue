@@ -20,12 +20,12 @@
   };
 
   let rotation = 0;
-  let historyData = new Array(config.bars).fill(0);
 
   const logoImg = new Image();
 
   const dataArray = ref<Uint8Array | null>(null); // 频率数据数组
   const canvasRef = ref<HTMLCanvasElement | null>(null); // Canvas引用
+  const raf = ref();
 
   let ctx: CanvasRenderingContext2D;
   let centerX: number;
@@ -34,7 +34,9 @@
    * 绘制环形柱状图
    */
   const draw = () => {
-    requestAnimationFrame(draw);
+    if (isPlaying.value) {
+      raf.value = requestAnimationFrame(draw);
+    }
 
     // 获取频率数据
     analyser.value!.getByteFrequencyData(dataArray.value as Uint8Array);
@@ -43,12 +45,10 @@
     ctx.clearRect(0, 0, canvasRef.value!.width, canvasRef.value!.height);
     ctx.fillStyle = 'transparent';
     ctx.fillRect(0, 0, canvasRef.value!.width, canvasRef.value!.height);
-
-    centerX = canvasRef.value!.width / 2;
-    centerY = canvasRef.value!.height / 2;
     // 绘制中心Logo
     ctx.save();
     ctx.beginPath();
+    console.log('centerX, centerY', centerX, centerY);
     ctx.arc(centerX, centerY, config.centerRadius, 0, Math.PI * 2);
     ctx.clip();
     ctx.drawImage(
@@ -73,10 +73,7 @@
     // 绘制柱状图
     for (let i = 0; i < config.bars; i++) {
       const value = dataArray.value![i] / 255;
-      historyData[i] = value > historyData[i]
-        ? value
-        : historyData[i] * config.smoothFactor;
-      const barLength = historyData[i] * config.maxBarLength;
+      const barLength = value * config.maxBarLength;
 
       ctx.fillStyle = userColor.value;
 
@@ -109,11 +106,22 @@
     dataArray.value = new Uint8Array(analyser.value!.frequencyBinCount);
     logoImg.onload = () => { // 等待图片加载完成
       nextTick(() => {
+        centerX = canvasRef.value!.width / 2;
+        centerY = canvasRef.value!.height / 2;
         ctx = canvasRef.value!.getContext('2d')!;
         draw();
       });
     };
   }, { deep: true })
+
+  watch([isPlaying, screenWidth], () => {
+    centerX = canvasRef.value!.width / 2;
+    centerY = canvasRef.value!.height / 2;
+    if (raf.value) {
+      cancelAnimationFrame(raf.value);
+    }
+    draw();
+  })
 </script>
 
 <template>

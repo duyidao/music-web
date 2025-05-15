@@ -107,6 +107,7 @@ const getMusicType = (item: MusicItem) => {
     transform: translate(-50%, 0);
     padding: 1px 24px;
     border: 1px solid #ccc;
+    border-top: none;
     border-radius: 0 0 5px 5px;
     cursor: pointer;
   }
