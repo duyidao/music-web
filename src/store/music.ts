@@ -1,4 +1,4 @@
-import { currentMusic } from './data.ts';
+import { currentMusic } from "./data.ts";
 import {
   volume,
   playIndex,
@@ -8,7 +8,8 @@ import {
   order,
   nextSong,
 } from "./contorl.ts";
-import { musicList, modelList } from "./data.ts";
+import { musicList } from "./data.ts";
+import { newLoad } from "./load.ts";
 import type { MusicItem } from "@/types/music.ts";
 import { canPlayFn } from "./user.ts";
 
@@ -16,6 +17,9 @@ export const audioContext = ref<AudioContext | null>(null); // 音频上下文
 export const gainNode = ref<GainNode | null>(null); // 音量控制节点
 export const analyser = ref<AnalyserNode | null>(null); // 音频分析器
 
+/**
+ * 初始化音频上下文及节点链
+ */
 export const init = () => {
   if (audioContext.value) return;
   audioContext.value = new window.AudioContext();
@@ -38,40 +42,32 @@ export const pauseTime = ref<number>(0); // 暂停时间
 export const startTime = ref<number>(0); // 开始时间
 export const nowPlay = ref<MusicItem>({} as MusicItem);
 
+export let cancel = () => {};
+
 // 加载音频文件
-export const load = async (
-  item: MusicItem = musicList.value[playIndex.value]
-) => {
-  console.log('load');
-  
-  const flag = canPlayFn(item); // 播放前先调用canplay事件
-  if (!flag) return;
+export async function load(item: MusicItem = musicList.value[playIndex.value]) {
+  const newload = newLoad(item);
+  const flag = await newload.run();
+  cancel = newload.cancel;
 
-  const index = musicList.value.findIndex((i) => i.audioUrl === item.audioUrl);
-  playIndex.value = index;
-  currentTime.value = 0;
-
-  // 停止当前正在播放的实例, 创建新的音频源节点
-  destroy();
-  init();
-
-  try {
-    modelList.value.unshift(`正在加载音频：${item.id}`);
-    const response = await fetch(item.audioUrl);
-    const arrayBuffer = await response.arrayBuffer();
-    audioBuffer.value = await audioContext.value!.decodeAudioData(arrayBuffer); // 解码音频数据
-    duration.value = audioBuffer.value.duration; // 获取音频时长
-    nowPlay.value = item;
+  if (flag) {
     play(false);
-    return true;
-  } catch (err) {
-    console.error("音频加载失败:", err);
-    return false;
   }
-};
+}
 
 export const beginListen = ref(0);
 export const endListen = ref(0);
+const documentHidden = () => {
+  if (document.hidden) {
+    // 页面切到后台：停用 requestAnimationFrame，改用 setInterval
+    _switchToBackgroundUpdate();
+  } else {
+    // 页面回到前台：停用 setInterval，恢复 requestAnimationFrame
+    _switchToForegroundUpdate();
+    // 恢复可能被暂停的 AudioContext
+    _resumeAudioContextIfNeeded();
+  }
+};
 
 // 播放控制
 export function play(needStop = true) {
@@ -81,7 +77,10 @@ export function play(needStop = true) {
     return;
   }
   if (needStop) {
-    const flag = canPlayFn(nowPlay.value.id ? nowPlay.value : currentMusic.value, "play"); // 播放前先调用canplay事件
+    const flag = canPlayFn(
+      nowPlay.value.id ? nowPlay.value : currentMusic.value,
+      "play"
+    ); // 播放前先调用canplay事件
     if (!flag) return;
   }
 
@@ -97,7 +96,7 @@ export function play(needStop = true) {
   isPlaying.value = true;
   beginListen.value = Date.now();
 
-  _trackProgressWithRAF();
+  documentHidden();
 }
 
 // 暂停或停止，都计算当前音频剩余时长
@@ -212,43 +211,34 @@ function _trackProgressWithInterval() {
   _backgroundIntervalId.value = setInterval(update, 1000);
 }
 
-// 销毁实例
-// export function destroy() {
-//   stop();
-//   if (audioContext.value) {
-//     audioContext.value?.close();
-//     gainNode.value?.disconnect();
-//     audioContext.value = null;
-//     gainNode.value = null;
-//   }
-// }
 // 增强的销毁函数
 export function destroy() {
   stop();
   clearIntervalOrRAF();
-  
   // 断开所有节点连接
   if (sourceNode.value) {
     sourceNode.value.disconnect();
     sourceNode.value = null;
   }
-  
+
   if (analyser.value) {
     analyser.value.disconnect();
     analyser.value = null;
   }
-  
+
   if (gainNode.value) {
     gainNode.value.disconnect();
     gainNode.value = null;
   }
-  
+
   // 关闭音频上下文
   if (audioContext.value) {
-    audioContext.value.close().catch(e => console.error("关闭音频上下文失败:", e));
+    audioContext.value
+      .close()
+      .catch((e) => console.error("关闭音频上下文失败:", e));
     audioContext.value = null;
   }
-  
+
   // 重置状态
   audioBuffer.value = null;
   pauseTime.value = 0;
@@ -292,14 +282,4 @@ const _resumeAudioContextIfNeeded = async () => {
 };
 
 // 添加页面可见性监听
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden) {
-    // 页面切到后台：停用 requestAnimationFrame，改用 setInterval
-    _switchToBackgroundUpdate();
-  } else {
-    // 页面回到前台：停用 setInterval，恢复 requestAnimationFrame
-    _switchToForegroundUpdate();
-    // 恢复可能被暂停的 AudioContext
-    _resumeAudioContextIfNeeded();
-  }
-});
+document.addEventListener("visibilitychange", documentHidden);

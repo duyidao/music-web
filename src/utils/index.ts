@@ -39,12 +39,12 @@ export const pxToRem = () => {
 }
 pxToRem();
 
-export const debounce = (fn: Function, delay: number = 500) => {
+export const debounce = (fn: any, delay: number = 500) => {
   let timer: NodeJS.Timeout;
   return function (...args: any[]) {
-    console.log('timer', timer);
     if (timer) clearTimeout(timer);
     timer = setTimeout(() => {
+      // @ts-ignore
       fn.apply(this, args);
     }, delay);
   };

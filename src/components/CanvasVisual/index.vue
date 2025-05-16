@@ -38,6 +38,8 @@
       raf.value = requestAnimationFrame(draw);
     }
 
+    if (!analyser.value) return;
+
     // 获取频率数据
     analyser.value!.getByteFrequencyData(dataArray.value as Uint8Array);
 
