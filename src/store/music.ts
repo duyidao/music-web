@@ -5,7 +5,7 @@ import {
   setSmoothVolume,
 } from "@/utils/audio";
 import { musicList, modelList } from "./data.ts";
-import { canPlay } from "./user.ts";
+import { reduceListeningTime } from "./user.ts";
 import {
   playIndex,
   currentTime,
@@ -14,6 +14,7 @@ import {
   next,
   documentHidden,
 } from "./contorl.ts";
+import type { MusicItem } from '@/types/music.ts'
 
 // 音频状态
 export const audioState = ref({
@@ -45,8 +46,6 @@ const musicMap = new Map<string, AudioBuffer>(); // 缓存音频缓冲区的映�
 export const loadAudio = async (
   item: MusicItem = musicList.value[playIndex.value]
 ) => {
-  if (!canPlay(item)) return false;
-
   try {
     initAudio();
     let buffer = musicMap.get(item.id);
@@ -94,6 +93,7 @@ export const pauseAudio = () => {
   audioState.value.pauseTime =
     audioState.value.context!.currentTime - audioState.value.startTime;
   audioState.value.isPlaying = false;
+  reduceListeningTime(musicList.value[playIndex.value].id, audioState.value.pauseTime.toFixed(0));
   stopProgressTracking();
 };
 
@@ -104,6 +104,7 @@ export const pauseAudio = () => {
  */
 export const stopAudio = () => {
   if (!audioState.value.isPlaying) return;
+  reduceListeningTime(musicList.value[playIndex.value].id, audioState.value.pauseTime.toFixed(0));
   destroy();
 };
 

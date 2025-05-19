@@ -27,17 +27,22 @@ setThemeColor();
 
 // 添加听歌时间
 export const addListeningTime = (songId: string, seconds: number) => {
-  if (songId in userTime.value) {
-    userTime.value[songId] += seconds;
-  }
-
   const song = musicList.value.find((item) => item.id === songId);
   if (song) {
     song.time = (song.time || 0) + seconds;
   }
 };
 
+// 扣除听歌时间
+export const reduceListeningTime = (songId: string, seconds: number) => {
+  const song = musicList.value.find((item) => item.id === songId);
+  if (song) {
+    song.time = (song.time || 0) - seconds;
+  }
+}
+
 export const nextPlayTimeout = ref<any>(null);
+export const nextPlayInterval = ref<any>(null);
 
 // 检查是否可以播放
 export const canPlay = (song: MusicItem, action: "load" | "play" = "load") => {
@@ -52,18 +57,25 @@ export const canPlay = (song: MusicItem, action: "load" | "play" = "load") => {
 
   // 试听歌曲处理
   if (song.type === 1 && (song.time || 0) <= 0) {
-    modelList.value.unshift("试听即将结束，10秒后播放下一首");
+    let timer = 5;
+    nextPlayInterval.value = setInterval(() => {
+      modelList.value.unshift(`试听中，${timer}秒后播放下一首`);
+      timer--;
+    }, 1000);
     nextPlayTimeout.value = setTimeout(() => {
-      stopAudio();
       next();
-    }, 10000);
+      clearTimeoutFn();
+    }, 5000);
     return true;
   }
 
   // 无剩余时长
   if (song.time !== undefined && song.time <= 0) {
     modelList.value.unshift("可听部分已结束，请购买或选择其他歌曲");
-    nextPlayTimeout.value = setTimeout(() => next(), 3000);
+    nextPlayTimeout.value = setTimeout(() => {
+      next();
+      clearTimeoutFn();
+    }, 3000);
     return false;
   }
 
@@ -77,5 +89,7 @@ export const canPlay = (song: MusicItem, action: "load" | "play" = "load") => {
  */
 export const clearTimeoutFn = () => {
   clearTimeout(nextPlayTimeout.value);
+  clearInterval(nextPlayInterval.value);
   nextPlayTimeout.value = null;
+  nextPlayInterval.value = null;
 }

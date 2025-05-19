@@ -1,4 +1,3 @@
-import { loadAudio, playAudio, audioState } from "@/store/music.ts";
 /**
  * 创建一个可取消的任务
  *
@@ -8,22 +7,16 @@ import { loadAudio, playAudio, audioState } from "@/store/music.ts";
 export const createCancelableTask = (fn) => {
   const NOOP = () => {};
   let cancel = NOOP;
-  console.log('fn', fn);
 
   return {
-    id: audioState.value.currentSong,
     cancel: () => cancel(),
     run: (...args) => {
       return new Promise((resolve, reject) => {
         cancel();
         cancel = () => (resolve = reject = NOOP);
-        console.log('cancel', cancel);
 
         fn(...args)
-          .then(res => {
-            console.log('resolve', resolve);
-            resolve(res)
-          })
+          .then(res => resolve(res))
           .catch(err => reject(err))
       })
     }
