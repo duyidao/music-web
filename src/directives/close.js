@@ -1,10 +1,10 @@
-import { show } from '@/store/contorl.ts'
+import { isShowingModal } from '@/store/contorl.ts'
 
 // 为dom结构绑定事件
 export const changePhoneDomShow = (el, value) => {
   el.addEventListener('click', (e) => {
     e.stopPropagation();
-    show.value = value;
+    isShowingModal.value = value;
   });
 }
 

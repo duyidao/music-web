@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { order } from '@/store/contorl.ts';
 import { OrderType } from '@/types/music.ts';
-import { userColor, setUserColor } from '@/store/user.ts';
+import { userColor, setThemeColor } from '@/store/user.ts';
 
 // 定义状态切换顺序
 const ORDER_CYCLE = {
@@ -53,7 +53,7 @@ const show = ref(false);
           :key="item"
           :class="{ 'active': item === userColor }"
           :style="{ '--bg': item }"
-          @click="setUserColor(item)"></span>
+          @click="setThemeColor(item)"></span>
       </div>
     </div>
   </div>

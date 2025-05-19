@@ -1,19 +1,23 @@
 import type { MusicItem } from "@/types/music.ts";
-import { playIndex } from "./contorl_副本.ts";
-import { userTime } from "./user_副本.ts";
+import { playIndex } from "./contorl.ts";
+import { userTime } from "./user.ts";
 
 // 状态管理
 export const musicList = ref<MusicItem[]>([]);
 export const modelList = ref<string[]>([]);
 const whileList = ['Season in the Sun', 'Shots'];
 
-// 当前播放音乐
+export const backgroundImage = ref(''); // 背景图片
+// 当前选择要播放的音乐
 export const currentMusic = computed(() => {
   return musicList.value[playIndex.value];
 });
 
 // 格式化歌词
 export const lrcList = computed(() => {
+  if (!!musicList.value.length) {
+    backgroundImage.value = `url(${musicList.value[playIndex.value]!.logo}) no-repeat 100% / cover`;
+  }
   return formatLyrics(currentMusic.value?.lyric);
 });
 

@@ -1,285 +1,208 @@
-import { currentMusic } from "./data.ts";
 import {
-  volume,
+  createAudioContext,
+  loadAudioBuffer,
+  createSourceNode,
+  setSmoothVolume,
+} from "@/utils/audio";
+import { musicList, modelList } from "./data.ts";
+import { canPlay } from "./user.ts";
+import {
   playIndex,
   currentTime,
   duration,
-  progress,
-  order,
-  nextSong,
+  volume,
+  next,
+  documentHidden,
 } from "./contorl.ts";
-import { musicList } from "./data.ts";
-import { newLoad } from "./load.ts";
-import type { MusicItem } from "@/types/music.ts";
-import { canPlayFn } from "./user.ts";
 
-export const audioContext = ref<AudioContext | null>(null); // 音频上下文
-export const gainNode = ref<GainNode | null>(null); // 音量控制节点
-export const analyser = ref<AnalyserNode | null>(null); // 音频分析器
+// 音频状态
+export const audioState = ref({
+  context: null as AudioContext | null, // 音频上下文
+  analyser: null as AnalyserNode | null, // 频域分析器
+  gainNode: null as GainNode | null, // 音量控制节点
+  buffer: null as AudioBuffer | null, // 音频缓冲区
+  source: null as AudioBufferSourceNode | null, // 音频源节点
+  isPlaying: false, // 是否正在播放
+  currentSong: null as MusicItem | null, // 当前播放的歌曲
+  pauseTime: 0, // 暂停时间
+  startTime: 0, // 开始时间
+});
 
-/**
- * 初始化音频上下文及节点链
- */
-export const init = () => {
-  if (audioContext.value) return;
-  audioContext.value = new window.AudioContext();
+// 初始化音频上下文
+export const initAudio = () => {
+  destroy();
 
-  // 创建分析器和增益节点
-  analyser.value = audioContext.value.createAnalyser();
-  analyser.value.fftSize = 256;
-  gainNode.value = audioContext.value.createGain();
-
-  gainNode.value = audioContext.value.createGain();
-  // 正确连接节点链：source -> analyser -> gain -> destination
-  gainNode.value.connect(audioContext.value.destination);
+  const { audioContext, analyser, gainNode } = createAudioContext();
+  audioState.value.context = audioContext;
+  audioState.value.analyser = analyser;
+  audioState.value.gainNode = gainNode;
   setVolume(volume.value);
 };
 
-export const audioBuffer = ref<AudioBuffer | null>(null); // 音频缓冲区
-export const isPlaying = ref<boolean>(false); // 是否正在播放
-export const sourceNode = ref<AudioBufferSourceNode | null>(null); // 音频源节点
-export const pauseTime = ref<number>(0); // 暂停时间
-export const startTime = ref<number>(0); // 开始时间
-export const nowPlay = ref<MusicItem>({} as MusicItem);
+const musicMap = new Map<string, AudioBuffer>(); // 缓存音频缓冲区的映射
 
-export let cancel = () => {};
+// 加载音频
+export const loadAudio = async (
+  item: MusicItem = musicList.value[playIndex.value]
+) => {
+  if (!canPlay(item)) return false;
 
-// 加载音频文件
-export async function load(item: MusicItem = musicList.value[playIndex.value]) {
-  const newload = newLoad(item);
-  const flag = await newload.run();
-  cancel = newload.cancel;
-
-  if (flag) {
-    play(false);
-  }
-}
-
-export const beginListen = ref(0);
-export const endListen = ref(0);
-const documentHidden = () => {
-  if (document.hidden) {
-    // 页面切到后台：停用 requestAnimationFrame，改用 setInterval
-    _switchToBackgroundUpdate();
-  } else {
-    // 页面回到前台：停用 setInterval，恢复 requestAnimationFrame
-    _switchToForegroundUpdate();
-    // 恢复可能被暂停的 AudioContext
-    _resumeAudioContextIfNeeded();
-  }
-};
-
-// 播放控制
-export function play(needStop = true) {
-  // 如果没有音频缓冲区，则加载音频
-  if (!audioBuffer.value) {
-    load();
-    return;
-  }
-  if (needStop) {
-    const flag = canPlayFn(
-      nowPlay.value.id ? nowPlay.value : currentMusic.value,
-      "play"
-    ); // 播放前先调用canplay事件
-    if (!flag) return;
-  }
-
-  sourceNode.value = audioContext.value!.createBufferSource();
-  sourceNode.value.buffer = audioBuffer.value;
-  // 连接音频源到分析器
-  sourceNode.value.connect(analyser.value!);
-  analyser.value!.connect(gainNode.value!);
-
-  const offset = pauseTime.value;
-  sourceNode.value.start(0, offset);
-  startTime.value = audioContext.value!.currentTime - offset;
-  isPlaying.value = true;
-  beginListen.value = Date.now();
-
-  documentHidden();
-}
-
-// 暂停或停止，都计算当前音频剩余时长
-export const timeCompute = () => {
-  if (nowPlay.value!.hasOwnProperty("time") && nowPlay.value.type !== 1) {
-    const index = musicList.value.findIndex(
-      (i) => i.audioUrl === nowPlay.value.audioUrl
-    );
-    (musicList.value![index] as any).time -= Number(
-      ((endListen.value - beginListen.value) / 1000).toFixed(0)
-    );
-  }
-};
-
-export const pause = () => {
-  if (isPlaying.value) {
-    sourceNode.value!.stop();
-    pauseTime.value = audioContext.value!.currentTime - startTime.value;
-    isPlaying.value = false;
-    endListen.value = Date.now();
-    timeCompute();
-  }
-  clearIntervalOrRAF();
-};
-
-export const stop = () => {
-  if (isPlaying.value) {
-    isPlaying.value = false;
-    sourceNode.value!.stop();
-    sourceNode.value!.disconnect();
-    endListen.value = Date.now();
-    timeCompute();
-    nowPlay.value = {} as MusicItem;
-  }
-  clearIntervalOrRAF();
-  pauseTime.value = 0;
-};
-
-// 音量控制 (0-1)
-export function setVolume(level: any) {
-  // 确保音量范围在 0-1 之间
-  const safeVolume = Math.max(0, Math.min(1, level));
-  if (gainNode.value && audioContext.value) {
-    // 使用指数渐变实现平滑音量变化
-    gainNode.value.gain.value = safeVolume;
-  }
-}
-
-// 跳转到指定时间 (秒)
-export const seek = (time: any) => {
-  if (time >= 0 && time <= duration.value) {
-    const wasPlaying = isPlaying.value;
-    pause();
-    pauseTime.value = time;
-    if (wasPlaying) play();
+  try {
+    initAudio();
+    let buffer = musicMap.get(item.id);
+    if (!buffer) {
+      buffer = await loadAudioBuffer(audioState.value.context!, item.audioUrl);
+      musicMap.set(item.id, buffer);
+    }
+    audioState.value.buffer = buffer;
+    duration.value = buffer.duration;
     return true;
+  } catch (err) {
+    modelList.value.unshift(`音频加载失败：${err}`);
+    return false;
   }
-  return false;
 };
 
-export const _progressCallback = ref<any>(null); // 进度回调函数
-export const _animationFrameId = ref<number>(); // 动画帧 ID
-export const _backgroundIntervalId = ref<any>(null); // 动画定时器
+/**
+ * 播放音频
+ */
+export const playAudio = () => {
+  audioState.value.source = createSourceNode(
+    audioState.value.context!,
+    audioState.value.buffer,
+    audioState.value.analyser!,
+    audioState.value.gainNode!
+  );
+  audioState.value.currentSong = musicList.value[playIndex.value];
 
-function clearIntervalOrRAF() {
-  if (_animationFrameId.value) {
-    cancelAnimationFrame(_animationFrameId.value);
-    _animationFrameId.value = 0;
+  const offset = audioState.value.pauseTime;
+  audioState.value.source.start(0, offset);
+  audioState.value.startTime = audioState.value.context!.currentTime - offset;
+  audioState.value.isPlaying = true;
+  startProgressTracking();
+};
+
+/**
+ * 暂停音频播放
+ *
+ * 暂停当前正在播放的音频，并停止进度追踪
+ */
+export const pauseAudio = () => {
+  if (!audioState.value.isPlaying) return;
+
+  audioState.value.source?.stop();
+  audioState.value.pauseTime =
+    audioState.value.context!.currentTime - audioState.value.startTime;
+  audioState.value.isPlaying = false;
+  stopProgressTracking();
+};
+
+/**
+ * 停止音频播放
+ *
+ * 调用此方法会停止当前正在播放的音频，并停止音频进度跟踪。
+ */
+export const stopAudio = () => {
+  if (!audioState.value.isPlaying) return;
+  destroy();
+};
+
+// 进度跟踪
+let animationFrameId: number | null;
+let backgroundIntervalId: number | null;
+
+/**
+ * 更新音频播放状态
+ *
+ * 如果音频未播放，则返回。否则更新当前播放时间，并在播放时间达到音频总时长时停止当前音频并播放下一首。
+ */
+const update = () => {
+  if (!audioState.value.isPlaying) return;
+
+  currentTime.value =
+    audioState.value.context!.currentTime - audioState.value.startTime;
+
+  if (duration.value !== 0 && currentTime.value >= duration.value) {
+    stopAudio();
+    next(); // 播放下一首
   }
-  if (_backgroundIntervalId.value) {
-    clearInterval(_backgroundIntervalId.value);
-    _backgroundIntervalId.value = null;
-  }
+};
+
+/**
+ * 开始进度跟踪
+ */
+function startProgressTracking() {
+  stopProgressTracking(); // 停止之前的进度跟踪，防止重复跟踪
+  documentHidden(backgroundIntervalId, animationFrameId, update);
 }
 
-// 进度跟踪：使用 requestAnimationFrame 更新进度（前台）
-export function _trackProgressWithRAF() {
-  const update = () => {
-    if (!isPlaying.value) return;
-    // 计算当前播放时间
-    currentTime.value = audioContext.value!.currentTime - startTime.value;
-    // 如果是正常播放完毕，则根据当前类型决定下一首的播放方式
-    if (duration.value !== 0 && currentTime.value >= duration.value) {
-      stop();
-      nextSong[order.value]();
-    }
-    if (_progressCallback.value) {
-      _progressCallback.value({
-        currentTime: currentTime.value,
-        duration: duration.value,
-        progress: (progress.value as unknown as number) * 100,
-      });
-    }
-    _animationFrameId.value = requestAnimationFrame(update);
-  };
-  update();
+document.addEventListener("visibilitychange", () => {
+  documentHidden(backgroundIntervalId, animationFrameId, update);
+});
+
+/**
+ * 停止进度跟踪
+ *
+ * 停止动画帧和背景定时器
+ */
+function stopProgressTracking() {
+  cancelAnimationFrame(animationFrameId);
+  animationFrameId = null;
+  clearInterval(backgroundIntervalId);
+  backgroundIntervalId = null;
 }
 
-// 进度跟踪：使用 setInterval 更新进度（后台）
-function _trackProgressWithInterval() {
-  const update = () => {
-    if (!isPlaying.value) return;
-    // 计算当前播放时间
-    currentTime.value = audioContext.value!.currentTime - startTime.value;
-    // 检测播放结束
-    if (duration.value !== 0 && currentTime.value >= duration.value) {
-      stop();
-      nextSong[order.value]();
+/**
+ * 设置音频音量
+ *
+ * @param level 音量等级，范围在 0 到 1 之间
+ */
+export const setVolume = (level: number) => {
+  if (audioState.value.gainNode) {
+    setSmoothVolume(audioState.value.gainNode, level);
+  }
+};
+
+/**
+ * 跳转播放音频到指定时间
+ *
+ * @param time 目标时间（秒），必须大于等于0且小于等于音频总时长
+ */
+export const seek = (time: number) => {
+  if (time >= 0 && time <= duration.value) {
+    const prevPlaying = audioState.value.isPlaying;
+    pauseAudio(); // 暂停播放
+    audioState.value.pauseTime = time;
+    if (prevPlaying) {
+      playAudio(); // 恢复播放
     }
-  };
-  // 设置1秒间隔（可根据需求调整）
-  _backgroundIntervalId.value = setInterval(update, 1000);
-}
-
-// 增强的销毁函数
-export function destroy() {
-  stop();
-  clearIntervalOrRAF();
-  // 断开所有节点连接
-  if (sourceNode.value) {
-    sourceNode.value.disconnect();
-    sourceNode.value = null;
   }
+};
 
-  if (analyser.value) {
-    analyser.value.disconnect();
-    analyser.value = null;
-  }
-
-  if (gainNode.value) {
-    gainNode.value.disconnect();
-    gainNode.value = null;
-  }
-
+/**
+ * 销毁音频实例
+ *
+ * 停止音频播放，关闭音频上下文，断开所有节点连接，并重置音频状态
+ */
+export const destroy = () => {
+  audioState.value.source?.stop();
   // 关闭音频上下文
-  if (audioContext.value) {
-    audioContext.value
-      .close()
-      .catch((e) => console.error("关闭音频上下文失败:", e));
-    audioContext.value = null;
-  }
-
-  // 重置状态
-  audioBuffer.value = null;
-  pauseTime.value = 0;
-  startTime.value = 0;
-  isPlaying.value = false;
-}
-
-// 切换到前台更新（高性能）
-const _switchToForegroundUpdate = () => {
-  // 清除后台的 setInterval
-  if (_backgroundIntervalId.value) {
-    clearInterval(_backgroundIntervalId.value);
-    _backgroundIntervalId.value = null;
-  }
-  // 启动 requestAnimationFrame
-  if (!_animationFrameId.value) {
-    _trackProgressWithRAF();
-  }
+  audioState.value.context
+    ?.close()
+    .catch((e) => console.error("关闭音频上下文失败:", e));
+  // 断开所有节点连接
+  ["analyser", "gainNode", "source"].forEach((e) => {
+    audioState.value[e]?.disconnect();
+  });
+  audioState.value = {
+    context: null,
+    analyser: null,
+    gainNode: null,
+    buffer: null,
+    source: null,
+    isPlaying: false,
+    pauseTime: 0,
+    startTime: 0,
+  };
+  stopProgressTracking();
 };
-
-// 切换到后台更新（确保持续检测）
-const _switchToBackgroundUpdate = () => {
-  // 清除前台的 requestAnimationFrame
-  if (_animationFrameId.value) {
-    cancelAnimationFrame(_animationFrameId.value);
-    _animationFrameId.value = 0;
-  }
-  // 启动 setInterval（间隔1秒）
-  if (!_backgroundIntervalId.value) {
-    _trackProgressWithInterval();
-  }
-};
-
-// 恢复 AudioContext（处理浏览器自动暂停）
-const _resumeAudioContextIfNeeded = async () => {
-  if (audioContext.value?.state === "suspended") {
-    await audioContext.value.resume();
-    // 校准播放时间（避免因暂停导致的时间偏差）
-    startTime.value = audioContext.value.currentTime - pauseTime.value;
-  }
-};
-
-// 添加页面可见性监听
-document.addEventListener("visibilitychange", documentHidden);

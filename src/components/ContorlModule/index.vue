@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { currentMusic } from '@/store/data.ts'
+import { backgroundImage } from '@/store/data.ts'
 import Progress from './progressBar.vue'
 import Volume from './volume.vue'
 import PlayBtn from './playBtn.vue'
@@ -10,9 +10,9 @@ const showBorad = ref<boolean>(false)
 
 const controlModuleRef = ref<HTMLDivElement>(null as unknown as HTMLDivElement);
 
-watch(() => currentMusic.value, (newVal) => {
-  if (!newVal?.logo) return;
-  nextTick(() => controlModuleRef.value.style.background = `url(${newVal!.logo}) no-repeat 100% / cover`)
+watch(() => backgroundImage.value, (newVal) => {
+  if (!newVal) return;
+  nextTick(() => controlModuleRef.value.style.background = newVal);
 })
 </script>
 

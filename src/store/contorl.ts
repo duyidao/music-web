@@ -1,57 +1,89 @@
-import { musicList } from "./data.ts";
-import { load, cancel } from "./music.ts";
-import { timeout, timetry } from "./user.ts";
-import { OrderType } from "@/types/music.ts";
+import { musicList, currentMusic } from "./data.ts";
+import { loadAudio, playAudio, audioState } from "./music.ts";
+import { userTime } from "./user.ts";
 import { getRandomIndex, debounce } from "@/utils/index.ts";
+import { createCancelableTask } from "@/utils/task.ts";
 
-export const volume = ref<number>(0.5); // 默认音量 50%
-export const playIndex = ref<number>(0); // 当前播放歌曲的索引
-export const currentTime = ref<number>(0); // 当前播放进度
-export const duration = ref<number>(0); // 音频时长
-export const order = ref<OrderType>(OrderType.Sequence); // 播放顺序
-export const show = ref<boolean>(false); // 是否显示购买弹窗
+// 播放状态
+export const playIndex = ref(0);
+export const currentTime = ref(0);
+export const duration = ref(0);
+export const volume = ref(0.5);
+export const order = ref<OrderType>("sequence");
+export const isShowingModal = ref(false);
 
-export const progress = computed<number>(() => {
-  return duration.value !== 0 ? currentTime.value / duration.value : 0;
+export const progress = computed(() => {
+  return duration.value ? currentTime.value / duration.value : 0;
 });
 
-const debounceLoad = debounce(async () => {
-  clearTimeout(timeout.value);
-  clearTimeout(timetry.value);
-  timeout.value = null;
-  timetry.value = null;
-  cancel();
-  load();
-});
 
-export const prev = () => {
-  if (playIndex.value === 0) {
-    playIndex.value = musicList.value.length - 1;
+/**
+ * 根据音频状态选择加载或播放音频
+ */
+export const loadOrPlayAudio = () => {
+  if (audioState.value.buffer) {
+    playAudio();
   } else {
-    playIndex.value--;
+    loadAndPlay();
   }
-  debounceLoad();
+};
+
+/**
+ * 根据文档隐藏状态设置定时器或动画帧
+ *
+ * @param backgroundIntervalId 背景定时器ID
+ * @param animationFrameId 动画帧ID
+ * @param fn 回调函数
+ */
+export const documentHidden = (backgroundIntervalId, animationFrameId, fn) => {
+  if (document.hidden) {
+    backgroundIntervalId = setInterval(fn, 1000);
+  } else {
+    const track = () => {
+      fn();
+      animationFrameId = requestAnimationFrame(track);
+    };
+    animationFrameId = requestAnimationFrame(track);
+  }
+}
+
+
+const debounceLoadAndPlay = debounce(loadAndPlay, 500);
+
+// 播放顺序处理
+export const nextSong = {
+  sequence: () => {
+    playIndex.value = (playIndex.value + 1) % musicList.value.length;
+    debounceLoadAndPlay();
+  },
+  random: () => {
+    playIndex.value = getRandomIndex(musicList.value.length, playIndex.value);
+    debounceLoadAndPlay();
+  },
+  single: () => {
+    debounceLoadAndPlay();
+  },
+};
+
+let cancelFn = () => {};
+
+// 加载并播放当前歌曲
+export async function loadAndPlay () {
+  const {run, cancel, id} = createCancelableTask(() => loadAudio(musicList.value[playIndex.value]))
+  cancelFn = cancel;
+  run().then((res) => {
+    playAudio();
+  })
+};
+
+// 上一首/下一首
+export const prev = () => {
+  playIndex.value =
+    (playIndex.value - 1 + musicList.value.length) % musicList.value.length;
+  debounceLoadAndPlay();
 };
 
 export const next = () => {
-  if (playIndex.value === musicList.value.length - 1) {
-    playIndex.value = 0;
-  } else {
-    playIndex.value++;
-  }
-  debounceLoad();
-};
-
-export const nextSong = {
-  SEQUENCE: () => next(),
-  RANDOM: () => {
-    playIndex.value = getRandomIndex(
-      musicList.value.length - 1,
-      playIndex.value
-    );
-    debounceLoad();
-  },
-  SINGLE: () => {
-    debounceLoad();
-  },
+  cancelFn();
+  nextSong[order.value]();
 };

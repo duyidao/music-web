@@ -2,9 +2,9 @@
   lang="ts">
   import { screenWidth, ratio } from '@/utils/index.ts';
   import { currentMusic } from '@/store/data.ts'
-  import { analyser, isPlaying } from '@/store/music.ts'
+  import { audioState } from '@/store/music.ts'
   import { userColor } from '@/store/user.ts'
-  
+
   const canvasWidth = computed(() => {
     return screenWidth.value < 768 ? screenWidth.value - 100 * ratio.value : 400
   });
@@ -34,14 +34,24 @@
    * 绘制环形柱状图
    */
   const draw = () => {
-    if (isPlaying.value) {
+    if (audioState.value.isPlaying) {
       raf.value = requestAnimationFrame(draw);
     }
 
-    if (!analyser.value) return;
+    // 多重安全校验
+    if (!ctx) return;
+    if (!audioState.value.analyser) return;
+
+    dataArray.value = new Uint8Array(audioState.value.analyser!.frequencyBinCount);
+
+    if (
+      !dataArray.value ||
+      dataArray.value.length !== audioState.value.analyser.frequencyBinCount
+    ) 
+      return;
 
     // 获取频率数据
-    analyser.value!.getByteFrequencyData(dataArray.value as Uint8Array);
+    audioState.value.analyser!.getByteFrequencyData(dataArray.value as Uint8Array);
 
     // 每次绘制前清空画布
     ctx.clearRect(0, 0, canvasRef.value!.width, canvasRef.value!.height);
@@ -63,7 +73,7 @@
     ctx.restore();
     ctx.save();
 
-    if (!isPlaying.value) return;
+    if (!audioState.value.isPlaying) return;
 
     ctx.translate(centerX, centerY);
     rotation += config.rotateSpeed;
@@ -104,7 +114,6 @@
     logoImg.src = newVal.logo; // 替换为你的Logo路径
 
     // 初始化数据数组
-    dataArray.value = new Uint8Array(analyser.value!.frequencyBinCount);
     logoImg.onload = () => { // 等待图片加载完成
       nextTick(() => {
         centerX = canvasRef.value!.width / 2;
@@ -115,13 +124,13 @@
     };
   }, { deep: true })
 
-  watch([isPlaying, screenWidth], () => {
+  watch(() => [audioState.value.isPlaying, screenWidth.value], () => {
     centerX = canvasRef.value!.width / 2;
     centerY = canvasRef.value!.height / 2;
     if (raf.value) {
       cancelAnimationFrame(raf.value);
     }
-    draw();
+    nextTick(() => draw());
   })
 </script>
 
@@ -131,7 +140,8 @@
     :height="canvasWidth"></canvas>
 </template>
 
-<style lang="less" scoped>
+<style lang="less"
+  scoped>
   canvas {
     background-color: transparent;
   }

@@ -1,9 +1,9 @@
-import { MusicItem } from "../types/music.ts";
-import { nowPlay, stop } from "./music.ts";
-import { duration, currentTime, order, nextSong } from "./contorl.ts";
 import { musicList, modelList } from "./data.ts";
+import { audioState, stopAudio } from "./music.ts";
+import { currentTime, duration, next } from "./contorl.ts";
 
-export const userTime = ref({
+// 用户数据
+export const userTime = ref<Record<string, number>>({
   Bones: 360,
   Demons: 15,
   Brids: 7800,
@@ -12,69 +12,70 @@ export const userTime = ref({
   Shots: 0,
 });
 
-export const userColor = ref("");
+export const userColor = ref("#4fa273");
 
 /**
- * 修改主题色
- * @param color 主题色
+ * 设置主题颜色
+ *
+ * @param color 主题颜色，默认为 "#4fa273"
  */
-export const setUserColor = (color: string = "#4fa273") => {
+export const setThemeColor = (color: string = "#4fa273") => {
   userColor.value = color;
-  document.documentElement.style.setProperty(`--base-color`, userColor.value);
+  document.documentElement.style.setProperty("--base-color", color);
 };
-setUserColor();
+setThemeColor();
 
-/**
- * 添加用户听歌时间
- * @param id 歌曲id
- * @param time 时间
- */
-export const addUserTime = (id: string, time: number) => {
-  if (id in userTime.value) {
-    userTime.value[id as keyof typeof userTime.value] += time;
+// 添加听歌时间
+export const addListeningTime = (songId: string, seconds: number) => {
+  if (songId in userTime.value) {
+    userTime.value[songId] += seconds;
   }
-  const obj = musicList.value.find((item) => item.id === id);
-  obj ? (obj.time! += time) : null;
+
+  const song = musicList.value.find((item) => item.id === songId);
+  if (song) {
+    song.time = (song.time || 0) + seconds;
+  }
 };
 
-export const timeout = ref<any>(null);
-export const timetry = ref<any>(null);
-/**
- * 是否允许播放音频
- */
-export const canPlayFn = (item: MusicItem, type = "load") => {
-  // 当前在播放且播放的音频是当前点击的音频，且还没播放完毕，则不重新初始化，继续播放
+export const nextPlayTimeout = ref<any>(null);
+
+// 检查是否可以播放
+export const canPlay = (song: MusicItem, action: "load" | "play" = "load") => {
+  // 正在播放同一首歌且未结束
   if (
-    type === "load" &&
-    item.audioUrl === nowPlay.value.audioUrl &&
-    !(Math.abs(duration.value - currentTime.value) <= 1)
-  )
+    action === "load" &&
+    song.audioUrl === audioState.value.currentSong?.audioUrl &&
+    Math.abs(duration.value - currentTime.value) > 1
+  ) {
     return false;
-  
-    // 允许试听音频
-  if (item?.type === 1 && item?.time! <= 0) {
-    timetry.value = setTimeout(() => {
-      modelList.value.unshift("当前歌曲试听已结束。即将播放下一首歌。");
-      stop();
-      timeout.value = setTimeout(() => {
-        nextSong[order.value]();
-      }, 3000);
+  }
+
+  // 试听歌曲处理
+  if (song.type === 1 && (song.time || 0) <= 0) {
+    modelList.value.unshift("试听即将结束，10秒后播放下一首");
+    nextPlayTimeout.value = setTimeout(() => {
+      stopAudio();
+      next();
     }, 10000);
     return true;
   }
 
-  // 如果剩余时长为空，不允许播放
-  if (item.hasOwnProperty("time") && (item?.time ?? 0) <= 0) {
-    modelList.value.unshift(
-      "当前歌曲可听部分已结束，请重新购买或选择其他音频。即将播放下一首歌。"
-    );
-    timeout.value = setTimeout(() => {
-      nextSong[order.value]();
-    }, 3000);
+  // 无剩余时长
+  if (song.time !== undefined && song.time <= 0) {
+    modelList.value.unshift("可听部分已结束，请购买或选择其他歌曲");
+    nextPlayTimeout.value = setTimeout(() => next(), 3000);
     return false;
   }
 
   return true;
 };
 
-
+/**
+ * 清除计时器
+ *
+ * 该函数用于清除已经设置的计时器，以避免执行不需要的操作。
+ */
+export const clearTimeoutFn = () => {
+  clearTimeout(nextPlayTimeout.value);
+  nextPlayTimeout.value = null;
+}

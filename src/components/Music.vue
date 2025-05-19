@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { init } from '@/store/music.ts'
+import { initAudio } from '@/store/music.ts'
 import { currentMusic, lrcList } from '@/store/data.ts'
-import { currentTime, show } from '@/store/contorl.ts'
+import { currentTime, isShowingModal } from '@/store/contorl.ts'
 import { screenWidth, ratio } from '@/utils/index.ts';
-import { addUserTime, timeout } from '@/store/user.ts'
+import { addListeningTime, clearTimeoutFn } from '@/store/user.ts'
 import { modelList } from '@/store/data.ts';
 import CanvasVisual from '@comp/CanvasVisual/index.vue'
 
@@ -39,7 +39,7 @@ const getBg = async () => {
 
 // @ts-ignore
 onMounted(() => {
-  init()
+  initAudio()
 })
 
 // @ts-ignore
@@ -98,12 +98,11 @@ const handleBuyFn = () => {
     modelList.value.unshift('购买时长必须大于0')
     return;
   }
-  addUserTime(currentMusic.value.id, buy.value);
-  clearTimeout(timeout.value);
-  timeout.value = null;
+  clearTimeoutFn();
+  addListeningTime(currentMusic.value.id, buy.value);
   buy.value = 0;
   modelList.value.unshift('购买成功，请继续享受音乐吧');
-  show.value = false;
+  isShowingModal.value = false;
 }
 
 const phoneShow = ref<string>('image')
@@ -122,13 +121,13 @@ const changePhoneShow = (type: string) => {
     :style="{ '--bg': bgColor }">
     <div class="music-logo"
       :class="{ 'active': phoneShow === 'image' }"
-      @click.stop="changePhoneShow('lrc')">
+      @click="changePhoneShow('lrc')">
       <CanvasVisual />
     </div>
     <div class="music-lrc"
       ref="musicLrc"
       :class="{ 'active': phoneShow === 'lrc' }"
-      @click.stop="changePhoneShow('image')">
+      @click="changePhoneShow('image')">
       <ul class="music-lrc-content"
         ref="musicLrcContent">
         <li v-for="item in lrcList"
@@ -144,7 +143,7 @@ const changePhoneShow = (type: string) => {
       title="购买音频">
       <span class="iconfont icon-gengduo"></span>
       <div class="music-more-content"
-        :class="{ 'active': show }">
+        :class="{ 'active': isShowingModal }">
         <p>当前可听时长：{{ currentMusic?.hasOwnProperty('time') ? currentMusic.time + ' 秒' : '无需购买' }}</p>
         <div v-if="currentMusic?.hasOwnProperty('time')">
           <input v-model="buy"

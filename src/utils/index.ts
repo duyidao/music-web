@@ -25,11 +25,14 @@ export function formatDuration(seconds: number) {
   return parts.join(":");
 }
 
-export const getRandomIndex = (len: number = 1, nowIndex?: number): number => {
-  let index = Math.floor(Math.random() * len);
-  if (index === nowIndex) getRandomIndex(len, nowIndex);
-  return index;
-}
+// 随机索引生成
+export const getRandomIndex = (length: number, currentIndex: number) => {
+  let newIndex;
+  do {
+    newIndex = Math.floor(Math.random() * length);
+  } while (newIndex === currentIndex && length > 1);
+  return newIndex;
+};
 
 export const ratio = ref(window.innerWidth / 750);
 export const screenWidth = ref(window.innerWidth);

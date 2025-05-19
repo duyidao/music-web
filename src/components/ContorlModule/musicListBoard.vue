@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { load } from '@/store/music.ts'
+import { loadAudio } from '@/store/music.ts'
 import { musicList } from '@/store/data.ts'
 import type { MusicItem } from '@/types/music.ts'
 import { playIndex } from '@/store/contorl.ts'
-import { currentMusic } from '@/store/data.ts'
+import { backgroundImage } from '@/store/data.ts'
 
 const choseMusic = (item: MusicItem, index: number) => {
   playIndex.value = index
-  load(item)
+  loadAudio(item)
   closeBoradFn()
 }
 
@@ -21,11 +21,9 @@ const closeBoradFn = () => {
 
 const boardRef = ref<HTMLDivElement>(null as unknown as HTMLDivElement);
 
-watch(() => currentMusic.value, (newVal) => {
-  if (!newVal?.logo) return;
-  nextTick(() => {
-    boardRef.value.style.background = `url(${newVal!.logo}) no-repeat 100% / cover`
-  })
+watch(() => backgroundImage.value, (newVal) => {
+  if (!newVal) return;
+  nextTick(() => boardRef.value.style.background = newVal);
 })
 
 const getMusicType = (item: MusicItem) => {
