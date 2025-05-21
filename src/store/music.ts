@@ -15,6 +15,7 @@ import {
   documentHidden,
 } from "./contorl.ts";
 import type { MusicItem } from '@/types/music.ts'
+import { taskMap, processQueue } from "@/utils/task.ts";
 
 // 音频状态
 export const audioState = ref({
@@ -40,7 +41,20 @@ export const initAudio = () => {
   setVolume(volume.value);
 };
 
-const musicMap = new Map<string, AudioBuffer>(); // 缓存音频缓冲区的映射
+// 初始化任务队列
+export const initMusicTasks = () => {
+  musicList.value.forEach(music => {
+    if (!taskMap.has(music.id)) {
+      taskMap.set(music.id, {
+        id: music.id,
+        status: 'pending',
+        data: null
+      });
+      pendingQueue.push(music.id);
+    }
+  });
+  processQueue();
+};
 
 // 加载音频
 export const loadAudio = async (
