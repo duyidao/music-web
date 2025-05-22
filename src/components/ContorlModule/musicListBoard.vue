@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { loadAudio } from '@/store/music.ts'
 import { musicList } from '@/store/data.ts'
 import type { MusicItem } from '@/types/music.ts'
-import { playIndex } from '@/store/contorl.ts'
+import { playIndex, loadAndPlay } from '@/store/contorl.ts'
 import { backgroundImage } from '@/store/data.ts'
 
-const choseMusic = (item: MusicItem, index: number) => {
+const choseMusic = (index: number) => {
   playIndex.value = index
-  loadAudio(item)
+  loadAndPlay()
   closeBoradFn()
 }
 
@@ -41,7 +40,7 @@ const getMusicType = (item: MusicItem) => {
       <div v-for="(item, index) in musicList"
         :key="item.id"
         class="music-item"
-        @click.stop="choseMusic(item, index)"
+        @click.stop="choseMusic(index)"
         :class="{ active: index === playIndex }">
         <span>{{ item.title }}</span>
         <span>{{ getMusicType(item) }}</span>

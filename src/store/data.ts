@@ -1,6 +1,7 @@
 import type { MusicItem } from "@/types/music.ts";
 import { playIndex } from "./contorl.ts";
 import { userTime } from "./user.ts";
+import { taskMap, pendingQueue, processQueue } from "@/utils/task.ts";
 
 // 状态管理
 export const musicList = ref<MusicItem[]>([]);
@@ -64,12 +65,35 @@ export const loadMusicData = async () => {
           )?.default || "",
         type: whileList.includes(baseName) ? 1 : 0,
       };
+      // ts-ignore
       if (userTime.value.hasOwnProperty(baseName)) obj.time = (userTime.value as any)[baseName];
       return obj;
     });
+    initMusicTasks();
   } catch (err) {
     console.error("加载音乐数据失败:", err);
   }
+};
+
+
+/**
+ * 初始化音乐任务
+ *
+ * 遍历音乐列表，并为每个音乐创建一个任务。如果任务映射（taskMap）中不存在该音乐的任务，则创建一个新任务，并将其添加到待处理队列（pendingQueue）中。
+ * 最后，调用processQueue函数处理待处理队列中的任务。
+ */
+function initMusicTasks () {
+  musicList.value.forEach((music) => {
+    if (!taskMap.has(music.id)) {
+      taskMap.set(music.id, {
+        id: music.id,
+        status: "waiting",
+        data: null,
+      });
+      pendingQueue.push(music.id);
+    }
+    processQueue();
+  });
 };
 
 // 格式化标题

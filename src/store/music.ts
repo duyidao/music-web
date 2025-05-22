@@ -1,6 +1,5 @@
 import {
   createAudioContext,
-  loadAudioBuffer,
   createSourceNode,
   setSmoothVolume,
 } from "@/utils/audio";
@@ -14,8 +13,8 @@ import {
   next,
   documentHidden,
 } from "./contorl.ts";
-import type { MusicItem } from '@/types/music.ts'
-import { taskMap, processQueue } from "@/utils/task.ts";
+import type { MusicItem } from "@/types/music.ts";
+import { taskMap, processQueueOnce, changeActiveTask } from "@/utils/task.ts";
 
 // 音频状态
 export const audioState = ref({
@@ -25,6 +24,7 @@ export const audioState = ref({
   buffer: null as AudioBuffer | null, // 音频缓冲区
   source: null as AudioBufferSourceNode | null, // 音频源节点
   isPlaying: false, // 是否正在播放
+  // ts-ignore
   currentSong: null as MusicItem | null, // 当前播放的歌曲
   pauseTime: 0, // 暂停时间
   startTime: 0, // 开始时间
@@ -41,19 +41,10 @@ export const initAudio = () => {
   setVolume(volume.value);
 };
 
-// 初始化任务队列
-export const initMusicTasks = () => {
-  musicList.value.forEach(music => {
-    if (!taskMap.has(music.id)) {
-      taskMap.set(music.id, {
-        id: music.id,
-        status: 'pending',
-        data: null
-      });
-      pendingQueue.push(music.id);
-    }
-  });
-  processQueue();
+const musicStateTip = {
+  error: "音频重新加载中...",
+  waiting: "音频加载中...",
+  pending: "音频获取中...",
 };
 
 // 加载音频
@@ -62,14 +53,18 @@ export const loadAudio = async (
 ) => {
   try {
     initAudio();
-    let buffer = musicMap.get(item.id);
-    if (!buffer) {
-      buffer = await loadAudioBuffer(audioState.value.context!, item.audioUrl);
-      musicMap.set(item.id, buffer);
+    let res = taskMap.get(item.id);
+    console.log("res", res);
+    if (res && res.status === "success") {
+      audioState.value.buffer = res.data as AudioBuffer;
+      duration.value = res.data!.duration;
+      return true;
     }
-    audioState.value.buffer = buffer;
-    duration.value = buffer.duration;
-    return true;
+    changeActiveTask(item);
+    // ts-ignore
+    modelList.value.unshift(musicStateTip[res!.status]);
+    if (res!.status !== "pending") processQueueOnce(item.id);
+    return false;
   } catch (err) {
     modelList.value.unshift(`音频加载失败：${err}`);
     return false;
@@ -82,11 +77,12 @@ export const loadAudio = async (
 export const playAudio = () => {
   audioState.value.source = createSourceNode(
     audioState.value.context!,
-    audioState.value.buffer,
+    audioState.value.buffer!,
     audioState.value.analyser!,
     audioState.value.gainNode!
   );
   audioState.value.currentSong = musicList.value[playIndex.value];
+  changeActiveTask(null);
 
   const offset = audioState.value.pauseTime;
   audioState.value.source.start(0, offset);
@@ -107,7 +103,10 @@ export const pauseAudio = () => {
   audioState.value.pauseTime =
     audioState.value.context!.currentTime - audioState.value.startTime;
   audioState.value.isPlaying = false;
-  reduceListeningTime(musicList.value[playIndex.value].id, audioState.value.pauseTime.toFixed(0));
+  reduceListeningTime(
+    musicList.value[playIndex.value].id,
+    Numner(audioState.value.pauseTime.toFixed(0))
+  );
   stopProgressTracking();
 };
 
@@ -118,13 +117,16 @@ export const pauseAudio = () => {
  */
 export const stopAudio = () => {
   if (!audioState.value.isPlaying) return;
-  reduceListeningTime(musicList.value[playIndex.value].id, audioState.value.pauseTime.toFixed(0));
+  reduceListeningTime(
+    musicList.value[playIndex.value].id,
+    Number(audioState.value.pauseTime.toFixed(0))
+  );
   destroy();
 };
 
 // 进度跟踪
 let animationFrameId: number | null;
-let backgroundIntervalId: number | null;
+let backgroundIntervalId: Timeout | null;
 
 /**
  * 更新音频播放状态
@@ -152,7 +154,7 @@ function startProgressTracking() {
 }
 
 document.addEventListener("visibilitychange", () => {
-  documentHidden(backgroundIntervalId, animationFrameId, update);
+  documentHidden(backgroundIntervalId!, animationFrameId!, update);
 });
 
 /**
@@ -161,9 +163,9 @@ document.addEventListener("visibilitychange", () => {
  * 停止动画帧和背景定时器
  */
 function stopProgressTracking() {
-  cancelAnimationFrame(animationFrameId);
+  cancelAnimationFrame(animationFrameId!);
   animationFrameId = null;
-  clearInterval(backgroundIntervalId);
+  clearInterval(backgroundIntervalId!);
   backgroundIntervalId = null;
 }
 
@@ -207,8 +209,10 @@ export const destroy = () => {
     .catch((e) => console.error("关闭音频上下文失败:", e));
   // 断开所有节点连接
   ["analyser", "gainNode", "source"].forEach((e) => {
+    // ts-ignore
     audioState.value[e]?.disconnect();
   });
+  // ts-ignore
   audioState.value = {
     context: null,
     analyser: null,

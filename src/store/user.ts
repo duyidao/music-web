@@ -1,6 +1,7 @@
 import { musicList, modelList } from "./data.ts";
-import { audioState, stopAudio } from "./music.ts";
+import { audioState } from "./music.ts";
 import { currentTime, duration, next } from "./contorl.ts";
+import type { MusicItem } from "@/types/music.ts";
 
 // 用户数据
 export const userTime = ref<Record<string, number>>({
@@ -39,7 +40,7 @@ export const reduceListeningTime = (songId: string, seconds: number) => {
   if (song) {
     song.time = (song.time || 0) - seconds;
   }
-}
+};
 
 export const nextPlayTimeout = ref<any>(null);
 export const nextPlayInterval = ref<any>(null);
@@ -92,4 +93,4 @@ export const clearTimeoutFn = () => {
   clearInterval(nextPlayInterval.value);
   nextPlayTimeout.value = null;
   nextPlayInterval.value = null;
-}
+};

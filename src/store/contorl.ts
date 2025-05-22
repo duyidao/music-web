@@ -37,7 +37,8 @@ export const loadOrPlayAudio = () => {
  * @param animationFrameId 动画帧ID
  * @param fn 回调函数
  */
-export const documentHidden = (backgroundIntervalId: number, animationFrameId: number, fn: any) => {
+// @ts-ignore
+export const documentHidden = (backgroundIntervalId: Timeout, animationFrameId: number, fn: any) => {
   if (document.hidden) {
     backgroundIntervalId = setInterval(fn, 1000);
   } else {
@@ -53,15 +54,15 @@ const debounceLoadAndPlay = debounce(loadAndPlay, 500);
 
 // 播放顺序处理
 export const nextSong = {
-  sequence: () => {
+  SEQUENCE: () => {
     playIndex.value = (playIndex.value + 1) % musicList.value.length;
     debounceLoadAndPlay();
   },
-  random: () => {
+  RANDOM: () => {
     playIndex.value = getRandomIndex(musicList.value.length, playIndex.value);
     debounceLoadAndPlay();
   },
-  single: () => {
+  SINGLE: () => {
     debounceLoadAndPlay();
   },
 };
@@ -75,8 +76,9 @@ export async function loadAndPlay() {
   );
   clearTimeoutFn(); // 清除定时器
   cancelFn = cancel;
-  run().then(() => {
-    playAudio();
+  run().then((res) => {
+    console.log('res--------------playAudio', res);
+    if (res) playAudio();
   });
 }
 
@@ -90,5 +92,8 @@ export const prev = () => {
 
 export const next = () => {
   cancelFn();
+  console.log('nextSong', nextSong);
+  console.log('order.value', order.value);
+  console.log('nextSong[order.value]', nextSong[order.value]);
   nextSong[order.value]();
 };

@@ -21,7 +21,7 @@ export interface MusicItem {
 }
 
 export enum OrderType {
-  Sequence = 'SEQUENCE',
-  Random = 'RANDOM',
-  Single = 'SINGLE',
+  SEQUENCE = 'SEQUENCE',
+  RANDOM = 'RANDOM',
+  SINGLE = 'SINGLE',
 }
