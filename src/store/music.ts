@@ -13,7 +13,7 @@ import {
   next,
   documentHidden,
 } from "./contorl.ts";
-import type { MusicItem } from "@/types/music.ts";
+import type { MusicItem, Status, DisconnectableKeys } from "@/types/music.ts";
 import { taskMap, processQueueOnce, changeActiveTask } from "@/utils/task.ts";
 
 // 音频状态
@@ -47,6 +47,7 @@ const musicStateTip = {
   pending: "音频获取中...",
 };
 
+
 // 加载音频
 export const loadAudio = async (
   item: MusicItem = musicList.value[playIndex.value]
@@ -62,7 +63,7 @@ export const loadAudio = async (
     }
     changeActiveTask(item);
     // ts-ignore
-    modelList.value.unshift(musicStateTip[res!.status]);
+    modelList.value.unshift(musicStateTip[res!.status as Status]);
     if (res!.status !== "pending") processQueueOnce(item.id);
     return false;
   } catch (err) {
@@ -105,7 +106,7 @@ export const pauseAudio = () => {
   audioState.value.isPlaying = false;
   reduceListeningTime(
     musicList.value[playIndex.value].id,
-    Numner(audioState.value.pauseTime.toFixed(0))
+    Number(audioState.value.pauseTime.toFixed(0))
   );
   stopProgressTracking();
 };
@@ -126,7 +127,7 @@ export const stopAudio = () => {
 
 // 进度跟踪
 let animationFrameId: number | null;
-let backgroundIntervalId: Timeout | null;
+let backgroundIntervalId: number | null;
 
 /**
  * 更新音频播放状态
@@ -150,7 +151,7 @@ const update = () => {
  */
 function startProgressTracking() {
   stopProgressTracking(); // 停止之前的进度跟踪，防止重复跟踪
-  documentHidden(backgroundIntervalId, animationFrameId, update);
+  documentHidden(backgroundIntervalId!, animationFrameId!, update);
 }
 
 document.addEventListener("visibilitychange", () => {
@@ -209,10 +210,8 @@ export const destroy = () => {
     .catch((e) => console.error("关闭音频上下文失败:", e));
   // 断开所有节点连接
   ["analyser", "gainNode", "source"].forEach((e) => {
-    // ts-ignore
-    audioState.value[e]?.disconnect();
+    audioState.value[e as DisconnectableKeys]?.disconnect();
   });
-  // ts-ignore
   audioState.value = {
     context: null,
     analyser: null,
@@ -220,6 +219,7 @@ export const destroy = () => {
     buffer: null,
     source: null,
     isPlaying: false,
+    currentSong: null, // 补充缺失的 currentSong 属性
     pauseTime: 0,
     startTime: 0,
   };

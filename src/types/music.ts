@@ -4,6 +4,7 @@ export interface LrcListType {
   time: number;
 }
 
+// 音乐类型枚举
 enum MusicType {
   免费试听 = 1,
   免费音乐 = 0
@@ -20,8 +21,15 @@ export interface MusicItem {
   type?: MusicType;
 }
 
+// 定义播放顺序枚举类型
 export enum OrderType {
-  SEQUENCE = 'SEQUENCE',
-  RANDOM = 'RANDOM',
-  SINGLE = 'SINGLE',
+  Sequence = 'SEQUENCE',
+  Random = 'RANDOM',
+  Single = 'SINGLE',
 }
+
+// 定义播放状态枚举类型
+export type Status = "error" | "waiting" | "pending";
+
+// 定义断开连接的键类型
+export type DisconnectableKeys = "analyser" | "gainNode" | "source";

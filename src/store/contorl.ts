@@ -10,7 +10,7 @@ export const playIndex = ref(0);
 export const currentTime = ref(0);
 export const duration = ref(0);
 export const volume = ref(0.5);
-export const order = ref<OrderType>("SEQUENCE");
+export const order = ref<OrderType>(OrderType.Sequence);
 export const isShowingModal = ref(false);
 
 export const progress = computed(() => {

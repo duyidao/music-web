@@ -50,7 +50,7 @@ export const loadMusicData = async () => {
     musicList.value = Object.entries(mp3Modules).map(([mp3Path, mp3Url]) => {
       const baseName = mp3Path.replace(/^.*music\//, "").replace(/\.mp3$/, "");
 
-      let obj = {
+      let obj: MusicItem = {
         id: baseName,
         title: formatTitle(baseName),
         audioUrl: mp3Url as string,
@@ -65,7 +65,6 @@ export const loadMusicData = async () => {
           )?.default || "",
         type: whileList.includes(baseName) ? 1 : 0,
       };
-      // ts-ignore
       if (userTime.value.hasOwnProperty(baseName)) obj.time = (userTime.value as any)[baseName];
       return obj;
     });

@@ -13,7 +13,7 @@ export const createCancelableTask = (fn: any) => {
 
   return {
     cancel: () => cancel(),
-    run: (...args) => {
+    run: (...args: unknown[]) => {
       return new Promise((resolve, reject) => {
         cancel();
         cancel = () => (resolve = reject = NOOP);
