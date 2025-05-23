@@ -16,13 +16,9 @@
       "check": true
     }
   ],
-  "builds": [
-    {
-      "src": "vite.config.ts",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "docs"
-      }
+  "build": {
+    "env": {
+      "VITE_BASE_PATH": "/music-web/"
     }
-  ]
+  }
 }

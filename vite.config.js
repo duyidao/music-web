@@ -18,7 +18,7 @@ export default defineConfig({
             }
         })
     ],
-    base: '/music-web/',
+    base: process.env.VITE_BASE_PATH || '/music-web/',
     server: {
         port: 6996,
     },
