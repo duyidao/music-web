@@ -13,17 +13,5 @@
       "dest": "/music-web/index.html",
       "check": true
     }
-  ],
-  "builds": [
-    {
-      "src": "vite.config.ts",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "docs",
-        "cleanUrls": true
-      }
-    }
-  ],
-  "trailingSlash": false,
-  "cleanUrls": true
+  ]
 }
