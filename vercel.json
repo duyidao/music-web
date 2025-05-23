@@ -2,13 +2,6 @@
   "version": 2,
   "routes": [
     {
-      "src": "/music-web/(.*)",
-      "dest": "/music-web/$1",
-      "headers": {
-        "Cache-Control": "public, max-age=31536000, immutable"
-      }
-    },
-    {
       "src": "/music-web/.*",
       "dest": "/music-web/index.html",
       "check": true
