@@ -1,6 +1,15 @@
 {
-  "version": 2,
+  "version": 3,
   "routes": [
+    {
+      "src": "/",
+      "status": 301,
+      "headers": { "Location": "/music-web/" }
+    },
+    {
+      "src": "/music-web/(.*)",
+      "dest": "/music-web/$1"
+    },
     {
       "src": "/music-web/.*",
       "dest": "/music-web/index.html",
