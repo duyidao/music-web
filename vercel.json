@@ -7,8 +7,18 @@
       "headers": { "Location": "/music-web/" }
     },
     {
-      "src": "/music-web/(.*)",
-      "dest": "/music-web/$1"
+      "src": "/music-web/(assets/.*)",
+      "dest": "/music-web/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "src": "/music-web/(.*\\.(ico|svg|png|jpg))",
+      "dest": "/music-web/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=86400"
+      }
     },
     {
       "src": "/music-web/.*",
