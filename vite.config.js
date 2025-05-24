@@ -29,7 +29,7 @@ export default defineConfig({
         }
     },
     build: {
-        outDir: 'docs',
+        outDir: 'docs/music-web',
         rollupOptions: {
             output: {
                 // https://github.com/rollup/rollup/blob/master/src/utils/sanitizeFileName.ts
