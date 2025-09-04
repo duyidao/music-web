@@ -2,9 +2,8 @@ import {
   createAudioContext,
   createSourceNode,
   setSmoothVolume,
-} from "@/utils/audio";
-import { musicList, modelList } from "./data.ts";
-import { reduceListeningTime } from "./user.ts";
+} from '@/utils/audio'
+import { musicList, modelList } from './data.ts'
 import {
   playIndex,
   currentTime,
@@ -12,9 +11,9 @@ import {
   volume,
   next,
   documentHidden,
-} from "./contorl.ts";
-import type { MusicItem, Status, DisconnectableKeys } from "@/types/music.ts";
-import { taskMap, processQueueOnce, changeActiveTask } from "@/utils/task.ts";
+} from './contorl.ts'
+import type { MusicItem, Status, DisconnectableKeys } from '@/types/music.ts'
+import { taskMap, processQueueOnce, changeActiveTask } from '@/utils/task.ts'
 
 // 音频状态
 export const audioState = ref({
@@ -28,49 +27,48 @@ export const audioState = ref({
   currentSong: null as MusicItem | null, // 当前播放的歌曲
   pauseTime: 0, // 暂停时间
   startTime: 0, // 开始时间
-});
+})
 
 // 初始化音频上下文
 export const initAudio = () => {
-  destroy();
+  destroy()
 
-  const { audioContext, analyser, gainNode } = createAudioContext();
-  audioState.value.context = audioContext;
-  audioState.value.analyser = analyser;
-  audioState.value.gainNode = gainNode;
-  setVolume(volume.value);
-};
+  const { audioContext, analyser, gainNode } = createAudioContext()
+  audioState.value.context = audioContext
+  audioState.value.analyser = analyser
+  audioState.value.gainNode = gainNode
+  setVolume(volume.value)
+}
 
 const musicStateTip = {
-  error: "音频重新加载中...",
-  waiting: "音频加载中...",
-  pending: "音频获取中...",
-};
-
+  error: '音频重新加载中...',
+  waiting: '音频加载中...',
+  pending: '音频获取中...',
+}
 
 // 加载音频
 export const loadAudio = async (
   item: MusicItem = musicList.value[playIndex.value]
 ) => {
   try {
-    initAudio();
-    let res = taskMap.get(item.id);
-    console.log("res", res);
-    if (res && res.status === "success") {
-      audioState.value.buffer = res.data as AudioBuffer;
-      duration.value = res.data!.duration;
-      return true;
+    initAudio()
+    let res = taskMap.get(item.id)
+    console.log('res', res)
+    if (res && res.status === 'success') {
+      audioState.value.buffer = res.data as AudioBuffer
+      duration.value = res.data!.duration
+      return true
     }
-    changeActiveTask(item);
+    changeActiveTask(item)
     // ts-ignore
-    modelList.value.unshift(musicStateTip[res!.status as Status]);
-    if (res!.status !== "pending") processQueueOnce(item.id);
-    return false;
+    modelList.value.unshift(musicStateTip[res!.status as Status])
+    if (res!.status !== 'pending') processQueueOnce(item.id)
+    return false
   } catch (err) {
-    modelList.value.unshift(`音频加载失败：${err}`);
-    return false;
+    modelList.value.unshift(`音频加载失败：${err}`)
+    return false
   }
-};
+}
 
 /**
  * 播放音频
@@ -81,16 +79,16 @@ export const playAudio = () => {
     audioState.value.buffer!,
     audioState.value.analyser!,
     audioState.value.gainNode!
-  );
-  audioState.value.currentSong = musicList.value[playIndex.value];
-  changeActiveTask(null);
+  )
+  audioState.value.currentSong = musicList.value[playIndex.value]
+  changeActiveTask(null)
 
-  const offset = audioState.value.pauseTime;
-  audioState.value.source.start(0, offset);
-  audioState.value.startTime = audioState.value.context!.currentTime - offset;
-  audioState.value.isPlaying = true;
-  startProgressTracking();
-};
+  const offset = audioState.value.pauseTime
+  audioState.value.source.start(0, offset)
+  audioState.value.startTime = audioState.value.context!.currentTime - offset
+  audioState.value.isPlaying = true
+  startProgressTracking()
+}
 
 /**
  * 暂停音频播放
@@ -98,18 +96,14 @@ export const playAudio = () => {
  * 暂停当前正在播放的音频，并停止进度追踪
  */
 export const pauseAudio = () => {
-  if (!audioState.value.isPlaying) return;
+  if (!audioState.value.isPlaying) return
 
-  audioState.value.source?.stop();
+  audioState.value.source?.stop()
   audioState.value.pauseTime =
-    audioState.value.context!.currentTime - audioState.value.startTime;
-  audioState.value.isPlaying = false;
-  reduceListeningTime(
-    musicList.value[playIndex.value].id,
-    Number(audioState.value.pauseTime.toFixed(0))
-  );
-  stopProgressTracking();
-};
+    audioState.value.context!.currentTime - audioState.value.startTime
+  audioState.value.isPlaying = false
+  stopProgressTracking()
+}
 
 /**
  * 停止音频播放
@@ -117,17 +111,13 @@ export const pauseAudio = () => {
  * 调用此方法会停止当前正在播放的音频，并停止音频进度跟踪。
  */
 export const stopAudio = () => {
-  if (!audioState.value.isPlaying) return;
-  reduceListeningTime(
-    musicList.value[playIndex.value].id,
-    Number(audioState.value.pauseTime.toFixed(0))
-  );
-  destroy();
-};
+  if (!audioState.value.isPlaying) return
+  destroy()
+}
 
 // 进度跟踪
-let animationFrameId: number | null;
-let backgroundIntervalId: number | null;
+let animationFrameId: number | null
+let backgroundIntervalId: number | null
 
 /**
  * 更新音频播放状态
@@ -135,28 +125,28 @@ let backgroundIntervalId: number | null;
  * 如果音频未播放，则返回。否则更新当前播放时间，并在播放时间达到音频总时长时停止当前音频并播放下一首。
  */
 const update = () => {
-  if (!audioState.value.isPlaying) return;
+  if (!audioState.value.isPlaying) return
 
   currentTime.value =
-    audioState.value.context!.currentTime - audioState.value.startTime;
+    audioState.value.context!.currentTime - audioState.value.startTime
 
   if (duration.value !== 0 && currentTime.value >= duration.value) {
-    stopAudio();
-    next(); // 播放下一首
+    stopAudio()
+    next() // 播放下一首
   }
-};
+}
 
 /**
  * 开始进度跟踪
  */
 function startProgressTracking() {
-  stopProgressTracking(); // 停止之前的进度跟踪，防止重复跟踪
-  documentHidden(backgroundIntervalId!, animationFrameId!, update);
+  stopProgressTracking() // 停止之前的进度跟踪，防止重复跟踪
+  documentHidden(backgroundIntervalId!, animationFrameId!, update)
 }
 
-document.addEventListener("visibilitychange", () => {
-  documentHidden(backgroundIntervalId!, animationFrameId!, update);
-});
+document.addEventListener('visibilitychange', () => {
+  documentHidden(backgroundIntervalId!, animationFrameId!, update)
+})
 
 /**
  * 停止进度跟踪
@@ -164,10 +154,10 @@ document.addEventListener("visibilitychange", () => {
  * 停止动画帧和背景定时器
  */
 function stopProgressTracking() {
-  cancelAnimationFrame(animationFrameId!);
-  animationFrameId = null;
-  clearInterval(backgroundIntervalId!);
-  backgroundIntervalId = null;
+  cancelAnimationFrame(animationFrameId!)
+  animationFrameId = null
+  clearInterval(backgroundIntervalId!)
+  backgroundIntervalId = null
 }
 
 /**
@@ -177,9 +167,9 @@ function stopProgressTracking() {
  */
 export const setVolume = (level: number) => {
   if (audioState.value.gainNode) {
-    setSmoothVolume(audioState.value.gainNode, level);
+    setSmoothVolume(audioState.value.gainNode, level)
   }
-};
+}
 
 /**
  * 跳转播放音频到指定时间
@@ -188,14 +178,14 @@ export const setVolume = (level: number) => {
  */
 export const seek = (time: number) => {
   if (time >= 0 && time <= duration.value) {
-    const prevPlaying = audioState.value.isPlaying;
-    pauseAudio(); // 暂停播放
-    audioState.value.pauseTime = time;
+    const prevPlaying = audioState.value.isPlaying
+    pauseAudio() // 暂停播放
+    audioState.value.pauseTime = time
     if (prevPlaying) {
-      playAudio(); // 恢复播放
+      playAudio() // 恢复播放
     }
   }
-};
+}
 
 /**
  * 销毁音频实例
@@ -203,15 +193,15 @@ export const seek = (time: number) => {
  * 停止音频播放，关闭音频上下文，断开所有节点连接，并重置音频状态
  */
 export const destroy = () => {
-  audioState.value.source?.stop();
+  audioState.value.source?.stop()
   // 关闭音频上下文
   audioState.value.context
     ?.close()
-    .catch((e) => console.error("关闭音频上下文失败:", e));
+    .catch((e) => console.error('关闭音频上下文失败:', e))
   // 断开所有节点连接
-  ["analyser", "gainNode", "source"].forEach((e) => {
-    audioState.value[e as DisconnectableKeys]?.disconnect();
-  });
+  ;['analyser', 'gainNode', 'source'].forEach((e) => {
+    audioState.value[e as DisconnectableKeys]?.disconnect()
+  })
   audioState.value = {
     context: null,
     analyser: null,
@@ -222,6 +212,6 @@ export const destroy = () => {
     currentSong: null, // 补充缺失的 currentSong 属性
     pauseTime: 0,
     startTime: 0,
-  };
-  stopProgressTracking();
-};
+  }
+  stopProgressTracking()
+}

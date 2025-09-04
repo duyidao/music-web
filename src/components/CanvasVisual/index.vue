@@ -1,148 +1,114 @@
-<script setup
-  lang="ts">
-  import { screenWidth, ratio } from '@/utils/index.ts';
-  import { currentMusic } from '@/store/data.ts'
-  import { audioState } from '@/store/music.ts'
-  import { userColor } from '@/store/user.ts'
+<script setup lang="ts">
+import { screenWidth, ratio } from '@/utils/index.ts'
+import { audioState } from '@/store/music.ts'
+import { userColor } from '@/store/user.ts'
 
-  const canvasWidth = computed(() => {
-    return screenWidth.value < 768 ? screenWidth.value - 100 * ratio.value : 400
-  });
+defineProps({
+  canvasHeight: {
+    type: Number,
+    default: 150,
+  },
+  canvasWidth: {
+    type: Number,
+    default: screenWidth.value * ratio.value,
+  },
+})
 
-  // 初始化参数
-  const config = {
-    centerRadius: 100 * (screenWidth.value < 768 ? ratio.value : 1),    // 中心Logo区域半径
-    bars: 86,             // 柱体数量
-    maxBarLength: 100 * (screenWidth.value < 768 ? ratio.value : 1),    // 最大柱体长度
-    rotateSpeed: 0.05,    // 旋转速度
-    barWidth: 6 * (screenWidth.value < 768 ? ratio.value : 1),          // 柱体宽度
-    smoothFactor: 0.85    // 平滑系数
-  };
+const canvasRef = ref()
+const con = ref()
+const baseHeight = 250
+let dataArray: Uint8Array | null = null
 
-  let rotation = 0;
+onMounted(() => {
+  con.value = canvasRef.value?.getContext('2d')
+})
 
-  const logoImg = new Image();
-
-  const dataArray = ref<Uint8Array | null>(null); // 频率数据数组
-  const canvasRef = ref<HTMLCanvasElement | null>(null); // Canvas引用
-  const raf = ref();
-
-  let ctx: CanvasRenderingContext2D;
-  let centerX: number;
-  let centerY: number;
-  /**
-   * 绘制环形柱状图
-   */
-  const draw = () => {
-    if (audioState.value.isPlaying) {
-      raf.value = requestAnimationFrame(draw);
+const canvasDraw = {
+  pc: function () {
+    // 动画帧，按帧绘制canvas
+    requestAnimationFrame(canvasDraw.pc)
+    if (!audioState.value.analyser || !canvasRef.value || !dataArray) return
+    // 清空画布
+    const { width, height } = canvasRef.value
+    con.value.clearRect(0, 0, width, height)
+    // 让分析器节点分析出数据到数组中
+    audioState.value.analyser.getByteFrequencyData(dataArray)
+    // 设置canvas上下文绘制的颜色
+    con.value.fillStyle = userColor.value
+    // len表示获取分析到的音频数据数组长度的
+    const len = Number((dataArray.length / 1.2).toFixed(0))
+    // 这里除以2.5是剔除不经常出现的高频的部分
+    const barHeight = height / len
+    // barWidth表示每个波形矩形的宽度
+    for (let i = 0; i < len; i++) {
+      // data是8位数组的每个数据，因为是一个字节，即data的值都是 <= 255
+      const data1 = dataArray[i]
+      const data2 = dataArray[len - 1 - i]
+      // barHeight表示每个波形矩形的高度，值为单位长度乘canvas容器的高
+      const barWidth1 = (data1 / 255) * baseHeight
+      const barWidth2 = (data2 / 255) * baseHeight
+      const y = i * barHeight
+      // 绘制左边部分波形图
+      con.value.fillRect(0, y, barWidth1, barHeight - 2)
+      // 绘制右边部分波形图 TODO
+      con.value.fillRect(width - barWidth2, y, barWidth2, barHeight - 2)
     }
-
-    // 多重安全校验
-    if (!ctx) return;
-    if (!audioState.value.analyser) return;
-
-    dataArray.value = new Uint8Array(audioState.value.analyser!.frequencyBinCount);
-
-    if (
-      !dataArray.value ||
-      dataArray.value.length !== audioState.value.analyser.frequencyBinCount
-    ) 
-      return;
-
-    // 获取频率数据
-    audioState.value.analyser!.getByteFrequencyData(dataArray.value as Uint8Array);
-
-    // 每次绘制前清空画布
-    ctx.clearRect(0, 0, canvasRef.value!.width, canvasRef.value!.height);
-    ctx.fillStyle = 'transparent';
-    ctx.fillRect(0, 0, canvasRef.value!.width, canvasRef.value!.height);
-    // 绘制中心Logo
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, config.centerRadius, 0, Math.PI * 2);
-    ctx.clip();
-    ctx.drawImage(
-      logoImg,
-      centerX - config.centerRadius,
-      centerY - config.centerRadius,
-      config.centerRadius * 2,
-      config.centerRadius * 2
-    );
-
-    ctx.restore();
-    ctx.save();
-
-    if (!audioState.value.isPlaying) return;
-
-    ctx.translate(centerX, centerY);
-    rotation += config.rotateSpeed;
-    ctx.rotate(rotation * Math.PI / 180);
-    const angleStep = (Math.PI * 2) / config.bars;
-    let currentAngle = 0;
-
-    // 绘制柱状图
-    for (let i = 0; i < config.bars; i++) {
-      const value = dataArray.value![i] / 255;
-      const barLength = value * config.maxBarLength;
-
-      ctx.fillStyle = userColor.value;
-
-      ctx.save();
-      ctx.rotate(currentAngle);
-
-      // 绘制圆角柱体
-      ctx.beginPath();
-      ctx.roundRect(
-        -config.barWidth / 2,
-        -config.centerRadius - barLength,
-        config.barWidth,
-        barLength,
-        config.barWidth / 2
-      );
-      ctx.fill();
-
-      ctx.restore();
-      currentAngle += angleStep;
+  },
+  phone: function () {
+    // 动画帧，按帧绘制canvas
+    requestAnimationFrame(canvasDraw.phone)
+    if (!audioState.value.analyser || !canvasRef.value || !dataArray) return
+    // 清空画布
+    const { width, height } = canvasRef.value
+    con.value.clearRect(0, 0, width, height)
+    // 让分析器节点分析出数据到数组中
+    audioState.value.analyser.getByteFrequencyData(dataArray)
+    // 设置canvas上下文绘制的颜色
+    con.value.fillStyle = userColor.value
+    // len表示获取分析到的音频数据数组长度的
+    // 这里除以2.5是剔除不经常出现的高频的部分
+    const len = Number((dataArray.length / 2).toFixed(0))
+    // barWidth表示每个波形矩形的宽度
+    // 这里除以2是为了绘制对称的波形图
+    const barWidth = width / len / 2
+    for (let i = 0; i < len; i++) {
+      // data是8位数组的每个数据，因为是一个字节，即data的值都是 <= 255
+      const data = dataArray[i]
+      // barHeight表示每个波形矩形的高度，值为单位长度乘canvas容器的高
+      const barHeight = (data / baseHeight) * height
+      // 绘制点y
+      const y = height - barHeight
+      // 绘制点x1
+      const x1 = i * barWidth + width / 2
+      // 绘制点x2
+      const x2 = width / 2 - (i + 1) * barWidth
+      // 绘制右半部分波形图
+      con.value.fillRect(x1, y, barWidth - 2, barHeight)
+      // 绘制左半部分波形图
+      con.value.fillRect(x2, y, barWidth - 2, barHeight)
     }
+  },
+}
 
-    ctx.restore();
-  };
-
-  watch(() => currentMusic.value, (newVal) => {
-    // 加载Logo
-    logoImg.src = newVal.logo; // 替换为你的Logo路径
-
-    // 初始化数据数组
-    logoImg.onload = () => { // 等待图片加载完成
-      nextTick(() => {
-        centerX = canvasRef.value!.width / 2;
-        centerY = canvasRef.value!.height / 2;
-        ctx = canvasRef.value!.getContext('2d')!;
-        draw();
-      });
-    };
-  }, { deep: true })
-
-  watch(() => [audioState.value.isPlaying, screenWidth.value], () => {
-    centerX = canvasRef.value!.width / 2;
-    centerY = canvasRef.value!.height / 2;
-    if (raf.value) {
-      cancelAnimationFrame(raf.value);
-    }
-    nextTick(() => draw());
-  })
+watch(
+  () => audioState.value.analyser,
+  (newVal) => {
+    if (!newVal) return
+    dataArray = new Uint8Array(newVal.frequencyBinCount)
+    canvasDraw[screenWidth.value > 769 ? 'pc' : 'phone']()
+  },
+  { deep: true }
+)
 </script>
 
 <template>
-  <canvas ref="canvasRef"
-    :width="canvasWidth"
-    :height="canvasWidth"></canvas>
+  <canvas ref="canvasRef" :height="canvasHeight" :width="canvasWidth"></canvas>
 </template>
 
-<style lang="less"
-  scoped>
-  canvas {
-    background-color: transparent;
-  }
+<style lang="less" scoped>
+canvas {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+}
 </style>

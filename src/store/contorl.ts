@@ -1,34 +1,33 @@
-import { musicList } from "./data.ts";
-import { loadAudio, playAudio, audioState } from "./music.ts";
-import { clearTimeoutFn, canPlay } from "./user.ts";
-import { getRandomIndex, debounce } from "@/utils/index.ts";
-import { createCancelableTask } from "@/utils/task.ts";
-import { OrderType } from "@/types/music.ts";
+import { musicList } from './data.ts'
+import { loadAudio, playAudio, audioState } from './music.ts'
+import { canPlay } from './user.ts'
+import { getRandomIndex, debounce } from '@/utils/index.ts'
+import { createCancelableTask } from '@/utils/task.ts'
+import { OrderType } from '@/types/music.ts'
 
 // 播放状态
-export const playIndex = ref(0);
-export const currentTime = ref(0);
-export const duration = ref(0);
-export const volume = ref(0.5);
-export const order = ref<OrderType>(OrderType.Sequence);
-export const isShowingModal = ref(false);
+export const playIndex = ref(0)
+export const currentTime = ref(0)
+export const duration = ref(0)
+export const volume = ref(0.5)
+export const order = ref<OrderType>(OrderType.Sequence)
 
 export const progress = computed(() => {
-  return duration.value ? currentTime.value / duration.value : 0;
-});
+  return duration.value ? currentTime.value / duration.value : 0
+})
 
 /**
  * 根据音频状态选择加载或播放音频
  */
 export const loadOrPlayAudio = () => {
   if (audioState.value.buffer) {
-    if (!canPlay(musicList.value[playIndex.value], 'play')) return false;
-    playAudio();
+    if (!canPlay(musicList.value[playIndex.value], 'play')) return false
+    playAudio()
   } else {
-    if (!canPlay(musicList.value[playIndex.value])) return false;
-    loadAndPlay();
+    if (!canPlay(musicList.value[playIndex.value])) return false
+    loadAndPlay()
   }
-};
+}
 
 /**
  * 根据文档隐藏状态设置定时器或动画帧
@@ -38,62 +37,73 @@ export const loadOrPlayAudio = () => {
  * @param fn 回调函数
  */
 // @ts-ignore
-export const documentHidden = (backgroundIntervalId: Timeout, animationFrameId: number, fn: any) => {
+export const documentHidden = (
+  backgroundIntervalId: number | null,
+  animationFrameId: number | null,
+  fn: () => void
+) => {
   if (document.hidden) {
-    backgroundIntervalId = setInterval(fn, 1000);
+    backgroundIntervalId = setInterval(fn, 1000) as unknown as number
+    animationFrameId = null // 清除之前的 animation frame
   } else {
     const track = () => {
-      fn();
-      animationFrameId = requestAnimationFrame(track);
-    };
-    animationFrameId = requestAnimationFrame(track);
+      fn()
+      animationFrameId = requestAnimationFrame(track)
+    }
+    animationFrameId = requestAnimationFrame(track)
+    // 清除之前的 interval
+    if (backgroundIntervalId) {
+      clearInterval(backgroundIntervalId)
+      backgroundIntervalId = null
+    }
   }
-};
 
-const debounceLoadAndPlay = debounce(loadAndPlay, 500);
+  return { backgroundIntervalId, animationFrameId }
+}
+
+const debounceLoadAndPlay = debounce(loadAndPlay, 500)
 
 // 播放顺序处理
 export const nextSong = {
   SEQUENCE: () => {
-    playIndex.value = (playIndex.value + 1) % musicList.value.length;
-    debounceLoadAndPlay();
+    playIndex.value = (playIndex.value + 1) % musicList.value.length
+    debounceLoadAndPlay()
   },
   RANDOM: () => {
-    playIndex.value = getRandomIndex(musicList.value.length, playIndex.value);
-    debounceLoadAndPlay();
+    playIndex.value = getRandomIndex(musicList.value.length, playIndex.value)
+    debounceLoadAndPlay()
   },
   SINGLE: () => {
-    debounceLoadAndPlay();
+    debounceLoadAndPlay()
   },
-};
+}
 
-let cancelFn = () => {};
+let cancelFn = () => {}
 
 // 加载并播放当前歌曲
 export async function loadAndPlay() {
   const { run, cancel } = createCancelableTask(() =>
     loadAudio(musicList.value[playIndex.value])
-  );
-  clearTimeoutFn(); // 清除定时器
-  cancelFn = cancel;
+  )
+  cancelFn = cancel
   run().then((res) => {
-    console.log('res--------------playAudio', res);
-    if (res) playAudio();
-  });
+    console.log('res--------------playAudio', res)
+    if (res) playAudio()
+  })
 }
 
 // 上一首/下一首
 export const prev = () => {
   playIndex.value =
-    (playIndex.value - 1 + musicList.value.length) % musicList.value.length;
-  cancelFn();
-  debounceLoadAndPlay();
-};
+    (playIndex.value - 1 + musicList.value.length) % musicList.value.length
+  cancelFn()
+  debounceLoadAndPlay()
+}
 
 export const next = () => {
-  cancelFn();
-  console.log('nextSong', nextSong);
-  console.log('order.value', order.value);
-  console.log('nextSong[order.value]', nextSong[order.value]);
-  nextSong[order.value]();
-};
+  cancelFn()
+  console.log('nextSong', nextSong)
+  console.log('order.value', order.value)
+  console.log('nextSong[order.value]', nextSong[order.value])
+  nextSong[order.value]()
+}

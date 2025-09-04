@@ -14,32 +14,30 @@ export default defineConfig({
             imports: ['vue'], // 关键配置，启用 Vue 的自动导入
             dts: 'src/auto-imports.d.ts', // 生成类型声明文件
             eslintrc: {
-                enabled: true // 生成 .eslintrc-auto-import.json 文件
-            }
-        })
+                enabled: true, // 生成 .eslintrc-auto-import.json 文件
+            },
+        }),
     ],
-    base: process.env.VITE_BASE_PATH || '/music-web/',
     server: {
         port: 6996,
     },
     resolve: {
         alias: {
             '@': path.resolve(__dirname, 'src'),
-            '@comp': path.resolve(__dirname, 'src/components')
-        }
+            '@comp': path.resolve(__dirname, 'src/components'),
+        },
     },
     build: {
-        outDir: 'docs/music-web',
         rollupOptions: {
             output: {
                 // https://github.com/rollup/rollup/blob/master/src/utils/sanitizeFileName.ts
                 sanitizeFileName: function (name) {
                     var match = DRIVE_LETTER_REGEX.exec(name);
-                    var driveLetter = match ? match[0] : "";
+                    var driveLetter = match ? match[0] : '';
                     // A `:` is only allowed as part of a windows drive letter (ex: C:\foo)
                     // Otherwise, avoid them because they can refer to NTFS alternate data streams.
                     return (driveLetter +
-                        name.slice(driveLetter.length).replace(INVALID_CHAR_REGEX, ""));
+                        name.slice(driveLetter.length).replace(INVALID_CHAR_REGEX, ''));
                 },
             },
         },

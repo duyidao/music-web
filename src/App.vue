@@ -4,21 +4,21 @@ import Music from '@comp/Music.vue'
 import Model from '@comp/Common/model.vue'
 import { loadMusicData } from '@/store/data.ts'
 import { destroy } from '@/store/music.ts'
-import { pxToRem } from '@/utils/index.ts';
+import { pxToRem } from '@/utils/index.ts'
 
 onMounted(() => {
   loadMusicData()
-  window.addEventListener('resize', pxToRem);
+  window.addEventListener('resize', pxToRem)
 })
 
 onUnmounted(() => {
   destroy()
-  window.removeEventListener('resize', pxToRem);
+  window.removeEventListener('resize', pxToRem)
 })
 </script>
 
 <template>
-  <div class="container" v-close="false">
+  <div class="container">
     <Music />
     <ContorlModule />
     <Model />
