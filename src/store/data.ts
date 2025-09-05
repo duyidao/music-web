@@ -1,11 +1,11 @@
 import type { MusicItem } from '@/types/music.ts'
 import { playIndex } from './contorl.ts'
 import { taskMap, pendingQueue, processQueue } from '@/utils/task.ts'
+import musicData from '@/utils/data.ts'
 
 // 状态管理
 export const musicList = ref<MusicItem[]>([])
 export const modelList = ref<string[]>([])
-const whileList = ['Season in the Sun', 'Shots']
 
 export const backgroundImage = ref('') // 背景图片
 // 当前选择要播放的音乐
@@ -43,28 +43,18 @@ const formatLyrics = (lyric?: string) => {
 // 初始化音乐数据
 export const loadMusicData = async () => {
   try {
-    const [mp3Modules, jsModules, imgModules] = await Promise.all([
-      import.meta.glob('@/assets/music/*.mp3', { as: 'url', eager: true }),
-      import.meta.glob('@/assets/music/*.js', { eager: true }),
-      import.meta.glob('@/assets/images/music/*.webp', { eager: true }),
-    ])
-    musicList.value = Object.entries(mp3Modules).map(([mp3Path, mp3Url]) => {
-      const baseName = mp3Path.replace(/^.*music\//, '').replace(/\.mp3$/, '')
+    const jsModules = import.meta.glob('@/assets/lrc/*.js', { eager: true })
+    musicList.value = musicData.map((item: {audioUrl: string, logo: string}) => {
+      const baseName = item.audioUrl.replace(/^.*music\//, '').replace(/\.mp3$/, '')
 
       let obj: MusicItem = {
         id: baseName,
         title: formatTitle(baseName),
-        audioUrl: mp3Url as string,
+        audioUrl: item.audioUrl,
         lyric:
-          (jsModules[`/src/assets/music/${baseName}.js`] as { default: string })
+          (jsModules[`/src/assets/lrc/${baseName}.js`] as { default: string })
             ?.default || '',
-        logo:
-          (
-            imgModules[`/src/assets/images/music/${baseName}.webp`] as {
-              default: string
-            }
-          )?.default || '',
-        type: whileList.includes(baseName) ? 1 : 0,
+        logo: item.logo,
       }
       return obj
     })

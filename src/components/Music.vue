@@ -57,7 +57,7 @@ const musicLrc = ref()
 const musicLrcContent = ref()
 let musicLrcHeight = 0
 // @ts-ignore
-let liHeight = ref(screenWidth.value < 768 ? 40 * ratio.value : 40)
+let liHeight = ref<number>(screenWidth.value < 768 ? 40 * ratio.value : 40)
 let maxOffsetTop = 0
 
 // @ts-ignore
@@ -97,7 +97,7 @@ watch(
       offsetTop = maxOffsetTop
     }
 
-    musicLrcContent.value.style.transform = `translateY(-${offsetTop * 1}px)` // 设置偏移量
+    musicLrcContent.value.style.transform = `translateY(-${offsetTop}px)` // 设置偏移量
   }
 )
 
@@ -137,6 +137,8 @@ onMounted(() => {
   .music-logo {
     position: absolute;
     width: 100%;
+    height: 100%;
+    z-index: 1;
   }
 
   .music-lrc {
@@ -162,33 +164,18 @@ onMounted(() => {
         &.active {
           transform: scale(1.3);
           color: var(--base-color);
-          text-shadow: 0 0px 10px #fff;
+          text-shadow: 0 0 10px #fff;
         }
       }
     }
   }
 }
 
-@media screen and (min-width: 769px) {
-  .music {
-    .music-logo {
-      height: 100%;
-      z-index: 1;
-    }
-  }
-}
-
 @media screen and (max-width: 768px) {
   .music {
-    .music-logo {
-      bottom: 0;
-      left: 0;
-      height: 5rem;
-    }
 
     .music-lrc {
-      width: 100%;
-      height: clac(100% - 5.625rem);
+      backdrop-filter: none;
 
       ul {
         font-size: 0.75rem;
