@@ -1,5 +1,5 @@
 export default `[00:00.0]Take Me to the Beach - Imagine Dragons
-[00:09.56]  🎵🎵  
+[00:09.56]🎶🎶🎶
 [00:11.44]People pleasing planet
 [00:11.44]一个由好媚俗者充斥的世界
 [00:13.81]Got a million people saying how to plan it
@@ -91,7 +91,7 @@ export default `[00:00.0]Take Me to the Beach - Imagine Dragons
 [01:59.119995]And the days go on and on and on and on
 [01:59.119995]平静地随着日子一天天流逝
 [02:00.23]T-A-K-E
-[02:00.23]   
+[02:00.23]🎶🎶🎶
 [02:02.73]Take me to the beach
 [02:02.73]任我走向海滩
 [02:05.11]You could have the mountains

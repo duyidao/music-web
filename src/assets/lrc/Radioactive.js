@@ -1,12 +1,12 @@
 export default `[00:00.0]Radioactive - Imagine Dragons
 [00:07.25]Whoah-oh
-[00:07.25]   
+[00:07.25]🎶🎶🎶
 [00:14.37]Whoah-oh
-[00:14.37]   
+[00:14.37]🎶🎶🎶
 [00:21.39]Whoah-oh
-[00:21.39]   
+[00:21.39]🎶🎶🎶
 [00:29.11]Whoah
-[00:29.11]   
+[00:29.11]🎶🎶🎶
 [00:32.53]I'm waking up to ash and dust
 [00:32.53]在烟尘弥漫中醒来
 [00:36.0]I wipe my brow and I sweat my rust
@@ -20,7 +20,7 @@ export default `[00:00.0]Radioactive - Imagine Dragons
 [00:54.33]This is it the apocalypse
 [00:54.33]就是这样 这就是天启
 [00:55.44]Whoa
-[00:55.44]   
+[00:55.44]🎶🎶🎶
 [00:59.98]I'm waking up I feel it in my bones
 [00:59.98]我感到我的身体里躁动的力量
 [01:03.45]Enough to make my system blow
@@ -30,11 +30,11 @@ export default `[00:00.0]Radioactive - Imagine Dragons
 [01:10.74]Welcome to the new age to the new age
 [01:10.74]欢迎来到新纪元 来到新纪元
 [01:13.49]Whoa-oh whoa
-[01:13.49]   
+[01:13.49]🎶🎶🎶
 [01:17.79]I'm radioactive radioactive
 [01:17.79]我散发着能量 散发着能量
 [01:20.5]Whoa-oh whoa
-[01:20.5]   
+[01:20.5]🎶🎶🎶
 [01:25.3]I'm radioactive radioactive
 [01:25.3]我散发着能量 散发着能量
 [01:29.0]I raise my flags dye my clothes
@@ -44,7 +44,7 @@ export default `[00:00.0]Radioactive - Imagine Dragons
 [01:36.57]We're painted red to fit right in
 [01:36.57]我们涂上代表危险的红色参与其中
 [01:39.31]Whoa
-[01:39.31]   
+[01:39.31]🎶🎶🎶
 [01:42.85]I'm breaking in shaping up
 [01:42.85]我逐渐适应 准备就绪
 [01:46.490005]Then checking out on the prison bus
@@ -52,7 +52,7 @@ export default `[00:00.0]Radioactive - Imagine Dragons
 [01:50.32]This is it the apocalypse
 [01:50.32]就是这样 这就是天启
 [01:51.46]Whoa
-[01:51.46]   
+[01:51.46]🎶🎶🎶
 [01:56.130005]I'm waking up I feel it in my bones
 [01:56.130005]我感到我的身体里躁动的力量
 [01:59.61]Enough to make my system blow
@@ -62,11 +62,11 @@ export default `[00:00.0]Radioactive - Imagine Dragons
 [02:07.02]Welcome to the new age to the new age
 [02:07.02]欢迎来到新纪元 来到新纪元
 [02:09.71]Whoa-oh whoa
-[02:09.71]   
+[02:09.71]🎶🎶🎶
 [02:14.0]I'm radioactive radioactive
 [02:14.0]我散发着能量 散发着能量
 [02:16.73]Whoa-oh whoa
-[02:16.73]   
+[02:16.73]🎶🎶🎶
 [02:21.11]I'm radioactive radioactive
 [02:21.11]我散发着能量 散发着能量
 [02:27.9]All systems go the sun hasn't died
@@ -82,11 +82,11 @@ export default `[00:00.0]Radioactive - Imagine Dragons
 [02:49.24]Welcome to the new age to the new age
 [02:49.24]欢迎来到新纪元 来到新纪元
 [02:51.85]Whoa-oh whoa
-[02:51.85]   
+[02:51.85]🎶🎶🎶
 [02:56.15]I'm radioactive radioactive
 [02:56.15]我散发着能量 散发着能量
 [02:58.91]Whoa-oh whoa
-[02:58.91]   
+[02:58.91]🎶🎶🎶
 [03:03.091]I'm radioactive radioactive
 [03:03.091]我散发着能量 散发着能量
 `

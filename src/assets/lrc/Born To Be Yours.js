@@ -1,5 +1,5 @@
 export default `[00:01.36]Born To Be Yours - Kygo/Imagine Dragons
-[00:01.36] 🎵🎵
+[00:01.36]🎶🎶🎶
 [00:08.2]I know I've given up
 [00:08.2]我知道 我已经放弃过
 [00:12.26]A hundred times before

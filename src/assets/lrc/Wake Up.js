@@ -20,7 +20,7 @@ export default `[00:00.00]Wake Up - Imagine Dragons
 [00:36.00]Zip it up lock you in and close it up
 [00:36.00]别说话 将你牢牢禁锢 向你靠近
 [00:37.00]Yup
-[00:37.00]
+[00:37.00]🎶🎶🎶
 [00:41.00]Everybody's coming for you wake up
 [00:41.00]你成了众人竞相追逐的目标 醒醒吧
 [00:46.00]Everybody's coming wake up
@@ -72,7 +72,7 @@ export default `[00:00.00]Wake Up - Imagine Dragons
 [02:03.00]Spit your words and I'll watch you eat it
 [02:03.00]随你口诛笔伐 我可要好好看你自食恶果
 [02:07.00]Diggin'
-[02:07.00]
+[02:07.00]🎶🎶🎶
 [02:11.00]Everybody's coming for you wake up
 [02:11.00]你成了众人竞相追逐的目标 醒醒吧
 [02:16.00]Everybody's coming wake up

@@ -1,4 +1,5 @@
-export default `[00:00.0]Bad Liar - Imagine Dragons (梦龙)
+export default `[00:20.0]Bad Liar - Imagine Dragons (梦龙)
+[00:20.0]🎶🎶🎶
 [00:21.87]Oh hush my dear it's been a difficult year
 [00:21.87]噢 嘘别说话亲爱的 真是难熬的一年啊
 [00:27.72]And terrors don't prey on innocent victims

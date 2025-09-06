@@ -18,12 +18,10 @@ export default `[00:00.000] 作词 : Dan Reynolds/Wayne Sermon/Ben McKee/Robin L
 [00:22.136] 每一记鞭笞 每一句恶语受在我身
 [00:23.094] I've never been 
 [00:23.094] 却从未得到过宽恕
-
 [00:23.794] They say tomorrow's never promised, honest
 [00:23.794] 他们说 明日不可捉摸 无常才是真理
 [00:29.336] They say the angels are among us
 [00:29.336] 他们说 天使就在我们之中
-
 [00:33.500] Lock me up in a maze
 [00:33.500] 将我囚于迷宫
 [00:36.304] Turn out, turn out the lights
@@ -34,7 +32,6 @@ export default `[00:00.000] 作词 : Dan Reynolds/Wayne Sermon/Ben McKee/Robin L
 [00:41.812] 熄灭光明 拥抱黑暗
 [00:43.699] Turn out the lights
 [00:43.699] 熄灭光明吧
-
 [00:44.636] Lock me up inside a cage
 [00:44.636] 将我锁进牢笼
 [00:47.354] Just throw away the key
@@ -45,7 +42,6 @@ export default `[00:00.000] 作词 : Dan Reynolds/Wayne Sermon/Ben McKee/Robin L
 [00:50.490] 我驱车驰骋 高举双手
 [00:53.238] Put it in coast
 [00:53.238] 顺势而行 放任自流
-
 [00:55.291] I could do this with my eyes closed
 [00:55.291] 即便闭上双眼 我也能随心而动
 [00:58.397] Turn out, turn out the lights
@@ -56,12 +52,10 @@ export default `[00:00.000] 作词 : Dan Reynolds/Wayne Sermon/Ben McKee/Robin L
 [01:03.907] 熄灭光明 拥抱黑暗
 [01:06.461] I could do this with my eyes—
 [01:06.461] 即便闭上双眼 我也能随心而动
-
 [01:07.953] Less medications, less manifestations
 [01:07.953] 褪去药物的依附 抛开虚妄的表象
 [01:13.317] Mantras, meditation, throw it all away
 [01:13.317] 默念真言 静心冥想 一切统统摒弃
-
 [01:18.653] All the places I've been
 [01:18.653] 曾去过的旧地
 [01:19.982] All the blood that I've bled
@@ -78,12 +72,10 @@ export default `[00:00.000] 作词 : Dan Reynolds/Wayne Sermon/Ben McKee/Robin L
 [01:26.853] 一次次濒临死亡 却又一次次浴火重生
 [01:28.023] 'Cause I'll never be dead
 [01:28.023] 因为死亡永远无法将我禁锢
-
 [01:30.185] They say tomorrow's never promised, honest
 [01:30.185] 他们说 明日不可捉摸 无常才是真理
 [01:35.482] They say that piranhas are among us
 [01:35.482] 他们说 嗜血食人鱼就在我们之中
-
 [01:39.764] Lock me up in a maze
 [01:39.764] 将我囚于迷宫
 [01:42.518] Turn out, turn out the lights
@@ -94,7 +86,6 @@ export default `[00:00.000] 作词 : Dan Reynolds/Wayne Sermon/Ben McKee/Robin L
 [01:48.078] 熄灭光明 拥抱黑暗
 [01:49.770] Turn out the lights
 [01:49.770] 熄灭光明吧
-
 [01:50.753] Lock me up inside a cage
 [01:50.753] 将我锁进牢笼
 [01:53.572] Just throw away the key
@@ -105,7 +96,6 @@ export default `[00:00.000] 作词 : Dan Reynolds/Wayne Sermon/Ben McKee/Robin L
 [01:56.615] 我驱车驰骋 高举双手
 [01:59.425] Put it in coast
 [01:59.425] 顺势而行 放任自流
-
 [02:01.592] I could do this with my eyes closed
 [02:01.592] 即便闭上双眼 我也能随心而动
 [02:04.507] Turn out, turn out the lights
@@ -116,7 +106,6 @@ export default `[00:00.000] 作词 : Dan Reynolds/Wayne Sermon/Ben McKee/Robin L
 [02:10.121] 熄灭光明 拥抱黑暗
 [02:12.404] I could do this with my eyes—
 [02:12.404] 即便闭上双眼 我也能随心而动
-
 [02:14.716] And when the day broke, buried in violence
 [02:14.716] 当黎明撕破夜幕 被暴力掩埋
 [02:17.960] Something made my mind up
@@ -125,7 +114,6 @@ export default `[00:00.000] 作词 : Dan Reynolds/Wayne Sermon/Ben McKee/Robin L
 [02:20.578] 我选择远离喧嚣 化作孤岛
 [02:23.366] Alone and far away
 [02:23.366] 孑然一身 驻守天涯
-
 [02:25.301] Lock me up in a maze
 [02:25.301] 将我囚于迷宫
 [02:28.020] Turn out, turn out the lights
@@ -134,7 +122,6 @@ export default `[00:00.000] 作词 : Dan Reynolds/Wayne Sermon/Ben McKee/Robin L
 [02:30.637] 我为此而生 为这一时刻而存在
 [02:33.469] Turn out, turn out the lights
 [02:33.469] 熄灭光明 拥抱黑暗
-
 [02:36.198] Lock me up inside a cage
 [02:36.198] 将我锁进牢笼
 [02:38.981] Just throw away the key
@@ -145,7 +132,6 @@ export default `[00:00.000] 作词 : Dan Reynolds/Wayne Sermon/Ben McKee/Robin L
 [02:42.210] 我驱车驰骋 高举双手
 [02:44.927] Put it in coast
 [02:44.927] 顺势而行 放任自流
-
 [02:46.895] I could do this with my eyes closed
 [02:46.895] 即便闭上双眼 我也能随心而动
 [02:50.027] Turn out, turn out the lights

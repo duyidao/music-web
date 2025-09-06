@@ -4,6 +4,10 @@ const data = [
     logo: 'https://music.duyidao.cn/music/Bad%20Liar.webp',
   },
   {
+    audioUrl: 'https://music.duyidao.cn/music/Battle Cry.mp3',
+    logo: 'https://music.duyidao.cn/music/Battle%20Cry.webp',
+  },
+  {
     audioUrl: 'https://music.duyidao.cn/music/Bones.mp3',
     logo: 'https://music.duyidao.cn/music/Bones.webp',
   },
@@ -24,12 +28,28 @@ const data = [
     logo: 'https://music.duyidao.cn/music/Destination.webp',
   },
   {
+    audioUrl: 'https://music.duyidao.cn/music/Dont Forget Me.mp3',
+    logo: 'https://music.duyidao.cn/music/Dont%20Forget%20Me.webp',
+  },
+  {
     audioUrl: 'https://music.duyidao.cn/music/Easy Come Easy Go.mp3',
     logo: 'https://music.duyidao.cn/music/Easy%20Come%20Easy%20Go.webp',
   },
   {
     audioUrl: 'https://music.duyidao.cn/music/Eyes Closed.mp3',
     logo: 'https://music.duyidao.cn/music/Eyes%20Closed.webp',
+  },
+  {
+    audioUrl: 'https://music.duyidao.cn/music/Fire in These Hills.mp3',
+    logo: 'https://music.duyidao.cn/music/Fire%20in%20These%20Hills.webp',
+  },
+  {
+    audioUrl: 'https://music.duyidao.cn/music/Golden.mp3',
+    logo: 'https://music.duyidao.cn/music/Golden.webp',
+  },
+  {
+    audioUrl: 'https://music.duyidao.cn/music/In Your Corner.mp3',
+    logo: 'https://music.duyidao.cn/music/In%20Your%20Corner.webp',
   },
   {
     audioUrl: 'https://music.duyidao.cn/music/Its time.mp3',
@@ -56,6 +76,10 @@ const data = [
     logo: 'https://music.duyidao.cn/music/Radioactive.webp',
   },
   {
+    audioUrl: 'https://music.duyidao.cn/music/Ready Aim Fire.mp3',
+    logo: 'https://music.duyidao.cn/music/Ready%20Aim%20Fire.webp',
+  },
+  {
     audioUrl: 'https://music.duyidao.cn/music/Season in the Sun.mp3',
     logo: 'https://music.duyidao.cn/music/Season%20in%20the%20Sun.webp',
   },
@@ -80,12 +104,20 @@ const data = [
     logo: 'https://music.duyidao.cn/music/Wake%20Up.webp',
   },
   {
+    audioUrl: 'https://music.duyidao.cn/music/Walking The Wire.mp3',
+    logo: 'https://music.duyidao.cn/music/Walking%20The%20Wire.webp',
+  },
+  {
     audioUrl: 'https://music.duyidao.cn/music/Warriors.mp3',
     logo: 'https://music.duyidao.cn/music/Warriors.webp',
   },
   {
     audioUrl: 'https://music.duyidao.cn/music/Whatever It Takes.mp3',
     logo: 'https://music.duyidao.cn/music/Whatever%20It%20Takes.webp',
+  },
+  {
+    audioUrl: 'https://music.duyidao.cn/music/Who We Are.mp3',
+    logo: 'https://music.duyidao.cn/music/Who%20We%20Are.webp',
   },
 ]
 

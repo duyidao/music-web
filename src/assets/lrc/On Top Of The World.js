@@ -1,5 +1,5 @@
 export default `[00:15.00]On Top Of The World - Imagine Dragons (梦龙)
-[00:15.00] 🎵🎵
+[00:15.00]🎶🎶🎶
 [00:17.00]If you love somebody
 [00:17.00]如果你爱上了某个人
 [00:19.00]Better tell them while they're here 'cause
@@ -12,14 +12,12 @@ export default `[00:15.00]On Top Of The World - Imagine Dragons (梦龙)
 [00:29.00]要如何取决某些事
 [00:33.00]How long of time is left for you
 [00:33.00]而自己又还有多少时间可以陪伴他们
-
 [00:36.00]I've had the highest mountains
 [00:36.00]我曾拥有至高的山峰
 [00:38.00]I've had the deepest rivers
 [00:38.00]我曾拥有深不见底的河流
 [00:43.00]You can have it all but life keeps moving
 [00:43.00]你也可以拥有这一切 但是生命是瞬息万变的
-
 [00:46.00]Now take it in but don't look down
 [00:46.00]我接受了 但是却不敢低估
 [00:49.00]'Cause I'm on top of the world hey
@@ -40,7 +38,6 @@ export default `[00:15.00]On Top Of The World - Imagine Dragons (梦龙)
 [01:06.00]像个小孩子一样一直做着这场梦
 [01:09.00]I'm on top of the world
 [01:09.00]我站在世界之巅
-
 [01:12.00]I've tried to cut these corners
 [01:12.00]我懒得再去挥别那些不堪
 [01:14.00]Try to take the easy way out
@@ -53,7 +50,6 @@ export default `[00:15.00]On Top Of The World - Imagine Dragons (梦龙)
 [01:24.00]我却因此而无法再次拥有了 因为
 [01:29.00]I've traveled all this way for something
 [01:29.00]我曾为了一些事而重蹈覆辙
-
 [01:32.00]Now take it in but don't look down
 [01:32.00]我接受了 但是却不敢低估
 [01:34.00]'Cause I'm on top of the world hey
@@ -74,7 +70,6 @@ export default `[00:15.00]On Top Of The World - Imagine Dragons (梦龙)
 [01:51.00]像个小孩子一样一直做着这场梦
 [01:53.00]I'm on top of the world
 [01:53.00]我站在世界之巅
-
 [01:58.00]Oh woah oh oh oh oh
 [02:01.00]Oh woah oh oh
 [02:03.00]'Cause I'm on top of the world hey
@@ -93,7 +88,6 @@ export default `[00:15.00]On Top Of The World - Imagine Dragons (梦龙)
 [02:17.00]如果我可以我要带你与我一起走
 [02:21.00]Been dreaming of this since a child
 [02:21.00]像个小孩子一样一直做着这场梦
-
 [02:23.00]And I know it's hard when you're falling down
 [02:23.00]我知道这很难 特别是当你跌倒后
 [02:26.00]And it's a long way up when you hit the ground but
@@ -106,7 +100,6 @@ export default `[00:15.00]On Top Of The World - Imagine Dragons (梦龙)
 [02:35.00]而当你跌倒后 这段路依旧漫长
 [02:39.00]Get up now get up get up now
 [02:39.00]现在 起来吧
-
 [02:41.00]'Cause I'm on top of the world hey
 [02:41.00]因为我站在世界的巅峰
 [02:43.00]I'm on top of the world hey
@@ -125,7 +118,6 @@ export default `[00:15.00]On Top Of The World - Imagine Dragons (梦龙)
 [02:57.00]像个小孩子一样一直做着这场梦
 [02:59.00]I'm on top of the world
 [02:59.00]我站在世界之巅
-
 [03:04.00]Oh woah oh oh oh oh
 [03:04.00]我站在世界之巅
 `
