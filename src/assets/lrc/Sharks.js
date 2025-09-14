@@ -1,6 +1,5 @@
 export default `[00:00.00]Sharks - Imagine Dragons
 [00:06.00]Ha ha ha ha ha
-[00:06.00]🎶🎶🎶
 [00:08.00]Trouble
 [00:08.00]大祸临头
 [00:11.00]Blood is in the rocky waters
@@ -44,7 +43,6 @@ export default `[00:00.00]Sharks - Imagine Dragons
 [00:37.00]Same as them
 [00:37.00]沆瀣一气
 [00:38.00]Ha ha ha ha ha
-[00:38.00]🎶🎶🎶
 [00:40.00]So let it go let it go
 [00:40.00]所以放任自流吧
 [00:42.00]That's the way that it goes
@@ -64,11 +62,9 @@ export default `[00:00.00]Sharks - Imagine Dragons
 [00:56.00]He's coming to get you
 [00:56.00]他来势汹汹 对你展开攻势
 [00:59.00]Chicka-woo-woo
-[00:59.00]🎶🎶🎶
 [01:00.00]He's coming to get you get
 [01:00.00]他来势汹汹 对你展开攻势
 [01:02.00]Chicka-woo
-[01:02.00]🎶🎶🎶
 [01:03.00]Bubbles
 [01:03.00]不断冒着气泡
 [01:05.00]Drowning you seeing doubles
@@ -100,13 +96,11 @@ export default `[00:00.00]Sharks - Imagine Dragons
 [01:27.00]To the end
 [01:27.00]直到最后
 [01:28.00]Oh no
-[01:28.00]🎶🎶🎶
 [01:30.00]You're just the same as them
 [01:30.00]你与他们沆瀣一气
 [01:31.00]Same as them
 [01:31.00]沆瀣一气
 [01:32.00]Ha ha ha ha ha
-[01:32.00]🎶🎶🎶
 [01:34.00]So let it go let it go
 [01:34.00]所以放任自流吧
 [01:36.00]That's the way that it goes
@@ -130,7 +124,6 @@ export default `[00:00.00]Sharks - Imagine Dragons
 [01:51.00]Don't take it from me
 [01:51.00]千万不要相信我
 [01:52.00]Woo-woo
-[01:52.00]🎶🎶🎶
 [01:53.00]My blood is pumping
 [01:53.00]我热血沸腾
 [01:54.00]He's coming to get you get
@@ -144,7 +137,6 @@ export default `[00:00.00]Sharks - Imagine Dragons
 [01:59.00]Don't take it from me
 [01:59.00]千万不要相信我
 [03:00.00]Woo-woo
-[02:00.00]🎶🎶🎶
 [02:02.00]My blood is pumping
 [02:01.00]我热血沸腾
 [02:03.00]He's coming to get you get
@@ -198,7 +190,6 @@ export default `[00:00.00]Sharks - Imagine Dragons
 [02:53.00]Don't take it from me
 [02:53.00]千万不要相信我
 [02:54.00]Woo-woo
-[02:54.00]🎶🎶🎶
 [02:55.00]My blood is pumping
 [02:55.00]我热血沸腾
 [02:56.00]He's coming to get you get

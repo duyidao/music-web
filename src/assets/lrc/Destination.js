@@ -1,5 +1,4 @@
 export default `[00:01.36]Destination - Imagine Dragons
-[00:01.36]🎶🎶🎶
 [00:16.64]I see the colors of the world are rearranging
 [00:16.64]我窥见这世界的缤纷色彩重新排列组合
 [00:26.69]The center sentinels are cunningly estranging oh

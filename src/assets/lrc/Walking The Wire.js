@@ -1,10 +1,7 @@
 export default `[00:00.0]Walking The Wire (高空钢索) - Imagine Dragons (梦龙)
 [00:01.1]Lyrics by：Dan Reynolds/Wayne Sermon/Ben McKee/Daniel Platzman/Robin Fredriksson/Mattias Larsson/Justin Tranter
-[00:01.1]🎶🎶🎶
 [00:02.2]Composed by：Dan Reynolds/Wayne Sermon/Ben McKee/Daniel Platzman/Robin Fredriksson/Mattias Larsson/Justin Tranter
-[00:02.2]🎶🎶🎶
 [00:04.4]Produced by：Mattman & Robin
-[00:04.4]🎶🎶🎶
 [00:09.25]Do you feel the same when I'm away from you
 [00:09.25]当我离你远去你是否和我有一样的心情
 [00:13.99]Do you know the line that I'd walk for you
@@ -32,7 +29,6 @@ export default `[00:00.0]Walking The Wire (高空钢索) - Imagine Dragons (梦�
 [01:04.42]We couldn't be higher up
 [01:04.42]我们已经抵达巅峰 再无更高处可去
 [01:05.75]Ooh
-[01:05.75]🎶🎶🎶
 [01:11.7]We're walking the wire wire wire
 [01:11.7]我们如履薄冰 小心翼翼
 [01:16.55]There's nights we had to just walk away
@@ -54,7 +50,6 @@ export default `[00:00.0]Walking The Wire (高空钢索) - Imagine Dragons (梦�
 [01:52.47]We couldn't be higher up
 [01:52.47]我们已经抵达巅峰 再无更高处可去
 [01:53.740005]Ooh
-[01:53.740005]🎶🎶🎶
 [01:58.55]We're walking the wire wire wire
 [01:58.55]我们如履薄冰 小心翼翼
 [02:03.56]So look out down below
@@ -82,9 +77,7 @@ export default `[00:00.0]Walking The Wire (高空钢索) - Imagine Dragons (梦�
 [02:58.41]We couldn't be higher up
 [02:58.41]我们已经抵达巅峰 再无更高处可去
 [02:59.84]Couldn't be couldn't be
-[02:59.84]🎶🎶🎶
 [03:00.96]Ooh
-[03:00.96]🎶🎶🎶
 [03:05.79]We're walking the wire wire wire
 [03:05.79]我们如履薄冰 小心翼翼
 [03:10.71]So look out down below

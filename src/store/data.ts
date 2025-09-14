@@ -5,7 +5,6 @@ import musicData from '@/utils/data.ts'
 
 // 状态管理
 export const musicList = ref<MusicItem[]>([])
-export const modelList = ref<string[]>([])
 
 export const backgroundImage = ref('') // 背景图片
 // 当前选择要播放的音乐
@@ -18,7 +17,7 @@ export const lrcList = computed(() => {
   if (!!musicList.value.length) {
     backgroundImage.value = `url(${
       musicList.value[playIndex.value]!.logo
-    }) no-repeat 100% / cover`
+    })`
   }
   return formatLyrics(currentMusic.value?.lyric)
 })

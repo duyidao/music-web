@@ -1,9 +1,9 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import Progress from '@comp/Common/progress.vue'
-import { currentTime, duration, progress } from '@/store/contorl.ts'
-import { seek } from '@/store/music.ts'
-import { currentMusic } from '@/store/data.ts'
-import { formatDuration } from '@/utils/index.ts'
+import {currentTime, duration, progress} from '@/store/contorl.ts'
+import {seek} from '@/store/music.ts'
+import {currentMusic} from '@/store/data.ts'
+import {formatDuration} from '@/utils/index.ts'
 import baseImg from '@/assets/images/base/music.jpg'
 
 const callback = (num: number) => {
@@ -23,18 +23,16 @@ const durationText = computed(() => {
 <template>
   <div class="progress-bar">
     <div class="progress-bar__logo">
-      <img :src="currentMusic?.logo || baseImg"
-        alt="音乐logo">
+      <img :src="currentMusic?.logo || baseImg" alt="音乐logo">
     </div>
     <div class="progress-bar__info">
-      <p class="name">{{ currentMusic?.title || '暂无音乐' }}</p>
-      <div class="progress-bar__info__progress">
-        <Progress :progress="progress"
-          :callback="callback" />
+      <div class="progress-bar__info__content">
+        <p class="name">{{ currentMusic?.title || '暂无音乐' }}</p>
         <p class="time">
           <span>{{ currentTimeText }}</span> <i>/</i> <span>{{ durationText }}</span>
         </p>
       </div>
+      <Progress :callback="callback" :progress="progress"/>
     </div>
   </div>
 </template>
@@ -46,10 +44,11 @@ const durationText = computed(() => {
   justify-content: center;
   width: 100%;
   height: 100%;
+  padding: 0 25px;
 
   &__logo {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     overflow: hidden;
     margin-right: 15px;
 
@@ -63,15 +62,18 @@ const durationText = computed(() => {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    width: 80%;
+    color: #fff;
 
     p.name {
       font-size: 16px;
     }
 
-    &__progress {
+    &__content {
       display: flex;
       align-items: center;
-      margin-top: 10px;
+      justify-content: space-between;
+      margin-bottom: 5px;
       font-size: 12px;
       width: 100%;
 
@@ -84,38 +86,6 @@ const durationText = computed(() => {
 
         i {
           margin: 0 5px;
-        }
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 920px) {
-  .progress-bar {
-
-    &__logo {
-      width: 3.125rem;
-      height: 3.125rem;
-      margin-right: .9375rem;
-    }
-
-    &__info {
-      p.name {
-        font-size: 1rem;
-      }
-
-      &__progress {
-        margin-top: .625rem;
-        font-size: .75rem;
-
-        :deep(.progress) {
-          margin-right: 1rem;
-        }
-
-        .time {
-          i {
-            margin: 0 .3125rem;
-          }
         }
       }
     }

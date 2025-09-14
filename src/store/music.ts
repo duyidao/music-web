@@ -3,7 +3,7 @@ import {
   createSourceNode,
   setSmoothVolume,
 } from '@/utils/audio'
-import { musicList, modelList } from './data.ts'
+import { musicList } from './data.ts'
 import {
   playIndex,
   currentTime,
@@ -12,7 +12,7 @@ import {
   next,
   documentHidden,
 } from './contorl.ts'
-import type { MusicItem, Status, DisconnectableKeys } from '@/types/music.ts'
+import type { MusicItem, DisconnectableKeys } from '@/types/music.ts'
 import { taskMap, processQueueOnce, changeActiveTask } from '@/utils/task.ts'
 
 // 音频状态
@@ -40,12 +40,6 @@ export const initAudio = () => {
   setVolume(volume.value)
 }
 
-const musicStateTip = {
-  error: '音频重新加载中...',
-  waiting: '音频加载中...',
-  pending: '音频获取中...',
-}
-
 // 加载音频
 export const loadAudio = async (
   item: MusicItem = musicList.value[playIndex.value]
@@ -61,11 +55,9 @@ export const loadAudio = async (
     }
     changeActiveTask(item)
     // ts-ignore
-    modelList.value.unshift(musicStateTip[res!.status as Status])
     if (res!.status !== 'pending') processQueueOnce(item.id)
     return false
   } catch (err) {
-    modelList.value.unshift(`音频加载失败：${err}`)
     return false
   }
 }

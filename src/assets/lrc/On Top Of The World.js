@@ -1,5 +1,4 @@
 export default `[00:15.00]On Top Of The World - Imagine Dragons (梦龙)
-[00:15.00]🎶🎶🎶
 [00:17.00]If you love somebody
 [00:17.00]如果你爱上了某个人
 [00:19.00]Better tell them while they're here 'cause

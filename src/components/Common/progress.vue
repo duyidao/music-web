@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 const props = defineProps<{
   callback: (value: number) => void,
   progress: number
@@ -41,6 +41,7 @@ function updateProgress(e: MouseEvent | TouchEvent) {
   rawValue = Math.max(0, Math.min(1, rawValue))
   props.callback(Number(rawValue.toFixed(2)))
 }
+
 // 点击轨道跳转
 function handleTrackClick(e: any) {
   updateProgress(e)
@@ -49,17 +50,11 @@ function handleTrackClick(e: any) {
 
 <template>
   <div class="progress">
-    <div class="custom-slider"
-      ref="sliderRef">
-      <div class="track"
-        @click="handleTrackClick">
-        <div class="fill"
-          :style="{ width: progress * 100 + '%' }"></div>
+    <div ref="sliderRef" class="custom-slider">
+      <div class="track" @click="handleTrackClick">
+        <div :style="{ width: progress * 100 + '%' }" class="fill"></div>
       </div>
-      <div class="thumb"
-        :style="{ left: progress * 100 + '%' }"
-        @mousedown="startDrag"
-        @touchstart="startDrag"></div>
+      <div :style="{ left: progress * 100 + '%' }" class="thumb" @mousedown="startDrag" @touchstart="startDrag"></div>
     </div>
   </div>
 </template>
@@ -81,8 +76,8 @@ function handleTrackClick(e: any) {
   top: 50%;
   left: 0;
   right: 0;
-  height: 4px;
-  background: #ddd;
+  height: 3px;
+  background: hsla(0, 0%, 100%, .2);
   border-radius: 2px;
   transform: translateY(-50%);
   cursor: pointer;
@@ -91,16 +86,16 @@ function handleTrackClick(e: any) {
 .fill {
   position: absolute;
   height: 100%;
-  background: var(--base-color);
-  border-radius: 2px;
+  background: #fff;
+  border-radius: 1px;
   transition: width 0.1s;
 }
 
 .thumb {
   position: absolute;
   top: 50%;
-  width: 15px;
-  height: 15px;
+  width: 12px;
+  height: 12px;
   background: #fff;
   border-radius: 50%;
   transform: translate(-50%, -50%);

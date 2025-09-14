@@ -1,5 +1,4 @@
 export default `[00:06.27]Warriors - Imagine Dragons
-[00:06.27]🎶🎶🎶
 [00:12.45]As a child you would wait and watch from far away
 [00:12.45]当你还是懵懂小孩 常在远处观看比赛
 [00:15.64]But you always knew that you'd be the one

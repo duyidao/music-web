@@ -1,8 +1,6 @@
 export default `[00:00.0]Golden - HUNTR/X/EJAE/AUDREY NUNA/REI AMI/KPop Demon Hunters Cast
 [00:08.81]Composed by：EJAE/Mark Sonnenblick
-[00:08.从选区创建新的临时文件]🎶🎶🎶
 [00:16.25]Produced by：ido/24/TEDDY/Ian Eisendrath
-[00:16.25]🎶🎶🎶
 [00:19.3]I was a ghost I was alone hah
 [00:19.3]我曾是游魂 独自徘徊 哈  
 [00:24.02]어두워진 hah 압길속에 ah

@@ -52,7 +52,6 @@ export default `[00:00.00]Seasons in the Sun - Westlife (西城男孩)
 [02:22.00]But the wine and the song like the seasons have all gone
 [02:22.00]便如这更迭的四季悄然逝去
 [02:26.00]Yeah yeah
-[02:26.00]🎶🎶🎶
 [02:32.00]Goodbye Michelle my little one
 [02:32.00]再见了 米歇尔 我的小情人
 [02:37.00]You gave me love and helped me find the sun

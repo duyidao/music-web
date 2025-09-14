@@ -1,16 +1,14 @@
-<script setup lang="ts">
-import { initAudio } from '@/store/music.ts'
-import { currentMusic, lrcList } from '@/store/data.ts'
-import { currentTime } from '@/store/contorl.ts'
-import { screenWidth, ratio } from '@/utils/index.ts'
+<script lang="ts" setup>
+import {initAudio} from '@/store/music.ts'
+import {currentMusic, lrcList} from '@/store/data.ts'
+import {currentTime} from '@/store/contorl.ts'
+import {ratio, screenWidth} from '@/utils/index.ts'
+import {setThemeColor} from '@/store/user.ts'
 import CanvasVisual from '@comp/CanvasVisual/index.vue'
-
 // @ts-ignore
 import ColorThief from 'colorthief'
 
 const colorThief = new ColorThief()
-// @ts-ignore
-const bgColor = ref('transparent')
 watch(
   () => currentMusic.value,
   async (newVal: any) => {
@@ -30,13 +28,13 @@ watch(
 
       // 3. 获取颜色
       const colors = await colorThief.getColor(img, 5)
-      bgColor.value = `rgba(${colors[0]}, ${colors[1]}, ${colors[2]}, .35)`
+      setThemeColor(`rgb(${colors[0]}, ${colors[1]}, ${colors[2]})`)
     } catch (err) {
       console.error('获取背景色失败:', err)
-      bgColor.value = 'transparent' // 设置默认颜色
+      setThemeColor()
     }
   },
-  { deep: true }
+  {deep: true}
 )
 
 // @ts-ignore
@@ -112,12 +110,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="music">
+  <!--音乐播放相关-->
+  <div class="music-play">
     <div ref="musicRef" class="music-logo">
-      <CanvasVisual :canvasWidth="canvasWidth" :canvasHeight="canvasHeight" />
+      <CanvasVisual :canvasHeight="canvasHeight" :canvasWidth="canvasWidth"/>
     </div>
-    <div class="music-lrc" :style="{ '--bg': bgColor }" ref="musicLrc">
-      <ul class="music-lrc-content" ref="musicLrcContent">
+    <div ref="musicLrc" class="music-lrc">
+      <ul ref="musicLrcContent" class="music-lrc-content">
         <li
           v-for="item in lrcList"
           :class="{ active: (item as any)?.time === (lrcActive as any)?.time }"
@@ -131,8 +130,10 @@ onMounted(() => {
 </template>
 
 <style lang="less" scoped>
-.music {
+.music-play {
   position: relative;
+  width: 100%;
+  height: calc(100vh - 90px);
 
   .music-logo {
     position: absolute;
@@ -148,7 +149,6 @@ onMounted(() => {
     overflow-y: scroll;
     overflow-x: hidden;
     z-index: 2;
-    background-color: var(--bg);
     backdrop-filter: blur(3px);
 
     ul {
@@ -160,30 +160,11 @@ onMounted(() => {
         display: flex;
         justify-content: center;
         align-items: center;
+        color: #bbb;
 
         &.active {
           transform: scale(1.3);
           color: var(--base-color);
-          text-shadow: 0 0 10px #fff;
-        }
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .music {
-
-    .music-lrc {
-      backdrop-filter: none;
-
-      ul {
-        font-size: 0.75rem;
-
-        li {
-          &.active {
-            transform: scale(1.2);
-          }
         }
       }
     }

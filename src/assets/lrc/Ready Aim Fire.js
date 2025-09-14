@@ -1,8 +1,6 @@
 export default `[00:00.0]Ready Aim Fire - Imagine Dragons (梦龙)
 [00:01.44]Lyrics by：Dan Reynolds/Alexander Grant/Josh Mosser
-[00:01.44]🎶🎶🎶
 [00:04.34]Composed by：Dan Reynolds/Alexander Grant/Josh Mosser
-[00:04.34]🎶🎶🎶
 [00:07.85]With our backs to the wall the darkness will fall
 [00:07.85]没有退路可退了 黑暗即将垄罩
 [00:11.31]We never quite thought we could lose it all
@@ -90,13 +88,9 @@ export default `[00:00.0]Ready Aim Fire - Imagine Dragons (梦龙)
 [02:43.74]Ready aim fire ready aim fire away
 [02:43.74]准备 瞄准 发射 发射
 [02:49.54001]Oh-woah-oh
-[02:49.54001]🎶🎶🎶
 [02:56.11]Oh-woah-oh
-[02:56.11]🎶🎶🎶
 [03:02.73]Oh-woah-oh
-[03:02.73]🎶🎶🎶
 [03:09.84]Oh-woah-oh
-[03:09.84]🎶🎶🎶
 [03:13.18]With our backs to the wall the darkness will fall
 [03:13.18]没有退路可退了 黑暗即将垄罩
 [03:16.68]We never quite thought we could lose it all

@@ -1,5 +1,4 @@
 export default `[00:01.36]Born To Be Yours - Kygo/Imagine Dragons
-[00:01.36]🎶🎶🎶
 [00:08.2]I know I've given up
 [00:08.2]我知道 我已经放弃过
 [00:12.26]A hundred times before
@@ -67,9 +66,7 @@ export default `[00:01.36]Born To Be Yours - Kygo/Imagine Dragons
 [02:32.37]I was born to be yours
 [02:32.37]我生来便属于你
 [02:49.28]Oh woah
-[02:49.28] 🎵🎵
 [02:50.84]Oh woah hey
-[02:50.84] 🎵🎵
 [02:52.85]Born to be yours
 [02:52.85]命中注定属于你
 [02:54.89]I was born born born born

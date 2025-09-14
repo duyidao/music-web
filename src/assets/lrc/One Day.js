@@ -1,5 +1,4 @@
 export default `[00:00.22]One Day - Imagine Dragons (梦龙)
-[00:00.22]🎶🎶🎶
 [00:05.04]I know that one day I'll be that one
 [00:05.04]我知道总有一天我
 [00:07.69]Thing that makes you happy
@@ -19,7 +18,6 @@ export default `[00:00.22]One Day - Imagine Dragons (梦龙)
 [00:31.96]I know that it's right on time time
 [00:31.96]我知道就是现在 现在
 [00:33.38]Twee-da-da-da
-[00:33.38]🎶🎶🎶
 [00:37.57]Life flies by the moon and the midnight sky
 [00:37.57]生命转瞬即逝 月亮和午夜天空
 [00:42.97]Is guiding me to your side side
@@ -45,7 +43,6 @@ export default `[00:00.22]One Day - Imagine Dragons (梦龙)
 [01:14.58]Fields
 [01:14.58]草地
 [01:15.82]Twee-da-da-da
-[01:15.82]🎶🎶🎶
 [01:21.16]I know they tellin' you things that you put in your head head
 [01:21.16]我知道他们对你说的话 你都记在了心里
 [01:25.74]Promise you that are better off without them
@@ -87,19 +84,13 @@ export default `[00:00.22]One Day - Imagine Dragons (梦龙)
 [02:09.16]Yeah I know that one day one day
 [02:09.16]我知道总有一天 总有一天
 [02:13.26]Ooh ooh-ooh-ooh-ooh
-[02:13.26]🎶🎶🎶
 [02:15.82]Ooh ooh-ooh-ooh-ooh
-[02:15.82]🎶🎶🎶
 [02:17.12]Ooh ooh-ooh-ooh-ooh
-[02:17.12]🎶🎶🎶
 [02:19.82]One day
 [02:19.82]总有一天
 [02:23.77]Ooh ooh-ooh-ooh-ooh
-[02:23.77]🎶🎶🎶
 [02:26.47]Ooh ooh-ooh-ooh-ooh
-[02:26.47]🎶🎶🎶
 [02:27.8]Ooh ooh-ooh-ooh-ooh
-[02:27.8]🎶🎶🎶
 [02:32.08]One day
 [02:32.08]总有一天
 `

@@ -1,11 +1,7 @@
 export default `[00:00.00]Battle Cry - Imagine Dragons (梦龙)
-[00:00.00]🎶🎶🎶
 [00:13.00]Lyrics by：Imagine Dragons
-[00:13.00]🎶🎶🎶
 [00:35.00]Composed by：Imagine Dragons
-[00:35.00]🎶🎶🎶
 [00:54.00]Arranged by：Imagine Dragons/Alex da Kid
-[00:54.00]🎶🎶🎶
 [00:58.00]Just one more time before I go
 [00:58.00]在我踏上战场前再一次
 [01:02.00]I'll let you know

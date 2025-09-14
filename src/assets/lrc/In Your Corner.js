@@ -1,8 +1,6 @@
 export default `[00:00.08]In Your Corner - Imagine Dragons
 [00:01.33]Lyrics by：Dan Reynolds/Wayne Sermon/Ben McKee/Robin Lennart Fredriksson/Mattias Larsson
-[00:01.33]🎶🎶🎶
 [00:09.91]Composed by：Dan Reynolds/Wayne Sermon/Ben McKee/Robin Lennart Fredriksson/Mattias Larsson
-[00:09.91]🎶🎶🎶
 [00:12.5]Woke up to the phone wanna see your name
 [00:12.5]醒来看看手机 希望能看到你的名字
 [00:16.93]Taking some space and I'm all to blame alright
@@ -48,7 +46,6 @@ export default `[00:00.08]In Your Corner - Imagine Dragons
 [01:14.33]Keep your hands up
 [01:14.33]让自己重新振作起来
 [01:15.78]Ayy ayy yeah
-[01:15.78]🎶🎶🎶
 [01:18.270004]Hold on hold on alright alright
 [01:18.270004]坚持下去 一切都会好起来的
 [01:19.75]Keep your hands up
@@ -94,23 +91,19 @@ export default `[00:00.08]In Your Corner - Imagine Dragons
 [02:18.25]In your corner in your corner
 [02:18.25]我一直待在你的角落
 [02:20.7]Ayy ayy yeah
-[02:20.7]🎶🎶🎶
 [02:23.18]Hold on hold on
 [02:23.18]我希望你能坚持下去
 [02:24.03]Keep your hands up
 [02:24.03]让自己重新振作起来
 [02:25.39]Ayy ayy yeah
-[02:25.39]🎶🎶🎶
 [02:28.2]Hold on hold on alright alright
 [02:28.2]坚持下去 一切都会好起来的
 [02:30.74]Ayy ayy yeah
-[02:30.74]🎶🎶🎶
 [02:32.73]Hold on hold on
 [02:32.73]坚持下去
 [02:33.95999]Keep your hands up
 [02:33.95999]让自己重新振作起来吧
 [02:35.34]Ayy ayy yeah
-[02:35.34]🎶🎶🎶
 [02:37.81]Hold on hold on alright alright
 [02:37.81]坚持下去 一切都会好起来的
 [02:38.91]Hands keep 'em up
@@ -130,19 +123,15 @@ export default `[00:00.08]In Your Corner - Imagine Dragons
 [02:57.85]In your corner in your corner
 [02:57.85]我一直待在你的角落
 [03:00.29]Ayy ayy yeah
-[03:00.29]🎶🎶🎶
 [03:02.9]Hold on hold on
 [03:02.9]坚持下去
 [03:03.78]Keep your hands up
 [03:03.78]让自己重新振作起来吧
 [03:05.16]Ayy ayy yeah
-[03:05.16]🎶🎶🎶
 [03:07.95]Hold on hold on alright alright
 [03:07.95]坚持下去 一切都会好起来的
 [03:13.26]Ayy ayy yeah
-[03:13.26]🎶🎶🎶
 [03:15.35]Ayy ayy yeah
-[03:15.35]🎶🎶🎶
 [03:17.52]Hold on hold on
 [03:17.52]坚持下去
 [03:22.052]Hands keep 'em up

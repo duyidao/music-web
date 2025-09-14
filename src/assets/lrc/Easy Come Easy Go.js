@@ -8,7 +8,6 @@ export default `[00:00.000] 作词 : Jayson DeZuzio/Dan Reynolds/Wayne Sermon/Be
 [00:21.199] 所以我写了一首歌 作摇篮曲
 [00:24.649] Sing me to sleep at night, open my third eye
 [00:24.649] 夜里伴我睡觉 睁开第三只眼
-[00:27.261]🎶🎶🎶
 [00:27.556] I'm not gonna lie to you, I miss you so much
 [00:27.556] 我不会骗你 我非常想你
 [00:31.031] Tell me what I did wrong to lose touch?
@@ -17,7 +16,6 @@ export default `[00:00.000] 作词 : Jayson DeZuzio/Dan Reynolds/Wayne Sermon/Be
 [00:34.392] 不骗你 这是艰难的一年
 [00:37.797] Oh, I wish that you were here
 [00:37.797] 我希望你在这里
-[00:40.426]🎶🎶🎶
 [00:41.204] I just need to let it go, waiting on a miracle
 [00:41.204] 我只需要放手 等待奇迹
 [00:44.654] Guess that's just the way it goes, easy come, easy go
@@ -26,7 +24,6 @@ export default `[00:00.000] 作词 : Jayson DeZuzio/Dan Reynolds/Wayne Sermon/Be
 [00:48.121] 我只需要放手 放缓速度 放低姿态
 [00:51.946] It's just the way it goes, easy come, easy go
 [00:51.946] 就是这样 来得容易去也快
-[00:54.056]🎶🎶🎶
 [00:55.657] Sometimes I drive a little too fast
 [00:55.657] 有时我操之过急
 [00:58.975] Think I'm running from demons of my past
@@ -35,7 +32,6 @@ export default `[00:00.000] 作词 : Jayson DeZuzio/Dan Reynolds/Wayne Sermon/Be
 [01:02.528] 所以我写了一首歌来帮我慢下来
 [01:05.832] Keep my mind straight but it's a bit late
 [01:05.832] 保持头脑清醒 但有些晚了
-[01:07.871]🎶🎶🎶
 [01:08.627] I'm not gonna lie to you, I miss you so much
 [01:08.627] 我不会骗你 我很想你
 [01:12.057] Tell me what I did wrong to lose touch?
@@ -44,7 +40,6 @@ export default `[00:00.000] 作词 : Jayson DeZuzio/Dan Reynolds/Wayne Sermon/Be
 [01:15.398] 不骗你 今年是艰难的一年
 [01:18.950] Oh, I wish that you were here
 [01:18.950] 我希望你在这里
-[01:21.416]🎶🎶🎶
 [01:22.324] I just need to let it go, waiting on a miracle
 [01:22.324] 我只需要放手 等待奇迹
 [01:25.821] Guess that's just the way it goes, easy come, easy go
@@ -61,7 +56,6 @@ export default `[00:00.000] 作词 : Jayson DeZuzio/Dan Reynolds/Wayne Sermon/Be
 [01:42.891] 我只需要放手 放缓速度 放低姿态
 [01:46.550] It's just the way it goes (It's just the way it goes), easy come, easy go
 [01:46.550] 就是这样 来得容易去得容易
-[01:48.550]🎶🎶🎶
 [01:49.743] Remember when you got sick, cancer of the bone
 [01:49.743] 记住当你患了骨癌
 [01:53.427] Everyone at school while you sitting at home
@@ -80,7 +74,6 @@ export default `[00:00.000] 作词 : Jayson DeZuzio/Dan Reynolds/Wayne Sermon/Be
 [02:10.880] 发誓明天我就会
 [02:15.137] But as for tonight
 [02:15.137] 但至于今晚
-[02:16.768]🎶🎶🎶
 [02:17.255] I just need to let it go (I just need to let it go), waiting on a miracle (Waiting on a miracle)
 [02:17.255] 我只需要放手 等待奇迹
 [02:20.604] Guess that's just the way it goes (Guess that's just the way it goes), easy come, easy go
@@ -97,7 +90,6 @@ export default `[00:00.000] 作词 : Jayson DeZuzio/Dan Reynolds/Wayne Sermon/Be
 [02:37.778] 我只需要放手 放缓速度 放低姿态
 [02:41.251] It's just the way it goes (It's just the way it goes), easy come, easy go
 [02:41.251] 这就是生活 来得容易去得容易
-[02:43.984]🎶🎶🎶
 [02:44.610] I just need to let it go (I just need to let it go), waiting on a miracle (Waiting on a miracle)
 [02:44.610]我只需要放手 等待奇迹
 [02:48.106] Guess that's just the way it goes (Guess that's just the way it goes), easy come, easy go

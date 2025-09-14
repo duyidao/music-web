@@ -1,10 +1,7 @@
 export default `[00:00.00]Don’t Forget Me - Imagine Dragons
 [00:01.00]Lyrics by：Dan Reynolds/Wayne Sermon/Ben McKee/Robin Lennart Fredriksson/Mattias Larsson
-[00:01.00]🎶🎶🎶
 [00:06.00]Composed by：Dan Reynolds/Wayne Sermon/Ben McKee/Robin Lennart Fredriksson/Mattias Larsson
-[00:06.00]🎶🎶🎶
 [00:14.00]Produced by：Mattman & Robin
-[00:14.00]🎶🎶🎶
 [00:18.00]After the party and people all fade
 [00:18.00]派对结束 人群散去
 [00:21.00]That's when I miss you the most
