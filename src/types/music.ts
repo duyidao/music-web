@@ -4,12 +4,6 @@ export interface LrcListType {
   time: number;
 }
 
-// 音乐类型枚举
-enum MusicType {
-  免费试听 = 1,
-  免费音乐 = 0
-}
-
 // 定义音乐对象类型
 export interface MusicItem {
   id: string;
@@ -18,7 +12,7 @@ export interface MusicItem {
   lyric: string;
   logo: string;
   time?: number;
-  type?: MusicType;
+  author?: string;
 }
 
 // 定义播放顺序枚举类型

@@ -43,8 +43,8 @@ const formatLyrics = (lyric?: string) => {
 export const loadMusicData = async () => {
   try {
     const jsModules = import.meta.glob('@/assets/lrc/*.js', { eager: true })
-    musicList.value = musicData.map((item: {audioUrl: string, logo: string}) => {
-      const baseName = item.audioUrl.replace(/^.*music\//, '').replace(/\.mp3$/, '')
+    musicList.value = musicData.map((item: {audioUrl: string, logo: string, author?: string}) => {
+      const baseName = item.audioUrl.replace(/^.*music\//, '').replace(/\.mp3$/, '').replace(/\.aac$/, '')
 
       let obj: MusicItem = {
         id: baseName,
@@ -54,6 +54,7 @@ export const loadMusicData = async () => {
           (jsModules[`/src/assets/lrc/${baseName}.js`] as { default: string })
             ?.default || '',
         logo: item.logo,
+        author: item.author || 'Imagine Dragons'
       }
       return obj
     })

@@ -20,7 +20,7 @@ const choseMusic = (index: number) => {
         <span>{{ index + 1 }}</span>
         <span>{{ item.title }}</span>
       </p>
-      <span>Imagine Dragons</span>
+      <span>{{ item.author || 'Imagine Dragons' }}</span>
     </div>
   </div>
 </template>
@@ -79,7 +79,7 @@ const choseMusic = (index: number) => {
       }
       span:nth-of-type(2) {
         display: block;
-        margin-left: 6px;
+        margin-left: 10px;
       }
     }
 

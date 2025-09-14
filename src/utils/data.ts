@@ -44,8 +44,14 @@ const data = [
     logo: 'https://music.duyidao.cn/music/Fire%20in%20These%20Hills.webp',
   },
   {
+    audioUrl: 'https://music.duyidao.cn/music/Futile Devices.mp3',
+    logo: 'https://music.duyidao.cn/music/Futile%20Devices.webp',
+    author: 'Sufjan Stevens'
+  },
+  {
     audioUrl: 'https://music.duyidao.cn/music/Golden.mp3',
     logo: 'https://music.duyidao.cn/music/Golden.webp',
+    author: 'Kpop Huntr'
   },
   {
     audioUrl: 'https://music.duyidao.cn/music/In Your Corner.mp3',
@@ -58,6 +64,11 @@ const data = [
   {
     audioUrl: 'https://music.duyidao.cn/music/Monday.mp3',
     logo: 'https://music.duyidao.cn/music/Monday.webp',
+  },
+  {
+    audioUrl: 'https://music.duyidao.cn/music/Mystery of Love.aac',
+    logo: 'https://music.duyidao.cn/music/Mystery%20of%20Love.webp',
+    author: 'Sufjan Stevens'
   },
   {
     audioUrl: 'https://music.duyidao.cn/music/Natural.mp3',
@@ -82,6 +93,7 @@ const data = [
   {
     audioUrl: 'https://music.duyidao.cn/music/Season in the Sun.mp3',
     logo: 'https://music.duyidao.cn/music/Season%20in%20the%20Sun.webp',
+    author: 'Westlife'
   },
   {
     audioUrl: 'https://music.duyidao.cn/music/Sharks.mp3',
