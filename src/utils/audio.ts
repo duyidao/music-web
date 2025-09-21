@@ -39,6 +39,5 @@ export const createSourceNode = (
 
 // 平滑音量变化
 export const setSmoothVolume = (gainNode: GainNode, volume: number) => {
-  const safeVolume = Math.max(0, Math.min(1, volume));
-  gainNode.gain.value = safeVolume;
+  gainNode.gain.value = Math.max(0, Math.min(1, volume));
 };

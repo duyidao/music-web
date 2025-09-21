@@ -1,6 +1,6 @@
 /**
  * @description 格式化时间
- * @param {number} timestamp 时间戳
+ * @param {number} seconds 时间戳
  * @return {string} 格式化后的时间字符串
  */
 export function formatDuration(seconds: number) {
@@ -34,8 +34,8 @@ export const getRandomIndex = (length: number, currentIndex: number) => {
   return newIndex;
 };
 
-export const ratio = ref(window.innerWidth / 750);
-export const screenWidth = ref(window.innerWidth);
+export const ratio = ref<number>(window.innerWidth / 750);
+export const screenWidth = ref<number>(window.innerWidth);
 export const pxToRem = () => {
   ratio.value = window.innerWidth / 750;
   screenWidth.value = window.innerWidth;
