@@ -1,7 +1,7 @@
 import type { MusicItem } from '@/types/music.ts'
 import { playIndex } from './contorl.ts'
 import { taskMap, pendingQueue, processQueue } from '@/utils/task.ts'
-import musicData from '@/utils/data.ts'
+import axios from 'axios'
 
 // 状态管理
 export const musicList = ref<MusicItem[]>([])
@@ -15,9 +15,7 @@ export const currentMusic = computed(() => {
 // 格式化歌词
 export const lrcList = computed(() => {
   if (!!musicList.value.length) {
-    backgroundImage.value = `url(${
-      musicList.value[playIndex.value]!.logo
-    })`
+    backgroundImage.value = `url("${musicList.value[playIndex.value]!.logo}")`
   }
   return formatLyrics(currentMusic.value?.lyric)
 })
@@ -43,21 +41,31 @@ const formatLyrics = (lyric?: string) => {
 export const loadMusicData = async () => {
   try {
     const jsModules = import.meta.glob('@/assets/lrc/*.js', { eager: true })
-    musicList.value = musicData.map((item: {audioUrl: string, logo: string, author?: string}) => {
-      const baseName = item.audioUrl.replace(/^.*music\//, '').replace(/\.mp3$/, '').replace(/\.aac$/, '')
+    const musicData = await axios.get(
+      'http://music.duyidao.cn:3001/api/music/list'
+    )
 
-      let obj: MusicItem = {
-        id: baseName,
-        title: formatTitle(baseName),
-        audioUrl: item.audioUrl,
-        lyric:
-          (jsModules[`/src/assets/lrc/${baseName}.js`] as { default: string })
-            ?.default || '',
-        logo: item.logo,
-        author: item.author || 'Imagine Dragons'
+    musicList.value = musicData.data.files?.map(
+      (item: { audioUrl: string; logo: string; author?: string }) => {
+        const baseName = item.audioUrl
+          .replace(/^.*music\//, '')
+          .replace(/\.mp3$/, '')
+          .replace(/\.aac$/, '')
+          .split('/')[1]
+
+        let obj: MusicItem = {
+          id: baseName,
+          title: formatTitle(baseName),
+          audioUrl: 'https://music.duyidao.cn' + item.audioUrl,
+          lyric:
+            (jsModules[`/src/assets/lrc/${baseName}.js`] as { default: string })
+              ?.default || '',
+          logo: 'https://music.duyidao.cn' + item.logo,
+          author: item.author,
+        }
+        return obj
       }
-      return obj
-    })
+    )
     initMusicTasks()
   } catch (err) {
     console.error('加载音乐数据失败:', err)

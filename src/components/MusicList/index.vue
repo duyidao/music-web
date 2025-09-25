@@ -2,8 +2,34 @@
 import { musicList } from '@/store/data.ts'
 import { audioState } from '@/store/music.ts'
 import { playIndex, loadAndPlay } from '@/store/contorl.ts'
+import { taskMap } from '@/utils/task.ts'
 
-const choseMusic = (index: number) => {
+// 获取当前状态
+const getStatus = (item) => {
+  console.log(
+    taskMap.get(item.id)?.status,
+    taskMap.get(item.id)?.status === 'pending' ||
+      taskMap.get(item.id)?.status === 'waiting'
+  )
+  return (
+    taskMap.get(item.id)?.status === 'pending' ||
+    taskMap.get(item.id)?.status === 'waiting'
+  )
+}
+
+const c = computed(() => {
+  return musicList.value.map((item) => {
+    return {
+      ...item,
+      loading:
+        taskMap.get(item.id)?.status === 'pending' ||
+        taskMap.get(item.id)?.status === 'waiting',
+    }
+  })
+})
+
+// 播放新的音频
+const choseMusic = (index: number, item) => {
   playIndex.value = index
   loadAndPlay()
 }
@@ -15,7 +41,17 @@ const choseMusic = (index: number) => {
       <p>歌名</p>
       <span>歌手</span>
     </div>
-    <div v-for="(item, index) in musicList" :key="item.id" class="music-list-body" :class="{active: index === playIndex && audioState.isPlaying}" :style="{'--index': index + 1}" @click.stop="choseMusic(index)">
+    <div
+      v-for="(item, index) in c"
+      :key="item.id"
+      class="music-list-body"
+      :class="{
+        active: index === playIndex && audioState.isPlaying,
+        loading: item.loading,
+      }"
+      :style="{ '--index': index + 1 }"
+      @click.stop="choseMusic(index, item)"
+    >
       <p>
         <span>{{ index + 1 }}</span>
         <span>{{ item.title }}</span>
@@ -46,7 +82,17 @@ const choseMusic = (index: number) => {
 
       p {
         span:nth-of-type(1) {
-          background: url("@/assets/images/wave.gif") 0 0 no-repeat;
+          background: url('@/assets/images/wave.gif') 0 0 no-repeat;
+          text-indent: -99px;
+          overflow: hidden;
+        }
+      }
+    }
+
+    &.loading {
+      p {
+        span:nth-of-type(1) {
+          background: url('@/assets/images/loading.gif') 0 0 no-repeat;
           text-indent: -99px;
           overflow: hidden;
         }
@@ -85,9 +131,9 @@ const choseMusic = (index: number) => {
 
     > span {
       width: 35%;
-      text-overflow:ellipsis;/*省略号 */
-      white-space:nowrap;/*溢出时不换行 */
-      overflow:hidden;/*溢出时隐藏 */
+      text-overflow: ellipsis; /*省略号 */
+      white-space: nowrap; /*溢出时不换行 */
+      overflow: hidden; /*溢出时隐藏 */
       margin-right: 8px;
     }
   }

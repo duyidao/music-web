@@ -2,9 +2,9 @@
 import ControlModule from '@comp/ContorlModule/index.vue'
 import Music from '@comp/Music.vue'
 import MusicList from '@comp/MusicList/index.vue'
-import {loadMusicData, backgroundImage} from '@/store/data.ts'
-import {destroy} from '@/store/music.ts'
-import {pxToRem} from '@/utils/index.ts'
+import { loadMusicData, backgroundImage } from '@/store/data.ts'
+import { destroy } from '@/store/music.ts'
+import { pxToRem } from '@/utils/index.ts'
 
 onMounted(() => {
   loadMusicData()
@@ -16,11 +16,15 @@ onUnmounted(() => {
   window.removeEventListener('resize', pxToRem)
 })
 
-const bgPlayerRef = ref();
-watch(() => backgroundImage.value, (newVal) => {
-  if (!newVal) return;
-  nextTick(() => bgPlayerRef.value.style.backgroundImage = newVal);
-})
+const bgPlayerRef = ref()
+watch(
+  () => backgroundImage.value,
+  (newVal) => {
+    if (!newVal) return
+    nextTick(() => (bgPlayerRef.value.style.backgroundImage = newVal))
+  },
+  { deep: true, immediate: true }
+)
 </script>
 
 <template>
@@ -29,15 +33,14 @@ watch(() => backgroundImage.value, (newVal) => {
     <div ref="bgPlayerRef" class="bg_player"></div>
     <div class="mod-player">
       <div class="mod-player-music">
-        <Music/>
-        <ControlModule/>
+        <Music />
+        <ControlModule />
       </div>
 
       <!--音乐列表-->
-      <MusicList/>
+      <MusicList />
     </div>
   </div>
-
 </template>
 
 <style lang="less" scoped>
@@ -73,13 +76,13 @@ watch(() => backgroundImage.value, (newVal) => {
     background-size: cover;
     background-position: 50%;
     filter: blur(35px);
-    opacity: .7;
+    opacity: 0.7;
     transform: translateZ(0);
     background-color: rgb(255, 255, 255);
   }
 
   .bg_player_mask {
-    background-color: rgba(0, 0, 0, .35);
+    background-color: rgba(0, 0, 0, 0.35);
     z-index: 2;
   }
 }
