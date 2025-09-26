@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import {order} from '@/store/contorl.ts';
-import {OrderType} from '@/types/music.ts';
+import { order } from '@/store/contorl.ts'
+import { OrderType } from '@/types/music.ts'
 
 // 定义状态切换顺序
 const ORDER_CYCLE = {
@@ -14,9 +14,13 @@ const icons = computed(() => [
     title: '顺序切换',
     icon: ORDER_CYCLE[order.value as OrderType],
     click: () => {
-      order.value = order.value === OrderType.Sequence ? OrderType.Random
-        : order.value === OrderType.Random ? OrderType.Single : OrderType.Sequence
-    }
+      order.value =
+        order.value === OrderType.Sequence
+          ? OrderType.Random
+          : order.value === OrderType.Random
+          ? OrderType.Single
+          : OrderType.Sequence
+    },
   },
 ])
 </script>
@@ -28,7 +32,8 @@ const icons = computed(() => [
       :key="item.icon"
       :class="item.icon"
       :title="item.title"
-      @click.stop="item.click">
+      @click.stop="item.click"
+    >
     </a>
   </div>
 </template>
@@ -39,8 +44,8 @@ a {
   width: 26px;
   height: 25px;
   background-image: url(../../assets/images/bg.png);
-  color: hsla(0, 0%, 88.2%, .8);
-  opacity: .8;
+  color: hsla(0, 0%, 88.2%, 0.8);
+  opacity: 0.8;
   cursor: pointer;
 
   &:hover {
@@ -49,8 +54,6 @@ a {
 }
 
 .btn-list {
-  margin-right: 20px;
-
   .btn-shunxu {
     background-position: 0 -205px;
   }

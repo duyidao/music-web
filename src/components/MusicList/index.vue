@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { musicList } from '@/store/data.ts'
 import { audioState } from '@/store/music.ts'
+import { authorChoose } from '@/store/author.ts'
 import { playIndex, loadAndPlay } from '@/store/contorl.ts'
 import { taskMap } from '@/utils/task.ts'
-import { showAuthor } from '@/store/author.ts'
 
 const musicHasLoadList = computed(() => {
-  return musicList.value.map((item) => {
+  const list = musicList.value.map((item) => {
     return {
       ...item,
       loading:
@@ -14,17 +14,16 @@ const musicHasLoadList = computed(() => {
         taskMap.value.get(item.id)?.status === 'waiting',
     }
   })
+  if (!authorChoose.value) {
+    return list
+  }
+  return list.filter((item) => item.author === authorChoose.value)
 })
 
 // 播放新的音频
-const choseMusic = (index: number, item) => {
-  playIndex.value = index
+const choseMusic = (item) => {
+  playIndex.value = musicList.value.findIndex((e) => e.id === item.id)
   loadAndPlay()
-}
-
-// 点击切换歌手的按钮
-const showAuthorList = () => {
-  showAuthor.value = true
 }
 </script>
 
@@ -46,7 +45,7 @@ const showAuthorList = () => {
           loading: item.loading,
         }"
         :style="{ '--index': index + 1 }"
-        @click.stop="choseMusic(index, item)"
+        @click.stop="choseMusic(item)"
       >
         <p>
           <span>{{ index + 1 }}</span>
@@ -57,11 +56,6 @@ const showAuthorList = () => {
     </div>
     <!-- 歌曲列表卡片搜索与歌手筛选等按钮 -->
     <div class="music-list-btns">
-      <a
-        title="切换歌手"
-        class="music-list-btn-author"
-        @click.stop="showAuthorList"
-      ></a>
       <a title="收起列表" class="music-list-btn-flexible"></a>
     </div>
   </aside>
@@ -90,12 +84,6 @@ const showAuthorList = () => {
       &:hover {
         opacity: 1;
       }
-    }
-
-    .music-list-btn-author {
-      width: 24px;
-      height: 22px;
-      background-position: 0 -370px;
     }
 
     .music-list-btn-flexible {

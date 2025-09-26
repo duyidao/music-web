@@ -31,7 +31,7 @@ watch(
   <div class="container">
     <div class="bg_player_mask"></div>
     <div ref="bgPlayerRef" class="bg_player"></div>
-    <div class="mod-player">
+    <div class="mod-player" v-close="false">
       <div class="mod-player-music">
         <Music />
         <ControlModule />

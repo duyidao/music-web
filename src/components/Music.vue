@@ -86,7 +86,7 @@ watch(
     const index = lrcList.value.findIndex((item: any) => {
       return item.time >= newVal
     })
-
+    if (!index || index < 0) return
     let offsetTop =
       index * liHeight.value + liHeight.value / 2 - musicLrcHeight / 2 // 计算偏移量
     if (offsetTop < 0) {

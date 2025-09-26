@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import Progress from '@comp/Common/progress.vue'
-import {setVolume} from '@/store/music.ts'
-import {volume} from '@/store/contorl.ts'
+import { setVolume } from '@/store/music.ts'
+import { volume } from '@/store/contorl.ts'
 
 const isMuted = computed<boolean>(() => volume.value === 0)
 const previousVolume = ref(0.5) // 保存静音前音量
@@ -30,16 +30,22 @@ const toggleMute = () => {
 }
 
 // 监听外部音量变化（如键盘快捷键）
-watch(() => volume.value, (newVal: number) => {
-  setVolume(newVal)
-})
+watch(
+  () => volume.value,
+  (newVal: number) => {
+    setVolume(newVal)
+  }
+)
 </script>
 
 <template>
   <div class="control-volume">
-    <a :class="{ 'btn-jingyin': isMuted, 'btn-yinliang': !isMuted }" @click.stop="toggleMute"></a>
+    <a
+      :class="{ 'btn-jingyin': isMuted, 'btn-yinliang': !isMuted }"
+      @click.stop="toggleMute"
+    ></a>
 
-    <Progress :callback="handleVolumeChange" :progress="volume"/>
+    <Progress :callback="handleVolumeChange" :progress="volume" />
   </div>
 </template>
 
@@ -49,8 +55,8 @@ a {
   width: 40px;
   height: 21px;
   background-image: url(../../assets/images/bg.png);
-  color: hsla(0, 0%, 88.2%, .8);
-  opacity: .8;
+  color: hsla(0, 0%, 88.2%, 0.8);
+  opacity: 0.8;
   cursor: pointer;
   margin-right: 6px;
 
@@ -61,7 +67,8 @@ a {
 
 .control-volume {
   display: flex;
-  width: 100%;
+  flex: 1;
+  margin: 0 10px;
   .btn-yinliang {
     background-position: 0 -144px;
   }

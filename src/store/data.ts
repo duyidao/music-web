@@ -1,6 +1,6 @@
 import type { MusicItem } from '@/types/music.ts'
 import { playIndex } from './contorl.ts'
-import { authorList } from './author.ts'
+import { authorList, authorMusicMap } from './author.ts'
 import { taskMap, pendingQueue, processQueue } from '@/utils/task.ts'
 import { formatLyrics, formatTitle } from '@/utils/index.ts'
 import axios from 'axios'
@@ -38,6 +38,10 @@ export const loadMusicData = async () => {
           .replace(/\.aac$/, '')
           .split('/')[1]
 
+        if (!authorList.value.includes(item.author)) {
+          authorList.value.push(item.author)
+        }
+
         let obj: MusicItem = {
           id: baseName,
           title: formatTitle(baseName),
@@ -52,11 +56,6 @@ export const loadMusicData = async () => {
       }
     )
     initMusicTasks()
-
-    authorList.value = Array.from(
-      new Set(musicList.value.map((item) => item.author))
-    )
-    console.log('authorList.value', authorList.value)
   } catch (err) {
     console.error('加载音乐数据失败:', err)
   }
