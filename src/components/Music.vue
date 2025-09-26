@@ -5,6 +5,7 @@ import { currentTime } from '@/store/contorl.ts'
 import { ratio, screenWidth } from '@/utils/index.ts'
 import { setThemeColor } from '@/store/user.ts'
 import CanvasVisual from '@comp/CanvasVisual/index.vue'
+import AuthorList from '@comp/AuthorList/index.vue'
 // @ts-ignore
 import ColorThief from 'colorthief'
 
@@ -28,7 +29,6 @@ watch(
 
       // 3. 获取颜色
       const colors = await colorThief.getColor(img, 5)
-      console.log('colors', colors)
       setThemeColor(`rgb(${colors[0]}, ${colors[1]}, ${colors[2]})`)
     } catch (err) {
       console.error('获取背景色失败:', err)
@@ -127,6 +127,7 @@ onMounted(() => {
         </li>
       </ul>
     </div>
+    <AuthorList />
   </div>
 </template>
 

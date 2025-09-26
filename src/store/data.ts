@@ -1,6 +1,8 @@
 import type { MusicItem } from '@/types/music.ts'
 import { playIndex } from './contorl.ts'
+import { authorList } from './author.ts'
 import { taskMap, pendingQueue, processQueue } from '@/utils/task.ts'
+import { formatLyrics, formatTitle } from '@/utils/index.ts'
 import axios from 'axios'
 
 // 状态管理
@@ -19,23 +21,6 @@ export const lrcList = computed(() => {
   }
   return formatLyrics(currentMusic.value?.lyric)
 })
-
-// 歌词格式化工具函数
-const formatLyrics = (lyric?: string) => {
-  if (!lyric) return [{ text: '暂无歌词' }]
-
-  return lyric.split('\n').map((item) => {
-    if (!item) return { text: '' }
-
-    const [timeStr, text] = item.split(']')
-    const [min, sec] = timeStr.replace('[', '').split(':').map(Number)
-
-    return {
-      time: (min || 0) * 60 + (sec || 0),
-      text: text || '',
-    }
-  })
-}
 
 // 初始化音乐数据
 export const loadMusicData = async () => {
@@ -67,6 +52,11 @@ export const loadMusicData = async () => {
       }
     )
     initMusicTasks()
+
+    authorList.value = Array.from(
+      new Set(musicList.value.map((item) => item.author))
+    )
+    console.log('authorList.value', authorList.value)
   } catch (err) {
     console.error('加载音乐数据失败:', err)
   }
@@ -80,8 +70,8 @@ export const loadMusicData = async () => {
  */
 function initMusicTasks() {
   musicList.value.forEach((music) => {
-    if (!taskMap.has(music.id)) {
-      taskMap.set(music.id, {
+    if (!taskMap.value.has(music.id)) {
+      taskMap.value.set(music.id, {
         id: music.id,
         status: 'waiting',
         data: null,
@@ -90,12 +80,4 @@ function initMusicTasks() {
     }
     processQueue()
   })
-}
-
-// 格式化标题
-function formatTitle(fileName: string) {
-  return fileName
-    .replace(/^\d+_/, '')
-    .replace(/_/g, ' ')
-    .replace(/\b\w/g, (c) => c.toUpperCase())
 }

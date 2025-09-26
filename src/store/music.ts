@@ -46,7 +46,7 @@ export const loadAudio = async (
 ) => {
   try {
     initAudio()
-    let res = taskMap.get(item.id)
+    let res = taskMap.value.get(item.id)
     console.log('res', res)
     if (res && res.status === 'success') {
       audioState.value.buffer = res.data as AudioBuffer
