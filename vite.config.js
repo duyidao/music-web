@@ -20,6 +20,12 @@ export default defineConfig({
     ],
     server: {
         port: 6996,
+        proxy: {
+            '/api': {
+                target: 'https://music.duyidao.cn',
+                changeOrigin: true,
+            },
+        },
     },
     resolve: {
         alias: {

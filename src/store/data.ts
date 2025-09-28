@@ -1,8 +1,8 @@
-import type { MusicItem } from '@/types/music.ts'
+import type { MusicItem, MusicParams } from '@/types/music.ts'
 import { playIndex } from './contorl.ts'
 import { authorList } from './author.ts'
 import { taskMap, pendingQueue, processQueue } from '@/utils/task.ts'
-import { formatLyrics, formatTitle } from '@/utils/index.ts'
+import { formatLyrics } from '@/utils/index.ts'
 import axios from 'axios'
 
 // 状态管理
@@ -25,34 +25,22 @@ export const lrcList = computed(() => {
 // 初始化音乐数据
 export const loadMusicData = async () => {
   try {
-    const jsModules = import.meta.glob('@/assets/lrc/*.js', { eager: true })
     const musicData = await axios.get('https://music.duyidao.cn/api/music/list')
 
-    musicList.value = musicData.data.files?.map(
-      (item: { audioUrl: string; logo: string; author?: string }) => {
-        const baseName = item.audioUrl
-          .replace(/^.*music\//, '')
-          .replace(/\.mp3$/, '')
-          .replace(/\.aac$/, '')
-          .split('/')[1]
-
-        if (!authorList.value.includes(item.author!)) {
-          authorList.value.push(item.author!)
-        }
-
-        let obj: MusicItem = {
-          id: baseName,
-          title: formatTitle(baseName),
-          audioUrl: 'https://music.duyidao.cn' + item.audioUrl,
-          lyric:
-            (jsModules[`/src/assets/lrc/${baseName}.js`] as { default: string })
-              ?.default || '',
-          logo: 'https://music.duyidao.cn' + item.logo,
-          author: item.author!,
-        }
-        return obj
+    musicList.value = musicData.data.files?.map((item: MusicParams) => {
+      if (!authorList.value.includes(item.author!)) {
+        authorList.value.push(item.author!)
       }
-    )
+      let obj: MusicItem = {
+        id: item.title,
+        title: item.title,
+        audioUrl: 'https://music.duyidao.cn' + item.audioUrl,
+        lyric: 'https://music.duyidao.cn' + item.lyric,
+        logo: 'https://music.duyidao.cn' + item.logo,
+        author: item.author!,
+      }
+      return obj
+    })
     initMusicTasks()
   } catch (err) {
     console.error('加载音乐数据失败:', err)

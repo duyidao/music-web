@@ -69,11 +69,3 @@ export const formatLyrics = (lyric?: string) => {
     }
   })
 }
-
-// 格式化标题
-export function formatTitle(fileName: string) {
-  return fileName
-    .replace(/^\d+_/, '')
-    .replace(/_/g, ' ')
-    .replace(/\b\w/g, (c) => c.toUpperCase())
-}

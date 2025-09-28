@@ -15,6 +15,11 @@ export interface MusicItem {
   author: string
 }
 
+export type MusicParams = Pick<
+  MusicItem,
+  'audioUrl' | 'logo' | 'author' | 'lyric' | 'title'
+>
+
 // 定义播放顺序枚举类型
 export enum OrderType {
   Sequence = 'SEQUENCE',
