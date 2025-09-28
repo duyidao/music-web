@@ -30,7 +30,6 @@ watch(
     playListIndex.value = musicHasLoadList.value.findIndex(
       (e) => e.id === currentMusic.value.id
     )
-    console.log('playListIndex.value', playListIndex.value)
   }
 )
 

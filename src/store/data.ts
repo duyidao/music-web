@@ -26,9 +26,7 @@ export const lrcList = computed(() => {
 export const loadMusicData = async () => {
   try {
     const jsModules = import.meta.glob('@/assets/lrc/*.js', { eager: true })
-    const musicData = await axios.get(
-      'http://music.duyidao.cn:3001/api/music/list'
-    )
+    const musicData = await axios.get('https://music.duyidao.cn/api/music/list')
 
     musicList.value = musicData.data.files?.map(
       (item: { audioUrl: string; logo: string; author?: string }) => {
