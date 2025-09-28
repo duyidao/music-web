@@ -2,7 +2,11 @@
 import { authorList, showAuthor, authorChoose } from '@/store/author.ts'
 
 const handleChooseAuthor = (item: string) => {
-  authorChoose.value = item
+  if (authorChoose.value === item) {
+    authorChoose.value = ''
+  } else {
+    authorChoose.value = item
+  }
 }
 </script>
 

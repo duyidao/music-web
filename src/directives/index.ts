@@ -1,6 +1,7 @@
 import close from './close.js'
+import type { App, ObjectDirective } from 'vue'
 
-const directives = {
+const directives: Record<string, ObjectDirective> = {
   close,
 }
 
@@ -10,7 +11,7 @@ export default {
    *
    * @param app Vue应用实例
    */
-  install(app) {
+  install(app: App) {
     Object.keys(directives).forEach((key) => {
       app.directive(key, directives[key])
     })

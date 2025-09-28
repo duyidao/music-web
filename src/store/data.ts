@@ -1,6 +1,6 @@
 import type { MusicItem } from '@/types/music.ts'
 import { playIndex } from './contorl.ts'
-import { authorList, authorMusicMap } from './author.ts'
+import { authorList } from './author.ts'
 import { taskMap, pendingQueue, processQueue } from '@/utils/task.ts'
 import { formatLyrics, formatTitle } from '@/utils/index.ts'
 import axios from 'axios'
@@ -38,8 +38,8 @@ export const loadMusicData = async () => {
           .replace(/\.aac$/, '')
           .split('/')[1]
 
-        if (!authorList.value.includes(item.author)) {
-          authorList.value.push(item.author)
+        if (!authorList.value.includes(item.author!)) {
+          authorList.value.push(item.author!)
         }
 
         let obj: MusicItem = {
@@ -50,7 +50,7 @@ export const loadMusicData = async () => {
             (jsModules[`/src/assets/lrc/${baseName}.js`] as { default: string })
               ?.default || '',
           logo: 'https://music.duyidao.cn' + item.logo,
-          author: item.author,
+          author: item.author!,
         }
         return obj
       }

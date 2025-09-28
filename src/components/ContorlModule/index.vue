@@ -3,12 +3,6 @@ import Progress from './progressBar.vue'
 import Volume from './volume.vue'
 import PlayBtn from './playBtn.vue'
 import ControlBtn from './controlBtn.vue'
-import { showAuthor } from '@/store/author.ts'
-
-// 点击切换歌手的按钮
-const showAuthorList = () => {
-  showAuthor.value = true
-}
 </script>
 
 <template>

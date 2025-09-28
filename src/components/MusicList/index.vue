@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { musicList } from '@/store/data.ts'
+import { musicList, currentMusic } from '@/store/data.ts'
 import { audioState } from '@/store/music.ts'
 import { authorChoose } from '@/store/author.ts'
 import { playIndex, loadAndPlay } from '@/store/contorl.ts'
 import { taskMap } from '@/utils/task.ts'
+import type { MusicItem } from '@/types/music.ts'
 
 const musicHasLoadList = computed(() => {
   const list = musicList.value.map((item) => {
@@ -17,12 +18,26 @@ const musicHasLoadList = computed(() => {
   if (!authorChoose.value) {
     return list
   }
-  return list.filter((item) => item.author === authorChoose.value)
+  return list.filter((item: MusicItem) => item.author === authorChoose.value)
 })
 
+const playListIndex = ref<number>(-1)
+
+// 如果切换了歌手，那么重新计算激活的索引
+watch(
+  () => authorChoose.value,
+  () => {
+    playListIndex.value = musicHasLoadList.value.findIndex(
+      (e) => e.id === currentMusic.value.id
+    )
+    console.log('playListIndex.value', playListIndex.value)
+  }
+)
+
 // 播放新的音频
-const choseMusic = (item) => {
+const choseMusic = (item: MusicItem, index: number) => {
   playIndex.value = musicList.value.findIndex((e) => e.id === item.id)
+  playListIndex.value = index
   loadAndPlay()
 }
 </script>
@@ -41,11 +56,11 @@ const choseMusic = (item) => {
         :key="item.id"
         class="music-list-body-item"
         :class="{
-          active: index === playIndex && audioState.isPlaying,
+          active: index === playListIndex && audioState.isPlaying,
           loading: item.loading,
         }"
         :style="{ '--index': index + 1 }"
-        @click.stop="choseMusic(item)"
+        @click.stop="choseMusic(item, index)"
       >
         <p>
           <span>{{ index + 1 }}</span>

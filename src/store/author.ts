@@ -1,5 +1,5 @@
-export const showAuthor = ref(false)
+export const showAuthor = ref<boolean>(false)
 
-export const authorList = ref([])
+export const authorList = ref<string[]>([])
 
-export const authorChoose = ref('')
+export const authorChoose = ref<string>('')
