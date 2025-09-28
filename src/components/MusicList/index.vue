@@ -25,11 +25,14 @@ const playListIndex = ref<number>(-1)
 
 // 如果切换了歌手，那么重新计算激活的索引
 watch(
-  () => authorChoose.value,
+  () => [authorChoose.value, currentMusic.value],
   () => {
     playListIndex.value = musicHasLoadList.value.findIndex(
       (e) => e.id === currentMusic.value.id
     )
+  },
+  {
+    deep: true,
   }
 )
 
