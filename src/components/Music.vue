@@ -152,6 +152,8 @@ onMounted(() => {
     overflow-x: hidden;
     z-index: 2;
     backdrop-filter: blur(3px);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
     ul {
       font-size: 16px;

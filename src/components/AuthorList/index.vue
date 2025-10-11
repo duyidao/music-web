@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { authorList, showAuthor, authorChoose } from '@/store/author.ts'
+import Down from '@/assets/svg/down.svg?url'
 
 const handleChooseAuthor = (item: string) => {
   if (authorChoose.value === item) {
@@ -12,7 +13,7 @@ const handleChooseAuthor = (item: string) => {
 
 <template>
   <div class="author" :class="{ show: showAuthor }" v-close="true">
-    <div class="author-close" v-close="false">×</div>
+    <img class="author-close" v-close="false" :src="Down" />
     <div class="author-list">
       <div
         v-for="item in authorList"
@@ -48,16 +49,13 @@ const handleChooseAuthor = (item: string) => {
 
   .author-close {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 8px;
+    right: 20px;
     width: 30px;
     height: 30px;
-    line-height: 28px;
     text-align: center;
-    border-radius: 50%;
-    font-size: 20px;
+    font-size: 25px;
     color: #fff;
-    background-color: rgba(0, 0, 0, 0.5);
     cursor: pointer;
   }
 
@@ -85,14 +83,14 @@ const handleChooseAuthor = (item: string) => {
         border-color: var(--base-color);
 
         &::before {
-          content: '√';
+          content: '⭐';
           display: block;
           position: absolute;
           top: -4px;
           left: -4px;
-          width: 22px;
-          height: 22px;
-          line-height: 22px;
+          width: 25px;
+          height: 25px;
+          line-height: 25px;
           text-align: center;
           border-radius: 0 0 8px 0;
           background-color: var(--base-color);

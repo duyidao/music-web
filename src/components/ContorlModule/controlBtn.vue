@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { order } from '@/store/contorl.ts'
 import { OrderType } from '@/types/music.ts'
+import { showAuthor, authorShow } from '@/store/author.ts'
 
 // 定义状态切换顺序
 const ORDER_CYCLE = {
@@ -13,13 +14,37 @@ const icons = computed(() => [
   {
     title: '顺序切换',
     icon: ORDER_CYCLE[order.value as OrderType],
-    click: () => {
-      order.value =
-        order.value === OrderType.Sequence
-          ? OrderType.Random
-          : order.value === OrderType.Random
-          ? OrderType.Single
-          : OrderType.Sequence
+    events: {
+      click: () => {
+        order.value =
+          order.value === OrderType.Sequence
+            ? OrderType.Random
+            : order.value === OrderType.Random
+            ? OrderType.Single
+            : OrderType.Sequence
+      },
+    },
+  },
+  {
+    title: '切换歌手',
+    icon: 'btn-author',
+    events: {
+      click: (event: Event) => {
+        event.stopPropagation()
+        showAuthor.value = true
+      },
+    },
+  },
+  {
+    title: '收起列表',
+    icon: {
+      'btn-flexible': true,
+      'btn-flexible-hide': !authorShow.value,
+    },
+    events: {
+      click: () => {
+        authorShow.value = !authorShow.value
+      },
     },
   },
 ])
@@ -29,10 +54,10 @@ const icons = computed(() => [
   <div class="btn-list">
     <a
       v-for="item in icons"
-      :key="item.icon"
+      :key="item.title"
       :class="item.icon"
       :title="item.title"
-      @click.stop="item.click"
+      v-on.stop="item.events"
     >
     </a>
   </div>
@@ -54,6 +79,10 @@ a {
 }
 
 .btn-list {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
   .btn-shunxu {
     background-position: 0 -205px;
   }
@@ -65,6 +94,24 @@ a {
   .btn-suiji {
     height: 19px;
     background-position: 0 -74px;
+  }
+
+  .btn-author {
+    width: 24px;
+    height: 22px;
+    background-position: 0 -370px;
+  }
+
+  .btn-flexible {
+    width: 21px;
+    height: 22px;
+    background-position: 0 -260px;
+    transform: rotate(0deg);
+    transition: all 0.3s;
+
+    &.btn-flexible-hide {
+      transform: rotate(180deg);
+    }
   }
 }
 </style>

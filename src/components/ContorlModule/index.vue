@@ -10,9 +10,8 @@ import ControlBtn from './controlBtn.vue'
     <PlayBtn />
     <Progress />
     <div class="controls-row">
-      <ControlBtn />
       <Volume />
-      <a title="切换歌手" class="music-list-btn-author" v-close="true"></a>
+      <ControlBtn />
     </div>
   </div>
 </template>
@@ -26,7 +25,7 @@ import ControlBtn from './controlBtn.vue'
   .controls-row {
     display: flex;
     align-items: center;
-    width: 250px;
+    width: 325px;
 
     a {
       display: block;
@@ -38,12 +37,6 @@ import ControlBtn from './controlBtn.vue'
       &:hover {
         opacity: 1;
       }
-    }
-
-    .music-list-btn-author {
-      width: 24px;
-      height: 22px;
-      background-position: 0 -370px;
     }
   }
 }

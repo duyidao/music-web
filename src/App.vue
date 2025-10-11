@@ -34,11 +34,10 @@ watch(
     <div class="mod-player" v-close="false">
       <div class="mod-player-music">
         <Music />
-        <ControlModule />
+        <!--音乐列表-->
+        <MusicList />
       </div>
-
-      <!--音乐列表-->
-      <MusicList />
+      <ControlModule />
     </div>
   </div>
 </template>
@@ -52,11 +51,13 @@ watch(
 
   .mod-player {
     display: flex;
+    flex-direction: column;
     position: relative;
     z-index: 5;
 
     .mod-player-music {
       flex: 1;
+      display: flex;
     }
   }
 
